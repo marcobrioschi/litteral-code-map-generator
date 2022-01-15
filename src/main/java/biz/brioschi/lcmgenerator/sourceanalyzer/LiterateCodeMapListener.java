@@ -1,4 +1,4 @@
-package biz.brioschi.lcmgenerator;
+package biz.brioschi.lcmgenerator.sourceanalyzer;
 
 import biz.brioschi.lcmgenerator.antlr.parser.JavaParser;
 import biz.brioschi.lcmgenerator.antlr.parser.JavaParserBaseListener;
