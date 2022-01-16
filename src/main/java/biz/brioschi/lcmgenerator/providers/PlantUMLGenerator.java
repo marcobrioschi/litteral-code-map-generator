@@ -9,7 +9,7 @@ import java.io.OutputStream;
 
 public class PlantUMLGenerator {
 
-    public void generateSVGDiagram2(String diagramDescription, OutputStream os) throws IOException {
+    public void generateSVGDiagram(String diagramDescription, OutputStream os) throws IOException {
         SourceStringReader reader = new SourceStringReader(diagramDescription);
         reader.generateImage(os, new FileFormatOption(FileFormat.SVG)); // TODO update the deprecated method
     }

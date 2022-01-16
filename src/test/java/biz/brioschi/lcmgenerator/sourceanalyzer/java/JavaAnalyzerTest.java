@@ -1,6 +1,6 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
-import biz.brioschi.lcmgenerator.model.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static biz.brioschi.lcmgenerator.model.LiterateCodeMapBox.BoxType;
+import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;

@@ -1,0 +1,20 @@
+package biz.brioschi.lcmgenerator.diagram;
+
+import biz.brioschi.lcmgenerator.diagram.builders.DiagramBuilder;
+
+import java.util.List;
+
+public class DiagramMapper {
+
+    private final DiagramBuilder diagramBuilder;
+
+    public DiagramMapper(DiagramBuilder diagramBuilder) {
+        this.diagramBuilder = diagramBuilder;
+    }
+
+    public void mapBoxes(List<LiterateCodeMapBox> boxes) {
+        this.diagramBuilder.startDocument("", "");  // TODO title and description
+        this.diagramBuilder.endDocument();
+    }
+
+}

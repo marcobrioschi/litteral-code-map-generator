@@ -1,6 +1,9 @@
 package biz.brioschi.lcmgenerator;
 
-import biz.brioschi.lcmgenerator.model.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.diagram.DiagramMapper;
+import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.diagram.builders.DiagramBuilder;
+import biz.brioschi.lcmgenerator.diagram.builders.PlantUMLBuilder;
 import biz.brioschi.lcmgenerator.providers.FileSystemScanner;
 import biz.brioschi.lcmgenerator.providers.PlantUMLGenerator;
 import biz.brioschi.lcmgenerator.sourceanalyzer.java.JavaAnalyzer;
@@ -32,6 +35,8 @@ public class LiterateCodeMapGenerator implements Runnable {
 
     @Override
     public void run() {
+
+        // Scan all the files
         FileSystemScanner fileSystemScanner = new FileSystemScanner(sourceDirectories);
         List<File> sourceUnits = fileSystemScanner.scanBaseDirectories();
         List<LiterateCodeMapBox> boxes = new ArrayList<>();
@@ -44,16 +49,21 @@ public class LiterateCodeMapGenerator implements Runnable {
                 System.err.println("Exception reading a source unit: " + e.getMessage());
             }
         }
+
+        DiagramBuilder diagramBuilder = new PlantUMLBuilder();
+        DiagramMapper diagramMapper = new DiagramMapper(diagramBuilder);
+        diagramMapper.mapBoxes(boxes);
         // TODO use the data
         for (LiterateCodeMapBox box : boxes) {
             System.out.println(">>> " + box);
         }
-        String source = "@startuml\n";
-        source += "Bob -> Alice : hello\n";
-        source += "@enduml\n";
+        String source = diagramBuilder.getDiagramDescription();
+
+
+        // Generate the diagram
         try (OutputStream diagramFileOutputStream = new FileOutputStream(plantUMLOutputDirectory + File.separator + "literate-code-map.svg")) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
-            plantUMLGenerator.generateSVGDiagram2(source, diagramFileOutputStream);
+            plantUMLGenerator.generateSVGDiagram(source, diagramFileOutputStream);
         } catch (IOException e) {
             System.err.println("Exception writing the literate code map diagram: " + e.getMessage());
         }

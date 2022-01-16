@@ -1,4 +1,4 @@
-package biz.brioschi.lcmgenerator.model;
+package biz.brioschi.lcmgenerator.diagram;
 
 import lombok.Value;
 
