@@ -2,6 +2,7 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStreams;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -11,8 +12,7 @@ import java.util.stream.Stream;
 
 import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class JavaAnalyzerTest {
 
@@ -33,6 +33,42 @@ public class JavaAnalyzerTest {
                 Arguments.of("public interface TestInterface { }", BoxType.JAVA_INTERFACE, "TestInterface"),
                 Arguments.of("public enum TestEnum { A, B; }", BoxType.JAVA_ENUM, "TestEnum")
         );
+    }
+
+    @Test
+    public void parseClassThatExtendsAnotherClass() {
+        String inputUnit = "class Test2 extends Test1 {}";
+        JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromString(inputUnit));
+        List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
+        assertThat(units, hasSize(1));
+        LiterateCodeMapBox firstUnit = units.get(0);
+        assertThat(firstUnit.getType(), is(BoxType.JAVA_CLASS));
+        assertThat(firstUnit.getName(), is("Test2"));
+        assertThat(firstUnit.getExtend_s(), contains("Test1"));
+    }
+
+    @Test
+    public void parseClassThatImplementsAnInterface() {
+        String inputUnit = "class Test2 implements Test1 {}";
+        JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromString(inputUnit));
+        List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
+        assertThat(units, hasSize(1));
+        LiterateCodeMapBox firstUnit = units.get(0);
+        assertThat(firstUnit.getType(), is(BoxType.JAVA_CLASS));
+        assertThat(firstUnit.getName(), is("Test2"));
+        assertThat(firstUnit.getExtend_s(), contains("Test1"));
+    }
+
+    @Test
+    public void parseClassThatImplementsTwoInterfaces() {
+        String inputUnit = "class Test2 implements Test1, Test4 {}";
+        JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromString(inputUnit));
+        List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
+        assertThat(units, hasSize(1));
+        LiterateCodeMapBox firstUnit = units.get(0);
+        assertThat(firstUnit.getType(), is(BoxType.JAVA_CLASS));
+        assertThat(firstUnit.getName(), is("Test2"));
+        assertThat(firstUnit.getExtend_s(), contains("Test1", "Test4"));
     }
 
 }
