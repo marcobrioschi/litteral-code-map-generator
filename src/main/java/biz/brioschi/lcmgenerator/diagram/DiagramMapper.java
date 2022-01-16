@@ -14,6 +14,9 @@ public class DiagramMapper {
 
     public void mapBoxes(List<LiterateCodeMapBox> boxes) {
         this.diagramBuilder.startDocument("", "");
+        for (LiterateCodeMapBox box : boxes) {
+            this.diagramBuilder.addLiterateCodeMapBox(box);
+        }
         this.diagramBuilder.endDocument();
     }
 

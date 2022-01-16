@@ -23,7 +23,7 @@ public class PlantUMLBuilder implements DiagramBuilder {
 
     @Override
     public void addLiterateCodeMapBox(LiterateCodeMapBox box) {
-
+        this.diagramDescription.append("class ").append(box.getName()).append("\n");
     }
 
     @Override
