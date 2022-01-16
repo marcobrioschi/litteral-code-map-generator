@@ -1,5 +1,5 @@
-// Generated from /Users/m40030213/MyData/_workingdir/repositories/git/litteral-code-map-generator/antlr/JavaParser.g4 by ANTLR 4.9.2
-package biz.brioschi.lcmgenerator.antlr.parser;
+// Generated from /Users/m40030213/MyData/_workingdir/repositories/git/litteral-code-map-generator/antlr/java/JavaParser.g4 by ANTLR 4.9.2
+package biz.brioschi.lcmgenerator.antlr.java.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
