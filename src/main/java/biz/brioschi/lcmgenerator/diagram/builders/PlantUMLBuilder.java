@@ -23,7 +23,7 @@ public class PlantUMLBuilder implements DiagramBuilder {
 
     @Override
     public void addLiterateCodeMapBox(LiterateCodeMapBox box) {
-        switch(box.getType()) { // TODO add a test that check all the cases
+        switch(box.getType()) {
             case JAVA_CLASS:
                 this.diagramDescription.append("class ").append(box.getName()).append("\n");
                 break;
@@ -31,7 +31,10 @@ public class PlantUMLBuilder implements DiagramBuilder {
                 this.diagramDescription.append("interface ").append(box.getName()).append("\n");
                 break;
             case JAVA_ENUM:
+                this.diagramDescription.append("enum ").append(box.getName()).append("\n");
                 break;
+            default:
+                throw new RuntimeException("Missing case for enum value: " + box.getType());
         }
     }
 
