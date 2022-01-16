@@ -23,7 +23,16 @@ public class PlantUMLBuilder implements DiagramBuilder {
 
     @Override
     public void addLiterateCodeMapBox(LiterateCodeMapBox box) {
-        this.diagramDescription.append("class ").append(box.getName()).append("\n");
+        switch(box.getType()) { // TODO add a test that check all the cases
+            case JAVA_CLASS:
+                this.diagramDescription.append("class ").append(box.getName()).append("\n");
+                break;
+            case JAVA_INTERFACE:
+                this.diagramDescription.append("interface ").append(box.getName()).append("\n");
+                break;
+            case JAVA_ENUM:
+                break;
+        }
     }
 
     @Override

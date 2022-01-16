@@ -1,7 +1,6 @@
 package biz.brioschi.lcmgenerator.diagram.builders;
 
 import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +28,6 @@ class PlantUMLBuilderJavaBoxTest {
     }
 
     @Test
-    @Disabled
     public void addJavaInterfaceBox() {
 
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
