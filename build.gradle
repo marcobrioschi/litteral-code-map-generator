@@ -18,6 +18,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     implementation 'info.picocli:picocli:4.6.2'
     implementation 'org.antlr:antlr4-runtime:4.9.3'
+    implementation 'net.sourceforge.plantuml:plantuml:1.2022.0'
 }
 
 test {

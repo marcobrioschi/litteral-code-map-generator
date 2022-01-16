@@ -6,7 +6,7 @@ import java.util.List;
 
 public class FileSystemScanner {
 
-    private List<String> baseDirectories;
+    private final List<String> baseDirectories;
     private List<File> sourceUnits;
 
     public FileSystemScanner(List<String> baseDirectories) {
