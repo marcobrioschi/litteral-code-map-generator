@@ -2,12 +2,12 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
-import biz.brioschi.lcmgenerator.model.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.model.LiterateCodeMapBox.*;
+import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 
 public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
