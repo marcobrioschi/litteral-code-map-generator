@@ -38,7 +38,10 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     private void generateANewBoxElement(BoxType boxType, String boxName) {
         literateCodeMapBoxes.add(
-                new LiterateCodeMapBox(boxType, boxName)
+                LiterateCodeMapBox.builder()
+                        .type(boxType)
+                        .name(boxName)
+                        .build()
         );
     }
 
