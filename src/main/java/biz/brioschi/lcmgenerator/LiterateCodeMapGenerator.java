@@ -50,17 +50,13 @@ public class LiterateCodeMapGenerator implements Runnable {
             }
         }
 
+        // Generate the diagram description
         DiagramBuilder diagramBuilder = new PlantUMLBuilder();
         DiagramMapper diagramMapper = new DiagramMapper(diagramBuilder);
         diagramMapper.mapBoxes(boxes);
-        // TODO use the data
-        for (LiterateCodeMapBox box : boxes) {
-            System.out.println(">>> " + box);
-        }
         String source = diagramBuilder.getDiagramDescription();
 
-
-        // Generate the diagram
+        // Generate the diagram image
         try (OutputStream diagramFileOutputStream = new FileOutputStream(plantUMLOutputDirectory + File.separator + "literate-code-map.svg")) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
             plantUMLGenerator.generateSVGDiagram(source, diagramFileOutputStream);

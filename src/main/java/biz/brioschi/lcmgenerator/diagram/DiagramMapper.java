@@ -13,7 +13,7 @@ public class DiagramMapper {
     }
 
     public void mapBoxes(List<LiterateCodeMapBox> boxes) {
-        this.diagramBuilder.startDocument("", "");  // TODO title and description
+        this.diagramBuilder.startDocument("", "");
         this.diagramBuilder.endDocument();
     }
 

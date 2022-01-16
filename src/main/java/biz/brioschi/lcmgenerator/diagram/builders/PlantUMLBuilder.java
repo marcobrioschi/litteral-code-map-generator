@@ -13,10 +13,10 @@ public class PlantUMLBuilder implements DiagramBuilder {
     @Override
     public void startDocument(String title, String description) {
         this.diagramDescription.append("@startuml\n");
-        if (!"".equals(title)) {
+        if ((title != null) && !title.equals("")) {
             this.diagramDescription.append("title \"").append(title).append("\"\n");
         }
-        if (!"".equals(description)) {
+        if ((description != null) && !description.equals("")) {
             this.diagramDescription.append("caption \"").append(description).append("\"\n");
         }
     }
