@@ -7,7 +7,7 @@ import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 import java.util.ArrayList;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.*;
+import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 
 public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
