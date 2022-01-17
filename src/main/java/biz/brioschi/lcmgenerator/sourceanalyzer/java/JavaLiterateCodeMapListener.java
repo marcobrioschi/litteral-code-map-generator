@@ -24,6 +24,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         List<String> extend_s = new ArrayList<>();
+        // TODO check if terminals 'extends' and 'implements' are presents
         if (ctx.typeType() != null) {
             extend_s.add(ctx.typeType().getText());
         }
