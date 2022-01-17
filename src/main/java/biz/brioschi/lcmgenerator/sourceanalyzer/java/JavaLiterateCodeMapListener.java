@@ -3,6 +3,7 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
 import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +25,26 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         List<String> extend_s = new ArrayList<>();
-        // TODO check if terminals 'extends' and 'implements' are presents
-        if (ctx.typeType() != null) {
-            extend_s.add(ctx.typeType().getText());
-        }
-        if (ctx.typeList() != null)
-            if (ctx.typeList().size() != 0) {
-                List<JavaParser.TypeTypeContext> interfaceList = ctx.typeList().get(0).typeType();
-                for (JavaParser.TypeTypeContext interfaceName : interfaceList) {
-                    extend_s.add(interfaceName.getText());
+        String className = ctx.identifier().getText();
+        int lastReadedChild = 1;
+        while (ctx.getChildCount() - 1 > lastReadedChild) {
+            ParseTree currentExtensionType = ctx.getChild(++lastReadedChild);
+            if (currentExtensionType == ctx.EXTENDS()) {
+                extend_s.add(ctx.getChild(++lastReadedChild).getText());
+            }
+            if (currentExtensionType == ctx.IMPLEMENTS()) {
+                ParseTree interfaceList = ctx.getChild(++lastReadedChild);
+                for (int i = 0; i < interfaceList.getChildCount(); ++i) {
+                    String currentToken = interfaceList.getChild(i).getText();
+                    if (!currentToken.equals(",")) {
+                        extend_s.add(currentToken);
+                    }
                 }
             }
+        }
         generateANewBoxElement(
                 BoxType.JAVA_CLASS,
-                ctx.identifier().getText(),
+                className,
                 extend_s
         );
     }
