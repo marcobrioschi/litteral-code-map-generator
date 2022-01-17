@@ -16,12 +16,7 @@ class PlantUMLBuilderJavaBoxTest {
 
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(
-                LiterateCodeMapBox.builder()
-                        .type(LiterateCodeMapBox.BoxType.JAVA_CLASS)
-                        .name("ClassName")
-                        .build()
-        );
+        plantUMLBuilder.addLiterateCodeMapBox(LiterateCodeMapBox.BoxType.JAVA_CLASS, "ClassName");
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
@@ -34,12 +29,7 @@ class PlantUMLBuilderJavaBoxTest {
 
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(
-                LiterateCodeMapBox.builder()
-                        .type(LiterateCodeMapBox.BoxType.JAVA_INTERFACE)
-                        .name("InterfaceName")
-                        .build()
-        );
+        plantUMLBuilder.addLiterateCodeMapBox(LiterateCodeMapBox.BoxType.JAVA_INTERFACE, "InterfaceName");
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
@@ -52,12 +42,7 @@ class PlantUMLBuilderJavaBoxTest {
 
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(
-                LiterateCodeMapBox.builder()
-                        .type(LiterateCodeMapBox.BoxType.JAVA_ENUM)
-                        .name("EnumName")
-                        .build()
-        );
+        plantUMLBuilder.addLiterateCodeMapBox(LiterateCodeMapBox.BoxType.JAVA_ENUM, "EnumName");
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
@@ -70,12 +55,7 @@ class PlantUMLBuilderJavaBoxTest {
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
         for (LiterateCodeMapBox.BoxType currentType : LiterateCodeMapBox.BoxType.values()) {
-            plantUMLBuilder.addLiterateCodeMapBox(
-                    LiterateCodeMapBox.builder()
-                            .type(currentType)
-                            .name("GenericName")
-                            .build()
-            );
+            plantUMLBuilder.addLiterateCodeMapBox(currentType, "GenericName");
         }
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();

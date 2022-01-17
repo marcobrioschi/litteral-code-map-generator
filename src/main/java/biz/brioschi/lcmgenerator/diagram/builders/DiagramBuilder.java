@@ -6,7 +6,7 @@ public interface DiagramBuilder {
 
     void startDocument(String title, String description);
 
-    void addLiterateCodeMapBox(LiterateCodeMapBox box);
+    void addLiterateCodeMapBox(LiterateCodeMapBox.BoxType boxType, String boxName);
 
     void endDocument();
 
