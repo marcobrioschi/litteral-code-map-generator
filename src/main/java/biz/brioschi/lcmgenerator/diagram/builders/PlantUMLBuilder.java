@@ -1,5 +1,7 @@
 package biz.brioschi.lcmgenerator.diagram.builders;
 
+import biz.brioschi.lcmgenerator.diagram.BoxConnection;
+
 import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 
 public class PlantUMLBuilder implements DiagramBuilder {
@@ -35,6 +37,17 @@ public class PlantUMLBuilder implements DiagramBuilder {
                 break;
             default:
                 throw new RuntimeException("Missing case for enum value: " + boxType);
+        }
+    }
+
+    @Override
+    public void addLiterateCodeMapConnection(String sourceBox, String destinationBox, BoxConnection.ConnectionType connectionType) {
+        switch(connectionType) {
+            case EXTENDS:
+                this.diagramDescription.append(sourceBox).append(" <|-- ").append(destinationBox).append("\n");
+                break;
+            default:
+                throw new RuntimeException("Missing case for enum value: " + connectionType);
         }
     }
 

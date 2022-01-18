@@ -1,8 +1,8 @@
 package biz.brioschi.lcmgenerator.diagram.builders;
 
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 import org.junit.jupiter.api.Test;
 
+import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -16,7 +16,7 @@ class PlantUMLBuilderJavaBoxTest {
 
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(LiterateCodeMapBox.BoxType.JAVA_CLASS, "ClassName");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassName");
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
@@ -29,7 +29,7 @@ class PlantUMLBuilderJavaBoxTest {
 
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(LiterateCodeMapBox.BoxType.JAVA_INTERFACE, "InterfaceName");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_INTERFACE, "InterfaceName");
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
@@ -42,7 +42,7 @@ class PlantUMLBuilderJavaBoxTest {
 
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(LiterateCodeMapBox.BoxType.JAVA_ENUM, "EnumName");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_ENUM, "EnumName");
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
@@ -54,7 +54,7 @@ class PlantUMLBuilderJavaBoxTest {
     public void testAllEnumTypeValues() {
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
-        for (LiterateCodeMapBox.BoxType currentType : LiterateCodeMapBox.BoxType.values()) {
+        for (BoxType currentType : BoxType.values()) {
             plantUMLBuilder.addLiterateCodeMapBox(currentType, "GenericName");
         }
         plantUMLBuilder.endDocument();
