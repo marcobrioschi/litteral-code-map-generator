@@ -44,7 +44,7 @@ public class PlantUMLBuilder implements DiagramBuilder {
     public void addLiterateCodeMapConnection(String sourceBox, String destinationBox, BoxConnection.ConnectionType connectionType) {
         switch(connectionType) {
             case EXTENDS:
-                this.diagramDescription.append(sourceBox).append(" <|-- ").append(destinationBox).append("\n");
+                this.diagramDescription.append(destinationBox).append(" <|-- ").append(sourceBox).append("\n");
                 break;
             default:
                 throw new RuntimeException("Missing case for enum value: " + connectionType);

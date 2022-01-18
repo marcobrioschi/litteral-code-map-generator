@@ -16,6 +16,13 @@ public class DiagramMapper {
         this.diagramBuilder.startDocument("", "");
         for (LiterateCodeMapBox box : boxes) {
             this.diagramBuilder.addLiterateCodeMapBox(box.getType(), box.getName());
+            for (BoxConnection connection : box.getConnections()) {
+                this.diagramBuilder.addLiterateCodeMapConnection(
+                        box.getName(),
+                        connection.getTargetBoxName(),
+                        connection.getType()
+                );
+            }
         }
         this.diagramBuilder.endDocument();
     }

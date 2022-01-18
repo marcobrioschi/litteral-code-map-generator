@@ -16,6 +16,7 @@ public class LiterateCodeMapBox {
     @NonNull
     String name;
 
+    @NonNull
     List<BoxConnection> connections;
 
     public enum BoxType  {

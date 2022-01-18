@@ -25,6 +25,7 @@ public class JavaAnalyzerTest {
         LiterateCodeMapBox firstUnit = units.get(0);
         assertThat(firstUnit.getType(), is(type));
         assertThat(firstUnit.getName(), is(boxName));
+        assertThat(firstUnit.getConnections(), hasSize(0));
     }
 
     private static Stream<Arguments> parseJavaBox() {

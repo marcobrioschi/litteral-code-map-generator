@@ -52,12 +52,12 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
-        generateANewBoxElement(BoxType.JAVA_INTERFACE, ctx.identifier().getText(), null);
+        generateANewBoxElement(BoxType.JAVA_INTERFACE, ctx.identifier().getText(), new ArrayList<>());
     }
 
     @Override
     public void enterEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
-        generateANewBoxElement(BoxType.JAVA_ENUM, ctx.identifier().getText(), null);
+        generateANewBoxElement(BoxType.JAVA_ENUM, ctx.identifier().getText(), new ArrayList<>());
     }
 
     private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {

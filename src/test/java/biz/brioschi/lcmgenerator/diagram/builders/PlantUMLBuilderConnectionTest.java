@@ -25,7 +25,7 @@ class PlantUMLBuilderConnectionTest {
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
-        assertThat(result, containsString("\nClassNameSource <|-- ClassNameTarget\n"));
+        assertThat(result, containsString("\nClassNameTarget <|-- ClassNameSource\n"));
     }
 
     @Test
