@@ -2,6 +2,7 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
+import biz.brioschi.lcmgenerator.diagram.BoxConnection;
 import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -24,20 +25,21 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
-        List<String> extend_s = new ArrayList<>();
+        List<BoxConnection> connections = new ArrayList<>();
         String className = ctx.identifier().getText();
         int lastReadedChild = 1;
         while (ctx.getChildCount() - 1 > lastReadedChild) {
             ParseTree currentExtensionType = ctx.getChild(++lastReadedChild);
             if (currentExtensionType == ctx.EXTENDS()) {
-                extend_s.add(ctx.getChild(++lastReadedChild).getText());
+                String boxName = ctx.getChild(++lastReadedChild).getText();
+                connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, boxName));
             }
             if (currentExtensionType == ctx.IMPLEMENTS()) {
                 ParseTree interfaceList = ctx.getChild(++lastReadedChild);
                 for (int i = 0; i < interfaceList.getChildCount(); ++i) {
                     String currentToken = interfaceList.getChild(i).getText();
                     if (!currentToken.equals(",")) {
-                        extend_s.add(currentToken);
+                        connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, currentToken));
                     }
                 }
             }
@@ -45,8 +47,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         generateANewBoxElement(
                 BoxType.JAVA_CLASS,
                 className,
-                extend_s
-        );
+                connections);
     }
 
     @Override
@@ -59,12 +60,12 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         generateANewBoxElement(BoxType.JAVA_ENUM, ctx.identifier().getText(), null);
     }
 
-    private void generateANewBoxElement(BoxType boxType, String boxName, List<String> extend_s) {
+    private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
         literateCodeMapBoxes.add(
                 LiterateCodeMapBox.builder()
                         .type(boxType)
                         .name(boxName)
-                        .extend_s(extend_s)
+                        .connections(connections)
                         .build()
         );
     }
