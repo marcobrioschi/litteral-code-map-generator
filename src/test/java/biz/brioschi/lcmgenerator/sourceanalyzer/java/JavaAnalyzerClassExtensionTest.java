@@ -10,31 +10,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class JavaAnalyzerTest {
-
-    @ParameterizedTest(name = "{index} - \"{0}\" generate a box of type {1} with name \"{2}\"")
-    @MethodSource
-    public void parseJavaBox(String inputUnit, BoxType type, String boxName) {
-        JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromString(inputUnit));
-        List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
-        assertThat(units, hasSize(1));
-        LiterateCodeMapBox firstUnit = units.get(0);
-        assertThat(firstUnit.getType(), is(type));
-        assertThat(firstUnit.getName(), is(boxName));
-        assertThat(firstUnit.getConnections(), hasSize(0));
-    }
-
-    private static Stream<Arguments> parseJavaBox() {
-        return Stream.of(
-                Arguments.of("public class TestClass { }", BoxType.JAVA_CLASS, "TestClass"),
-                Arguments.of("public interface TestInterface { }", BoxType.JAVA_INTERFACE, "TestInterface"),
-                Arguments.of("public enum TestEnum { A, B; }", BoxType.JAVA_ENUM, "TestEnum")
-        );
-    }
+public class JavaAnalyzerClassExtensionTest {
 
     @ParameterizedTest(name = "{index} - \"{0}\" the extensions are \"{1}\"")
     @MethodSource
@@ -43,7 +22,7 @@ public class JavaAnalyzerTest {
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(1));
         LiterateCodeMapBox firstUnit = units.get(0);
-        assertThat(firstUnit.getType(), is(BoxType.JAVA_CLASS));
+        assertThat(firstUnit.getType(), is(LiterateCodeMapBox.BoxType.JAVA_CLASS));
         assertThat(firstUnit.getName(), is("Test4"));
         assertThat(firstUnit.getConnections(), contains(connections));
     }
@@ -79,5 +58,4 @@ public class JavaAnalyzerTest {
                 )
         );
     }
-
 }

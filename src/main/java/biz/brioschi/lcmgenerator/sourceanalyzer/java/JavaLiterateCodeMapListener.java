@@ -44,19 +44,30 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
                 }
             }
         }
-        generateANewBoxElement(
-                BoxType.JAVA_CLASS,
-                className,
-                connections);
+        generateANewBoxElement(BoxType.JAVA_CLASS, className, connections);
     }
 
     @Override
     public void enterInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
-        generateANewBoxElement(BoxType.JAVA_INTERFACE, ctx.identifier().getText(), new ArrayList<>());
+        List<BoxConnection> connections = new ArrayList<>();
+        String className = ctx.identifier().getText();
+        int lastReadedChild = 1;
+        ParseTree currentExtensionType = ctx.getChild(++lastReadedChild);
+        if (currentExtensionType == ctx.EXTENDS()) {
+            ParseTree interfaceList = ctx.getChild(++lastReadedChild);
+            for (int i = 0; i < interfaceList.getChildCount(); ++i) {
+                String currentToken = interfaceList.getChild(i).getText();
+                if (!currentToken.equals(",")) {
+                    connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, currentToken));
+                }
+            }
+        }
+        generateANewBoxElement(BoxType.JAVA_INTERFACE, className, connections);
     }
 
     @Override
     public void enterEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
+        // TODO track extends/implements
         generateANewBoxElement(BoxType.JAVA_ENUM, ctx.identifier().getText(), new ArrayList<>());
     }
 
