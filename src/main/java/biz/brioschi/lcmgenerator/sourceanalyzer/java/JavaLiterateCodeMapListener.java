@@ -28,21 +28,15 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         List<BoxConnection> connections = new ArrayList<>();
         String className = ctx.identifier().getText();
         int lastReadedChild = 1;
-        while (ctx.getChildCount() - 1 > lastReadedChild) {
-            ParseTree currentExtensionType = ctx.getChild(++lastReadedChild);
-            if (currentExtensionType == ctx.EXTENDS()) {
-                String boxName = ctx.getChild(++lastReadedChild).getText();
-                connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, boxName));
-            }
-            if (currentExtensionType == ctx.IMPLEMENTS()) {
-                ParseTree interfaceList = ctx.getChild(++lastReadedChild);
-                for (int i = 0; i < interfaceList.getChildCount(); ++i) {
-                    String currentToken = interfaceList.getChild(i).getText();
-                    if (!currentToken.equals(",")) {
-                        connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, currentToken));
-                    }
-                }
-            }
+        ParseTree currentExtensionType = ctx.getChild(++lastReadedChild);
+        if (currentExtensionType == ctx.EXTENDS()) {
+            String targetBoxName = ctx.getChild(++lastReadedChild).getText();
+            connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, targetBoxName));
+            currentExtensionType = ctx.getChild(++lastReadedChild);
+        }
+        if (currentExtensionType == ctx.IMPLEMENTS()) {
+            ParseTree interfaceList = ctx.getChild(++lastReadedChild);
+            connections.addAll(parseListOfExtensions(interfaceList));
         }
         generateANewBoxElement(BoxType.JAVA_CLASS, className, connections);
     }
@@ -51,16 +45,10 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     public void enterInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
         List<BoxConnection> connections = new ArrayList<>();
         String className = ctx.identifier().getText();
-        int lastReadedChild = 1;
-        ParseTree currentExtensionType = ctx.getChild(++lastReadedChild);
+        ParseTree currentExtensionType = ctx.getChild(2);
         if (currentExtensionType == ctx.EXTENDS()) {
-            ParseTree interfaceList = ctx.getChild(++lastReadedChild);
-            for (int i = 0; i < interfaceList.getChildCount(); ++i) {
-                String currentToken = interfaceList.getChild(i).getText();
-                if (!currentToken.equals(",")) {
-                    connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, currentToken));
-                }
-            }
+            ParseTree interfaceList = ctx.getChild(3);
+            connections.addAll(parseListOfExtensions(interfaceList));
         }
         generateANewBoxElement(BoxType.JAVA_INTERFACE, className, connections);
     }
@@ -69,18 +57,23 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     public void enterEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
         List<BoxConnection> connections = new ArrayList<>();
         String className = ctx.identifier().getText();
-        int lastReadedChild = 1;
-        ParseTree currentExtensionType = ctx.getChild(++lastReadedChild);
+        ParseTree currentExtensionType = ctx.getChild(2);
         if (currentExtensionType == ctx.IMPLEMENTS()) {
-            ParseTree interfaceList = ctx.getChild(++lastReadedChild);
-            for (int i = 0; i < interfaceList.getChildCount(); ++i) {
-                String currentToken = interfaceList.getChild(i).getText();
-                if (!currentToken.equals(",")) {
-                    connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, currentToken));
-                }
-            }
+            ParseTree interfaceList = ctx.getChild(3);
+            connections.addAll(parseListOfExtensions(interfaceList));
         }
         generateANewBoxElement(BoxType.JAVA_ENUM, className, connections);
+    }
+
+    private List<BoxConnection> parseListOfExtensions(ParseTree interfaceList) {
+        List<BoxConnection> connections = new ArrayList<>();
+        for (int i = 0; i < interfaceList.getChildCount(); ++i) {
+            String currentToken = interfaceList.getChild(i).getText();
+            if (!currentToken.equals(",")) {
+                connections.add(new BoxConnection(BoxConnection.ConnectionType.EXTENDS, currentToken));
+            }
+        }
+        return connections;
     }
 
     private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
