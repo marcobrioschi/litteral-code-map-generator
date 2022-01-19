@@ -14,20 +14,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-public class JavaAnalyzerTest {
+public class JavaAnalyzerBoxTypeTest {
 
     @ParameterizedTest(name = "{index} - \"{0}\" generate a box of type {1} with name \"{2}\"")
     @MethodSource
-    public void parseJavaClassBox(String inputUnit, BoxType type, String boxName) {
+    public void parseJavaBox(String inputUnit, BoxType type, String boxName) {
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromString(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(1));
         LiterateCodeMapBox firstUnit = units.get(0);
         assertThat(firstUnit.getType(), is(type));
         assertThat(firstUnit.getName(), is(boxName));
+        assertThat(firstUnit.getConnections(), hasSize(0));
     }
 
-    private static Stream<Arguments> parseJavaClassBox() {
+    private static Stream<Arguments> parseJavaBox() {
         return Stream.of(
                 Arguments.of("public class TestClass { }", BoxType.JAVA_CLASS, "TestClass"),
                 Arguments.of("public interface TestInterface { }", BoxType.JAVA_INTERFACE, "TestInterface"),

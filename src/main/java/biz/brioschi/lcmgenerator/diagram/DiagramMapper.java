@@ -15,7 +15,14 @@ public class DiagramMapper {
     public void mapBoxes(List<LiterateCodeMapBox> boxes) {
         this.diagramBuilder.startDocument("", "");
         for (LiterateCodeMapBox box : boxes) {
-            this.diagramBuilder.addLiterateCodeMapBox(box);
+            this.diagramBuilder.addLiterateCodeMapBox(box.getType(), box.getName());
+            for (BoxConnection connection : box.getConnections()) {
+                this.diagramBuilder.addLiterateCodeMapConnection(
+                        box.getName(),
+                        connection.getTargetBoxName(),
+                        connection.getType()
+                );
+            }
         }
         this.diagramBuilder.endDocument();
     }
