@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,11 +26,14 @@ public class LiterateCodeMapGenerator implements Runnable {
         commandLine.execute(args);
     }
 
-    @Parameters(description = "source directories", defaultValue = ".", split = ",")
+    @Option(names = {"-s", "--source-directories"}, description = "source directories to scan", defaultValue = ".", arity = "0..*", split = ",")
     private List<String> sourceDirectories;
 
-    @Option(names = {"-o", "--output-directory"}, description = "output directory for diagrams", defaultValue = ".")
-    private String plantUMLOutputDirectory;
+    @Option(names = {"-f", "--filter-boxes"}, description = "boxes that can be showed", arity = "0..*", split = ",")
+    private List<String> validBoxes;
+
+    @Option(names = {"-o", "--output-file"}, description = "output diagram file name", defaultValue = "./literate-code-map.svg")
+    private String outputDiagramFileName;
 
     @Override
     public void run() {
@@ -57,12 +59,13 @@ public class LiterateCodeMapGenerator implements Runnable {
         String source = diagramBuilder.getDiagramDescription();
 
         // Generate the diagram image
-        try (OutputStream diagramFileOutputStream = new FileOutputStream(plantUMLOutputDirectory + File.separator + "literate-code-map.svg")) {
+        try (OutputStream diagramFileOutputStream = new FileOutputStream(outputDiagramFileName)) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
             plantUMLGenerator.generateSVGDiagram(source, diagramFileOutputStream);
         } catch (IOException e) {
             System.err.println("Exception writing the literate code map diagram: " + e.getMessage());
         }
+
     }
 
 }
