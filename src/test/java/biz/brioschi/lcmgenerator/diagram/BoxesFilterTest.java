@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType.EXTENDS;
 import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType.JAVA_CLASS;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 class BoxesFilterTest {
@@ -21,15 +23,21 @@ class BoxesFilterTest {
     }
 
     @Test
-    @Disabled
     public void filterNotValidBoxes() {
-        assertThat(true, is(false));
+        BoxesFilter boxesFilter = new BoxesFilter(Arrays.asList("box_numero_2", "box_numero_3", "box_numero_4"));
+        List<LiterateCodeMapBox> result = boxesFilter.filter(Arrays.asList(BOX1, BOX2));
+        assertThat(result, is(Arrays.asList(BOX2)));
     }
 
     @Test
     @Disabled
     public void filterNotValidBoxConnections() {
-        assertThat(true, is(false));
+        BoxesFilter boxesFilter = new BoxesFilter(Arrays.asList("box_numero_2", "box_numero_4"));
+        List<LiterateCodeMapBox> result = boxesFilter.filter(Arrays.asList(BOX1, BOX2));
+        assertThat(result, hasSize(1));
+        assertThat(result.get(0).getName(), is("box_numero_2"));
+        assertThat(result.get(0).getConnections(), hasSize(1));
+        assertThat(result.get(0).getConnections().get(0).getTargetBoxName(), is("box_numero_4"));
     }
 
     private static final LiterateCodeMapBox BOX1 = LiterateCodeMapBox.builder()
