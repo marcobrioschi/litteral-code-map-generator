@@ -52,6 +52,8 @@ public class LiterateCodeMapGenerator implements Runnable {
             }
         }
 
+        System.out.println(">>> " + validBoxes);
+
         // Generate the diagram description
         DiagramBuilder diagramBuilder = new PlantUMLBuilder();
         DiagramMapper diagramMapper = new DiagramMapper(diagramBuilder);
