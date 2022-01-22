@@ -1,5 +1,7 @@
 package biz.brioschi.lcmgenerator;
 
+import biz.brioschi.lcmgenerator.diagram.BoxConnection;
+import biz.brioschi.lcmgenerator.diagram.BoxesFilter;
 import biz.brioschi.lcmgenerator.diagram.DiagramMapper;
 import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 import biz.brioschi.lcmgenerator.diagram.builders.DiagramBuilder;
@@ -11,7 +13,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,11 +28,17 @@ public class LiterateCodeMapGenerator implements Runnable {
         commandLine.execute(args);
     }
 
-    @Parameters(description = "source directories", defaultValue = ".", split = ",")
+    @Option(names = {"-s", "--source-directories"}, description = "source directories to scan", defaultValue = ".", arity = "0..*", split = ",")
     private List<String> sourceDirectories;
 
-    @Option(names = {"-o", "--output-directory"}, description = "output directory for diagrams", defaultValue = ".")
-    private String plantUMLOutputDirectory;
+    @Option(names = {"-f", "--filter-boxes"}, description = "boxes that can be showed", arity = "0..*", split = ",")
+    private List<String> validBoxes;
+
+    @Option(names = {"-l", "--list-boxes"}, description = "list all the boxes found in the source directories", defaultValue = "false")
+    private boolean listAllBoxes;
+
+    @Option(names = {"-o", "--output-file"}, description = "output diagram file name", defaultValue = "./literate-code-map.svg")
+    private String outputDiagramFileName;
 
     @Override
     public void run() {
@@ -50,19 +57,34 @@ public class LiterateCodeMapGenerator implements Runnable {
             }
         }
 
+        // List all the boxes
+        if (listAllBoxes) {
+            for (LiterateCodeMapBox box : boxes) {
+                System.out.println("box:" + box.getName());
+                for (BoxConnection connection: box.getConnections()) {
+                    System.out.println("source:" + box.getName() + ",target:" + connection.getTargetBoxName());
+                }
+            }
+        }
+
+        // Filter list of boxes
+        BoxesFilter boxesFilter = new BoxesFilter(validBoxes);
+        List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);
+
         // Generate the diagram description
         DiagramBuilder diagramBuilder = new PlantUMLBuilder();
         DiagramMapper diagramMapper = new DiagramMapper(diagramBuilder);
-        diagramMapper.mapBoxes(boxes);
+        diagramMapper.mapBoxes(filteredBoxes);
         String source = diagramBuilder.getDiagramDescription();
 
         // Generate the diagram image
-        try (OutputStream diagramFileOutputStream = new FileOutputStream(plantUMLOutputDirectory + File.separator + "literate-code-map.svg")) {
+        try (OutputStream diagramFileOutputStream = new FileOutputStream(outputDiagramFileName)) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
             plantUMLGenerator.generateSVGDiagram(source, diagramFileOutputStream);
         } catch (IOException e) {
             System.err.println("Exception writing the literate code map diagram: " + e.getMessage());
         }
+
     }
 
 }
