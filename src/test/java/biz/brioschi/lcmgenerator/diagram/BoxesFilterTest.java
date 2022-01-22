@@ -1,6 +1,5 @@
 package biz.brioschi.lcmgenerator.diagram;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ class BoxesFilterTest {
     }
 
     @Test
-    @Disabled
     public void filterNotValidBoxConnections() {
         BoxesFilter boxesFilter = new BoxesFilter(Arrays.asList("box_numero_2", "box_numero_4"));
         List<LiterateCodeMapBox> result = boxesFilter.filter(Arrays.asList(BOX1, BOX2));

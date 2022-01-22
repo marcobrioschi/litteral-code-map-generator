@@ -18,6 +18,13 @@ public class BoxesFilter {
             Pattern filterPattern = Pattern.compile(composedRegEx);
             return boxList.stream()
                     .filter(box -> filterPattern.matcher(box.getName()).matches())
+                    .map(box -> new LiterateCodeMapBox(
+                            box.getType(),
+                            box.getName(),
+                            box.getConnections().stream()
+                                    .filter(boxConnection -> filterPattern.matcher(boxConnection.getTargetBoxName()).matches())
+                                    .collect(Collectors.toList())
+                    ))
                     .collect(Collectors.toList());
         } else {
             return boxList;
