@@ -37,26 +37,38 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         String className = ctx.identifier().getText();
         List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
         typeScopeStack.push(new TypeDeclarationScope(className, connections));
-        TypeDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(BoxType.JAVA_CLASS, currentScope.getTypeName(), currentScope.getConnections()); // TODO move to the exit
     }
 
     @Override
     public void exitClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
+        TypeDeclarationScope currentScope = typeScopeStack.pop();
+        generateANewBoxElement(BoxType.JAVA_CLASS, currentScope.getTypeName(), currentScope.getConnections());
     }
 
     @Override
     public void enterInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
         String className = ctx.identifier().getText();
         List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
-        generateANewBoxElement(BoxType.JAVA_INTERFACE, className, connections);
+        typeScopeStack.push(new TypeDeclarationScope(className, connections));
+    }
+
+    @Override
+    public void exitInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
+        TypeDeclarationScope currentScope = typeScopeStack.pop();
+        generateANewBoxElement(BoxType.JAVA_INTERFACE, currentScope.getTypeName(), currentScope.getConnections());
     }
 
     @Override
     public void enterEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
         String className = ctx.identifier().getText();
         List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
-        generateANewBoxElement(BoxType.JAVA_ENUM, className, connections);
+        typeScopeStack.push(new TypeDeclarationScope(className, connections));
+    }
+
+    @Override
+    public void exitEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
+        TypeDeclarationScope currentScope = typeScopeStack.pop();
+        generateANewBoxElement(BoxType.JAVA_ENUM, currentScope.getTypeName(), currentScope.getConnections());
     }
 
     private List<BoxConnection> getCurrentBoxExtensions(ParserRuleContext ctx) {
