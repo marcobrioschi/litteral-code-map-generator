@@ -6,6 +6,6 @@ import java.util.List;
 
 @Value
 public class TypeDeclarationScope {
-    String name;
-    List<BoxConnection> connectionList;
+    String typeName;
+    List<BoxConnection> connections;
 }

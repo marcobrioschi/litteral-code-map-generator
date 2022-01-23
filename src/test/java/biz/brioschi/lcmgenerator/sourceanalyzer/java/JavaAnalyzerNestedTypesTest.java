@@ -13,8 +13,7 @@ import java.util.List;
 import static biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType.EXTENDS;
 import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class JavaAnalyzerNestedTypesTest {
 
@@ -24,14 +23,13 @@ public class JavaAnalyzerNestedTypesTest {
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(7));
-        ArrayList<BoxConnection> emptyConnectionList = new ArrayList<>();
-        checkType(units.get(0), JAVA_CLASS, "Level_1", emptyConnectionList);
-        checkType(units.get(1), JAVA_CLASS, "Level_1_1", emptyConnectionList);
-        checkType(units.get(2), JAVA_CLASS, "Level_1_1_1", emptyConnectionList);
-        checkType(units.get(3), JAVA_INTERFACE, "Level_1_1_2", emptyConnectionList);
-        checkType(units.get(4), JAVA_ENUM, "Level_1_1_3", emptyConnectionList);
-        checkType(units.get(5), JAVA_INTERFACE, "Level_1_2", emptyConnectionList);
-        checkType(units.get(6), JAVA_ENUM, "Level_1_3", emptyConnectionList);
+        checkExpectedBox(units, JAVA_CLASS, "Level_1");
+        checkExpectedBox(units, JAVA_CLASS, "Level_1_1");
+        checkExpectedBox(units, JAVA_CLASS, "Level_1_1_1");
+        checkExpectedBox(units, JAVA_INTERFACE, "Level_1_1_2");
+        checkExpectedBox(units, JAVA_ENUM, "Level_1_1_3");
+        checkExpectedBox(units, JAVA_INTERFACE, "Level_1_2");
+        checkExpectedBox(units, JAVA_ENUM, "Level_1_3");
     }
 
     @Test
@@ -40,27 +38,36 @@ public class JavaAnalyzerNestedTypesTest {
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(7));
-        checkType(units.get(0), JAVA_CLASS, "Level_1", generateBoxConnectionTestList("C1"));
-        checkType(units.get(1), JAVA_CLASS, "Level_1_1", generateBoxConnectionTestList("I1", "I2"));
-        checkType(units.get(2), JAVA_CLASS, "Level_1_1_1", generateBoxConnectionTestList("C2", "I3", "I4"));
-        checkType(units.get(3), JAVA_INTERFACE, "Level_1_1_2", generateBoxConnectionTestList("I5"));
-        checkType(units.get(4), JAVA_ENUM, "Level_1_1_3", generateBoxConnectionTestList("I8", "I9"));
-        checkType(units.get(5), JAVA_INTERFACE, "Level_1_2", generateBoxConnectionTestList("I6", "I7"));
-        checkType(units.get(6), JAVA_ENUM, "Level_1_3", generateBoxConnectionTestList("I10"));
+        checkExpectedBox(units, JAVA_CLASS, "Level_1", "C1");
+        checkExpectedBox(units, JAVA_CLASS, "Level_1_1", "I1", "I2");
+        checkExpectedBox(units, JAVA_CLASS, "Level_1_1_1", "C2", "I3", "I4");
+        checkExpectedBox(units, JAVA_INTERFACE, "Level_1_1_2", "I5");
+        checkExpectedBox(units, JAVA_ENUM, "Level_1_1_3", "I8", "I9");
+        checkExpectedBox(units, JAVA_INTERFACE, "Level_1_2", "I6", "I7");
+        checkExpectedBox(units, JAVA_ENUM, "Level_1_3", "I10");
     }
 
-    private List<BoxConnection> generateBoxConnectionTestList(String... connectionNames) {
-        List<BoxConnection> connections = new ArrayList<>();
-        for (String connectionName : connectionNames) {
-            connections.add(new BoxConnection(EXTENDS, connectionName));
+    private LiterateCodeMapBox buildExpectedBox(BoxType expectedType, String expectedName, String[] expectedConnectionNames) {
+        List<BoxConnection> expectedConnections = new ArrayList<>();
+        for (String expectedConnectionName : expectedConnectionNames) {
+            expectedConnections.add(new BoxConnection(EXTENDS, expectedConnectionName));
         }
-        return connections;
+        LiterateCodeMapBox expectedBox = LiterateCodeMapBox.builder()
+                .type(expectedType)
+                .name(expectedName)
+                .connections(expectedConnections)
+                .build();
+        return expectedBox;
     }
 
-    private void checkType(LiterateCodeMapBox box, BoxType boxType, String boxName, List<BoxConnection> boxConnections) {
-        assertThat(box.getType(), is(boxType));
-        assertThat(box.getName(), is(boxName));
-        assertThat(box.getConnections(), is(boxConnections));
+    private void checkExpectedBox(
+            List<LiterateCodeMapBox> boxes,
+            BoxType expectedType,
+            String expectedName,
+            String... expectedConnectionNames
+    ) {
+        LiterateCodeMapBox expectedBox = buildExpectedBox(expectedType, expectedName, expectedConnectionNames);
+        assertThat(boxes, hasItems(expectedBox));
     }
 
 }
