@@ -4,6 +4,8 @@ public class StaticMethodCallClass {
 
     public void classMethod(int par1) {
         GenericClassTwo.secondStaticMethod(2, "Two");
+        // List.get(1).fakeInvocation("3-4");
+        // Class.OtherClass.otherMethod(5);
     }
 
 }
