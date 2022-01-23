@@ -7,7 +7,7 @@ public class BoxConnection {
 
     ConnectionType type;
     String targetBoxName;
-    String description = "";
+    String description = "";    // TODO: fix the management
 
     public enum ConnectionType {
         EXTENDS,

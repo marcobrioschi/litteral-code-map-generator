@@ -101,15 +101,18 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     ///////////////////////////////////////////////////////////////////////////
     // Method invocations
 
-//    @Override
-//    public void enterExpression(JavaParser.ExpressionContext ctx) {
-//        if (ctx.bop != null) {
-//            String targetBoxName = ctx.expression(0).getText();
-//            String invocationDescription = ctx.methodCall().getText();
-//            System.out.println(targetBoxName);
-//            System.out.println(invocationDescription);
-//        }
-//    }
+    @Override
+    public void enterExpression(JavaParser.ExpressionContext ctx) {
+        if (ctx.bop != null) {
+            String targetBoxName = ctx.expression(0).getText();
+            String invocationDescription = ctx.methodCall().getText();
+            // TODO: only direct class or single variables
+            // TODO: add ovveride comments
+            BoxConnection invokeConnection = new BoxConnection(BoxConnection.ConnectionType.INVOKE, targetBoxName);
+            typeScopeStack.peek().getConnections().add(invokeConnection);
+            // TODO add description
+        }
+    }
 
     private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
         literateCodeMapBoxes.add(
