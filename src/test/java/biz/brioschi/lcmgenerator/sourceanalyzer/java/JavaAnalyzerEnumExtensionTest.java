@@ -14,7 +14,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class JavaAnalyzerEnumExtensionTest {
-    
+
+    // TODO rifattorizzare i test con l'helper da questa classe
+
     @ParameterizedTest(name = "{index} - \"{0}\" the extensions are \"{1}\"")
     @MethodSource
     public void parseEnumExtensions(String inputUnit, BoxConnection[] connections) {

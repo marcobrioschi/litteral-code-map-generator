@@ -16,7 +16,7 @@ public class JavaAnalyzerStaticMethodCallTest {
 
     @Test
     public void recognizeStaticMethodCall() throws IOException {
-        String inputUnit = "src/test/resources/boxconnections/SimpleMethodCall.java";
+        String inputUnit = "src/test/resources/boxconnections/StaticMethodCallClass.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(1));
