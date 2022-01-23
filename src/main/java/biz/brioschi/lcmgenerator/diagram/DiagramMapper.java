@@ -20,8 +20,8 @@ public class DiagramMapper {
                 this.diagramBuilder.addLiterateCodeMapConnection(
                         box.getName(),
                         connection.getTargetBoxName(),
-                        connection.getType()
-                );
+                        connection.getType(),
+                        connection.getDescription());
             }
         }
         this.diagramBuilder.endDocument();

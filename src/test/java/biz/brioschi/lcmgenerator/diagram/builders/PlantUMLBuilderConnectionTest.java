@@ -20,12 +20,50 @@ class PlantUMLBuilderConnectionTest {
         plantUMLBuilder.addLiterateCodeMapConnection(
                 "ClassNameSource",
                 "ClassNameTarget",
-                ConnectionType.EXTENDS
-        );
+                ConnectionType.EXTENDS,
+                null);
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
 
         assertThat(result, containsString("\nClassNameTarget <|-- ClassNameSource\n"));
+    }
+
+    @Test
+    public void generateCallWithDescription() {
+
+        PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
+        plantUMLBuilder.startDocument("", "");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameSource");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameTarget");
+        plantUMLBuilder.addLiterateCodeMapConnection(
+                "ClassNameSource",
+                "ClassNameTarget",
+                ConnectionType.INVOKE,
+                "connectionDescription");
+        plantUMLBuilder.endDocument();
+        String result = plantUMLBuilder.getDiagramDescription();
+
+        assertThat(result, containsString("\nClassNameSource --> ClassNameTarget : connectionDescription\n"));
+
+    }
+
+    @Test
+    public void generateCallWithNoDescription() {
+
+        PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
+        plantUMLBuilder.startDocument("", "");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameSource");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameTarget");
+        plantUMLBuilder.addLiterateCodeMapConnection(
+                "ClassNameSource",
+                "ClassNameTarget",
+                ConnectionType.INVOKE,
+                null);
+        plantUMLBuilder.endDocument();
+        String result = plantUMLBuilder.getDiagramDescription();
+
+        assertThat(result, containsString("\nClassNameSource --> ClassNameTarget\n"));
+
     }
 
     @Test
@@ -35,7 +73,7 @@ class PlantUMLBuilderConnectionTest {
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "A");
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "B");
         for (ConnectionType currentType : ConnectionType.values()) {
-            plantUMLBuilder.addLiterateCodeMapConnection("A", "B", currentType);
+            plantUMLBuilder.addLiterateCodeMapConnection("A", "B", currentType, null);
         }
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
