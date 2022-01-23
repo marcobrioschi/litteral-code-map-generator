@@ -12,8 +12,8 @@ public class DiagramMapper {
         this.diagramBuilder = diagramBuilder;
     }
 
-    public void mapBoxes(List<LiterateCodeMapBox> boxes) {
-        this.diagramBuilder.startDocument("", "");
+    public void mapBoxes(String title, String description, List<LiterateCodeMapBox> boxes) {
+        this.diagramBuilder.startDocument(title, description);
         for (LiterateCodeMapBox box : boxes) {
             this.diagramBuilder.addLiterateCodeMapBox(box.getType(), box.getName());
             for (BoxConnection connection : box.getConnections()) {

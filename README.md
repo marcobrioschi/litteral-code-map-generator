@@ -1,7 +1,7 @@
 
 ### Auto test
 
-./generator.sh -s ./src/main/java -o generator.svg -f LiterateCodeMapGenerator,JavaAnalyzer,FileSystemScanner,PlantUMLGenerator,DiagramBuilder,PlantUMLBuilder,BoxesFilter,DiagramMapper
+./generator.sh -t 'Literate Code Map Generator' -d 'The diagram describe the main flow of the generator' -s ./src/main/java -o generator.svg -f LiterateCodeMapGenerator,JavaAnalyzer,FileSystemScanner,PlantUMLGenerator,DiagramBuilder,PlantUMLBuilder,BoxesFilter,DiagramMapper
 
 ### Credits
 

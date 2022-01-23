@@ -9,7 +9,8 @@ public class BoxConnection {
     String targetBoxName;
 
     public enum ConnectionType {
-        EXTENDS
+        EXTENDS,
+        // TODO add INVOKE
     }
 
 }

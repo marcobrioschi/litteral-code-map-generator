@@ -28,6 +28,12 @@ public class LiterateCodeMapGenerator implements Runnable {
         commandLine.execute(args);
     }
 
+    @Option(names = {"-t", "--title"}, description = "title of the diagram", defaultValue = "")
+    private String title;
+
+    @Option(names = {"-d", "--description"}, description = "description of the diagram", defaultValue = "")
+    private String description;
+
     @Option(names = {"-s", "--source-directories"}, description = "source directories to scan", defaultValue = ".", arity = "0..*", split = ",")
     private List<String> sourceDirectories;
 
@@ -74,7 +80,7 @@ public class LiterateCodeMapGenerator implements Runnable {
         // Generate the diagram description
         DiagramBuilder diagramBuilder = new PlantUMLBuilder();
         DiagramMapper diagramMapper = new DiagramMapper(diagramBuilder);
-        diagramMapper.mapBoxes(filteredBoxes);
+        diagramMapper.mapBoxes(title, description, filteredBoxes);
         String source = diagramBuilder.getDiagramDescription();
 
         // Generate the diagram image

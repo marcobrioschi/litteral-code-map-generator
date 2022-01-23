@@ -25,6 +25,9 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         return literateCodeMapBoxes;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Extensions
+
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         String className = ctx.identifier().getText();
@@ -72,6 +75,19 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         }
         return connections;
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Method invocations
+
+//    @Override
+//    public void enterExpression(JavaParser.ExpressionContext ctx) {
+//        if (ctx.bop != null) {
+//            String targetBoxName = ctx.expression(0).getText();
+//            String invocationDescription = ctx.methodCall().getText();
+//            System.out.println(targetBoxName);
+//            System.out.println(invocationDescription);
+//        }
+//    }
 
     private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
         literateCodeMapBoxes.add(
