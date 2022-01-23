@@ -18,8 +18,8 @@ The directive @LiterateMapInvoke make you able to add a connection between the c
 
 For each statement you can add elements on the map adding:
 
-* a multiline code comment before the statement
-* a single line comment after the statement
+* a comment before the statement
+* a comment after the statement and in the same line
 
 ## Design decisions
 

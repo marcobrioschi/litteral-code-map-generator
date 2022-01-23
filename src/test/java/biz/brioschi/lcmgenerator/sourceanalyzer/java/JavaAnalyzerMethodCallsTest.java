@@ -11,14 +11,14 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class JavaAnalyzerStaticMethodCallTest {
+public class JavaAnalyzerMethodCallsTest {
 
     // TODO nested classes
     // TODO handle only static invocation filtering other expressions
 
     @Test
     @Disabled
-    public void recognizeStaticMethodCall() throws IOException {
+    public void methodCalls() throws IOException {
         String inputUnit = "src/test/resources/boxconnections/MethodCall.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();

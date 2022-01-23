@@ -5,24 +5,33 @@ import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
 import biz.brioschi.lcmgenerator.diagram.BoxConnection;
 import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
 import biz.brioschi.lcmgenerator.diagram.TypeDeclarationScope;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
+import static biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType.EXTENDS;
 import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
+import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType.*;
 
 public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
+    private BufferedTokenStream bufferedTokenStream;
     private List<LiterateCodeMapBox> literateCodeMapBoxes;
     private Stack<TypeDeclarationScope> typeScopeStack;
+    private int lastReadCommentIndex;
 
-    public JavaLiterateCodeMapListener() {
+    public JavaLiterateCodeMapListener(BufferedTokenStream bufferedTokenStream) {
+        this.bufferedTokenStream = bufferedTokenStream;
         this.literateCodeMapBoxes = new ArrayList<>();
         this.typeScopeStack = new Stack<>();
+        this.lastReadCommentIndex = -1;
     }
 
     public List<LiterateCodeMapBox> getLiterateCodeMapBoxes() {
@@ -42,7 +51,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void exitClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         TypeDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(BoxType.JAVA_CLASS, currentScope.getTypeName(), currentScope.getConnections());
+        generateANewBoxElement(JAVA_CLASS, currentScope.getTypeName(), currentScope.getConnections());
     }
 
     @Override
@@ -55,7 +64,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void exitInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
         TypeDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(BoxType.JAVA_INTERFACE, currentScope.getTypeName(), currentScope.getConnections());
+        generateANewBoxElement(JAVA_INTERFACE, currentScope.getTypeName(), currentScope.getConnections());
     }
 
     @Override
@@ -68,7 +77,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void exitEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
         TypeDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(BoxType.JAVA_ENUM, currentScope.getTypeName(), currentScope.getConnections());
+        generateANewBoxElement(JAVA_ENUM, currentScope.getTypeName(), currentScope.getConnections());
     }
 
     private List<BoxConnection> getCurrentBoxExtensions(ParserRuleContext ctx) {
@@ -90,16 +99,13 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
             String currentExtensionName = interfaceList.getChild(i).getText();
             connections.add(
                     new BoxConnection(
-                            BoxConnection.ConnectionType.EXTENDS,
+                            EXTENDS,
                             currentExtensionName
                     )
             );
         }
         return connections;
     }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Method invocations
 
     private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
         literateCodeMapBoxes.add(
@@ -109,6 +115,53 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
                         .connections(connections)
                         .build()
         );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Literate Map Generator directives
+
+    @Override
+    public void enterStatement(JavaParser.StatementContext ctx) {
+        parseDirectives(ctx);
+    }
+    // TODO typeDeclaration, block, blockStatement, classBodyDeclaration, interfaceBodyDeclaration and remove statement
+
+    private void parseDirectives(JavaParser.StatementContext ctx) {
+        List<Token> possibleDirectives = new ArrayList<>();
+        possibleDirectives.addAll(findAllCommentsBeforeTheCurrentElementAndNotAlreadyUsed(ctx.start));
+        possibleDirectives.addAll(findAllCommentsAfterTheCurrentElementAndInTheSameLine(ctx.stop));
+        lastReadCommentIndex = possibleDirectives.stream()
+                .mapToInt(token -> token.getTokenIndex())
+                .max().orElse(lastReadCommentIndex);
+        for (Token singleToken : possibleDirectives) {
+            System.out.println(singleToken.getCharPositionInLine() + " - " + singleToken.getText());
+        }
+    }
+
+    private List<Token> findAllCommentsBeforeTheCurrentElementAndNotAlreadyUsed(Token currentElementFirstToken) {
+        return bufferedTokenStream.getHiddenTokensToLeft(currentElementFirstToken.getTokenIndex()).stream()
+                .filter(token -> isAComment(token))
+                .filter(token -> !isAlreadyUsed(token))
+                .collect(Collectors.toList());
+    }
+
+    private List<Token> findAllCommentsAfterTheCurrentElementAndInTheSameLine(Token currentElementLastToken) {
+        return bufferedTokenStream.getHiddenTokensToRight(currentElementLastToken.getTokenIndex()).stream()
+                .filter(token -> isAComment(token))
+                .filter(token -> isOnTheSameLine(token, currentElementLastToken.getLine()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isAlreadyUsed(Token token) {
+        return token.getTokenIndex() <= lastReadCommentIndex;
+    }
+
+    private boolean isOnTheSameLine(Token token, int referenceLine) {
+        return token.getLine() == referenceLine;
+    }
+
+    private boolean isAComment(Token token) {
+        return (token.getType() == JavaParser.COMMENT) || (token.getType() == JavaParser.LINE_COMMENT);
     }
 
 }

@@ -23,7 +23,7 @@ public class JavaAnalyzer {
         CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
         JavaParser parser = new JavaParser(commonTokenStream);
         ParseTree tree = parser.compilationUnit();
-        JavaLiterateCodeMapListener listener = new JavaLiterateCodeMapListener();
+        JavaLiterateCodeMapListener listener = new JavaLiterateCodeMapListener(commonTokenStream);
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
         return listener.getLiterateCodeMapBoxes();
