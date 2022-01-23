@@ -1,7 +1,7 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
-import biz.brioschi.lcmgenerator.diagram.BoxConnection;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

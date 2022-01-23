@@ -1,11 +1,11 @@
 package biz.brioschi.lcmgenerator;
 
-import biz.brioschi.lcmgenerator.diagram.BoxConnection;
-import biz.brioschi.lcmgenerator.diagram.BoxesFilter;
-import biz.brioschi.lcmgenerator.diagram.DiagramMapper;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
-import biz.brioschi.lcmgenerator.diagram.builders.DiagramBuilder;
-import biz.brioschi.lcmgenerator.diagram.builders.PlantUMLBuilder;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
+import biz.brioschi.lcmgenerator.literatemap.BoxesFilter;
+import biz.brioschi.lcmgenerator.literatemap.LiterateMapMapper;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.builders.DiagramBuilder;
+import biz.brioschi.lcmgenerator.literatemap.builders.PlantUMLBuilder;
 import biz.brioschi.lcmgenerator.providers.FileSystemScanner;
 import biz.brioschi.lcmgenerator.providers.PlantUMLGenerator;
 import biz.brioschi.lcmgenerator.sourceanalyzer.java.JavaAnalyzer;
@@ -28,10 +28,10 @@ public class LiterateCodeMapGenerator implements Runnable {
         commandLine.execute(args);
     }
 
-    @Option(names = {"-t", "--title"}, description = "title of the diagram", defaultValue = "")
+    @Option(names = {"-t", "--title"}, description = "title of the literatemap", defaultValue = "")
     private String title;
 
-    @Option(names = {"-d", "--description"}, description = "description of the diagram", defaultValue = "")
+    @Option(names = {"-d", "--description"}, description = "description of the literatemap", defaultValue = "")
     private String description;
 
     @Option(names = {"-s", "--source-directories"}, description = "source directories to scan", defaultValue = ".", arity = "0..*", split = ",")
@@ -43,7 +43,7 @@ public class LiterateCodeMapGenerator implements Runnable {
     @Option(names = {"-l", "--list-boxes"}, description = "list all the boxes found in the source directories", defaultValue = "false")
     private boolean listAllBoxes;
 
-    @Option(names = {"-o", "--output-file"}, description = "output diagram file name", defaultValue = "./literate-code-map.svg")
+    @Option(names = {"-o", "--output-file"}, description = "output literatemap file name", defaultValue = "./literate-code-map.svg")
     private String outputDiagramFileName;
 
     @Override
@@ -77,18 +77,18 @@ public class LiterateCodeMapGenerator implements Runnable {
         BoxesFilter boxesFilter = new BoxesFilter(validBoxes);
         List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);
 
-        // Generate the diagram description
+        // Generate the map description
         DiagramBuilder diagramBuilder = new PlantUMLBuilder();
-        DiagramMapper diagramMapper = new DiagramMapper(diagramBuilder);
-        diagramMapper.mapBoxes(title, description, filteredBoxes);
+        LiterateMapMapper literateMapMapper = new LiterateMapMapper(diagramBuilder);
+        literateMapMapper.mapBoxes(title, description, filteredBoxes);
         String source = diagramBuilder.getDiagramDescription();
 
-        // Generate the diagram image
+        // Generate the map image
         try (OutputStream diagramFileOutputStream = new FileOutputStream(outputDiagramFileName)) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
             plantUMLGenerator.generateSVGDiagram(source, diagramFileOutputStream);
         } catch (IOException e) {
-            System.err.println("Exception writing the literate code map diagram: " + e.getMessage());
+            System.err.println("Exception writing the literate code map literatemap: " + e.getMessage());
         }
 
     }

@@ -1,4 +1,4 @@
-package biz.brioschi.lcmgenerator.diagram.builders;
+package biz.brioschi.lcmgenerator.literatemap.builders;
 
 import org.junit.jupiter.api.Test;
 

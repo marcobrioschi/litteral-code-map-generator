@@ -1,14 +1,14 @@
-package biz.brioschi.lcmgenerator.diagram;
+package biz.brioschi.lcmgenerator.literatemap;
 
-import biz.brioschi.lcmgenerator.diagram.builders.DiagramBuilder;
+import biz.brioschi.lcmgenerator.literatemap.builders.DiagramBuilder;
 
 import java.util.List;
 
-public class DiagramMapper {
+public class LiterateMapMapper {
 
     private final DiagramBuilder diagramBuilder;
 
-    public DiagramMapper(DiagramBuilder diagramBuilder) {
+    public LiterateMapMapper(DiagramBuilder diagramBuilder) {
         this.diagramBuilder = diagramBuilder;
     }
 

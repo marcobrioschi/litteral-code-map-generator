@@ -1,13 +1,13 @@
 package biz.brioschi.lcmgenerator.util;
 
-import biz.brioschi.lcmgenerator.diagram.BoxConnection;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType.EXTENDS;
+import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
 
 public class LiterateCodeMapBoxHelper {
 

@@ -1,13 +1,13 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType.*;
+import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.*;
 import static biz.brioschi.lcmgenerator.util.LiterateCodeMapBoxHelper.generateLiterateCodeMapBox;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;

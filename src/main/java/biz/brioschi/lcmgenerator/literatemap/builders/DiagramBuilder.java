@@ -1,7 +1,7 @@
-package biz.brioschi.lcmgenerator.diagram.builders;
+package biz.brioschi.lcmgenerator.literatemap.builders;
 
-import biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 
 public interface DiagramBuilder {
 

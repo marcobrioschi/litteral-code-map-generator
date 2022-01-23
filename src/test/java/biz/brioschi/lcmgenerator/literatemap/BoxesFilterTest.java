@@ -1,4 +1,4 @@
-package biz.brioschi.lcmgenerator.diagram;
+package biz.brioschi.lcmgenerator.literatemap;
 
 import org.junit.jupiter.api.Test;
 
@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType.EXTENDS;
-import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType.JAVA_CLASS;
+import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
+import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.JAVA_CLASS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;

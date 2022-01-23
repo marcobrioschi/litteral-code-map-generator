@@ -1,6 +1,6 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

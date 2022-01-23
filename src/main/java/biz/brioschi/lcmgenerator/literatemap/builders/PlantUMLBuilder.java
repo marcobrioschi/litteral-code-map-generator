@@ -1,8 +1,8 @@
-package biz.brioschi.lcmgenerator.diagram.builders;
+package biz.brioschi.lcmgenerator.literatemap.builders;
 
-import biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
 
-import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
+import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
 
 public class PlantUMLBuilder implements DiagramBuilder {
 

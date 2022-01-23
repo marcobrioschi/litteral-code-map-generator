@@ -2,7 +2,7 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.antlr.java.lexer.JavaLexer;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
