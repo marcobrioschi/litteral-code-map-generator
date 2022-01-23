@@ -13,57 +13,58 @@ class PlantUMLBuilderConnectionTest {
     @Test
     public void generateExtension() {
 
-        PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
-        plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameSource");
-        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameTarget");
-        plantUMLBuilder.addLiterateCodeMapConnection(
+        String result = generatePlantUMLDocumentUsingConnectionBoxInfo(
                 "ClassNameSource",
                 "ClassNameTarget",
                 ConnectionType.EXTENDS,
-                null);
-        plantUMLBuilder.endDocument();
-        String result = plantUMLBuilder.getDiagramDescription();
+                null
+        );
 
         assertThat(result, containsString("\nClassNameTarget <|-- ClassNameSource\n"));
     }
 
     @Test
-    public void generateCallWithDescription() {
+    public void generateCallWithNoDescription() {
 
-        PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
-        plantUMLBuilder.startDocument("", "");
-        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameSource");
-        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameTarget");
-        plantUMLBuilder.addLiterateCodeMapConnection(
+        String result = generatePlantUMLDocumentUsingConnectionBoxInfo(
                 "ClassNameSource",
                 "ClassNameTarget",
                 ConnectionType.INVOKE,
-                "connectionDescription");
-        plantUMLBuilder.endDocument();
-        String result = plantUMLBuilder.getDiagramDescription();
+                null
+        );
+
+        assertThat(result, containsString("\nClassNameSource --> ClassNameTarget\n"));
+
+    }
+
+    @Test
+    public void generateCallWithDescription() {
+
+        String result = generatePlantUMLDocumentUsingConnectionBoxInfo(
+                "ClassNameSource",
+                "ClassNameTarget",
+                ConnectionType.INVOKE,
+                "connectionDescription"
+        );
 
         assertThat(result, containsString("\nClassNameSource --> ClassNameTarget : connectionDescription\n"));
 
     }
 
-    @Test
-    public void generateCallWithNoDescription() {
-
+    private String generatePlantUMLDocumentUsingConnectionBoxInfo(
+            String sourceBoxName,
+            String targetBoxName,
+            ConnectionType connectionType,
+            String description
+    ) {
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameSource");
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameTarget");
-        plantUMLBuilder.addLiterateCodeMapConnection(
-                "ClassNameSource",
-                "ClassNameTarget",
-                ConnectionType.INVOKE,
-                null);
+        plantUMLBuilder.addLiterateCodeMapConnection(sourceBoxName, targetBoxName, connectionType, description);
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getDiagramDescription();
-
-        assertThat(result, containsString("\nClassNameSource --> ClassNameTarget\n"));
-
+        return result;
     }
 
     @Test
