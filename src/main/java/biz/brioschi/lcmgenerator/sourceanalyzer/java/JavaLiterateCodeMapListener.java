@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static biz.brioschi.lcmgenerator.diagram.BoxConnection.ConnectionType.INVOKE;
 import static biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox.BoxType;
 
 public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
@@ -105,12 +106,11 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     public void enterExpression(JavaParser.ExpressionContext ctx) {
         if (ctx.bop != null) {
             String targetBoxName = ctx.expression(0).getText();
-            String invocationDescription = ctx.methodCall().getText();
+            String invocationDescription = ctx.methodCall().identifier().getText() + "(...)";
             // TODO: only direct class or single variables
             // TODO: add ovveride comments
-            BoxConnection invokeConnection = new BoxConnection(BoxConnection.ConnectionType.INVOKE, targetBoxName);
+            BoxConnection invokeConnection = new BoxConnection(INVOKE, targetBoxName, invocationDescription);
             typeScopeStack.peek().getConnections().add(invokeConnection);
-            // TODO add description
         }
     }
 

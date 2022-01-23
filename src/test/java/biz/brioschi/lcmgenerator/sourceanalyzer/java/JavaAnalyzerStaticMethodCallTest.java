@@ -27,10 +27,10 @@ public class JavaAnalyzerStaticMethodCallTest {
         assertThat(firstUnitConnections, hasSize(2));
         assertThat(firstUnitConnections.get(0).getType(), is(BoxConnection.ConnectionType.INVOKE));
         assertThat(firstUnitConnections.get(0).getTargetBoxName(), is("GenericClassOne"));
-        // TODO assertThat(firstUnitConnections.get(0).getDescription(), is("firstStaticMethod(1, \"One\")"));
+        assertThat(firstUnitConnections.get(0).getDescription(), is("firstStaticMethod(...)"));
         assertThat(firstUnitConnections.get(1).getType(), is(BoxConnection.ConnectionType.INVOKE));
         assertThat(firstUnitConnections.get(1).getTargetBoxName(), is("GenericClassTwo"));
-        // TODO assertThat(firstUnitConnections.get(1).getDescription(), is("secondStaticMethod(2, \"Two\")"));
+        assertThat(firstUnitConnections.get(1).getDescription(), is("secondStaticMethod(...)"));
     }
 
 }
