@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
 
 public class JavaAnalyzerEnumExtensionTest {
 
-    // TODO rifattorizzare i test con l'helper da questa classe
+    // TODO rifattorizzare l'helper
 
     @ParameterizedTest(name = "{index} - \"{0}\" the extensions are \"{1}\"")
     @MethodSource

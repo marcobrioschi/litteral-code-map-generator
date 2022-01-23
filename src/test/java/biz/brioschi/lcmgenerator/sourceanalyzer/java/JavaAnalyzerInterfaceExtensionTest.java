@@ -14,7 +14,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class JavaAnalyzerInterfaceExtensionTest {
-    
+
+    // TODO rifattorizzare l'helper
+
     @ParameterizedTest(name = "{index} - \"{0}\" the extensions are \"{1}\"")
     @MethodSource
     public void parseInterfaceExtensions(String inputUnit, BoxConnection[] connections) {

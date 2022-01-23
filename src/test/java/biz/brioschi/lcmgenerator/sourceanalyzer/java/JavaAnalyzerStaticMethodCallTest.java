@@ -14,6 +14,9 @@ import static org.hamcrest.Matchers.is;
 
 public class JavaAnalyzerStaticMethodCallTest {
 
+    // TODO nested classes
+    // TODO handle only static invocation filtering other expressions
+
     @Test
     public void recognizeStaticMethodCall() throws IOException {
         String inputUnit = "src/test/resources/boxconnections/StaticMethodCallClass.java";
