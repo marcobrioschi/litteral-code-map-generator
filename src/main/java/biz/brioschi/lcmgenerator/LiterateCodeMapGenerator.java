@@ -43,8 +43,8 @@ public class LiterateCodeMapGenerator implements Runnable {
     @Option(names = {"-l", "--list-boxes"}, description = "list all the boxes found in the source directories", defaultValue = "false")
     private boolean listAllBoxes;
 
-    @Option(names = {"-o", "--output-file"}, description = "output literatemap file name", defaultValue = "./literate-code-map.svg")
-    private String outputDiagramFileName;
+    @Option(names = {"-o", "--output-file"}, description = "output literate code map file name", defaultValue = "./literate-code-map.svg")
+    private String outputLiterateCodeMapFileName;
 
     @Override
     public void run() {
@@ -81,14 +81,14 @@ public class LiterateCodeMapGenerator implements Runnable {
         LiterateCodeBuilder literateCodeBuilder = new PlantUMLBuilder();
         LiterateCodeMap2BuilderMapper literateCodeMap2BuilderMapper = new LiterateCodeMap2BuilderMapper(literateCodeBuilder);
         literateCodeMap2BuilderMapper.mapBoxes(title, description, filteredBoxes);
-        String source = literateCodeBuilder.getDiagramDescription();
+        String source = literateCodeBuilder.getLiterateCodeMaoDescription();
 
         // Generate the map image
-        try (OutputStream diagramFileOutputStream = new FileOutputStream(outputDiagramFileName)) {
+        try (OutputStream literateCodeMapFileOutputStream = new FileOutputStream(outputLiterateCodeMapFileName)) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
-            plantUMLGenerator.generateSVGDiagram(source, diagramFileOutputStream);
+            plantUMLGenerator.generateSVGImage(source, literateCodeMapFileOutputStream);
         } catch (IOException e) {
-            System.err.println("Exception writing the literate code map literatemap: " + e.getMessage());
+            System.err.println("Exception writing the literate code map: " + e.getMessage());
         }
 
     }

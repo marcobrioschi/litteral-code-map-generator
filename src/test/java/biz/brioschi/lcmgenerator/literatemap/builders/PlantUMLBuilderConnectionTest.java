@@ -63,7 +63,7 @@ class PlantUMLBuilderConnectionTest {
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameTarget");
         plantUMLBuilder.addLiterateCodeMapConnection(sourceBoxName, targetBoxName, connectionType, description);
         plantUMLBuilder.endDocument();
-        String result = plantUMLBuilder.getDiagramDescription();
+        String result = plantUMLBuilder.getLiterateCodeMaoDescription();
         return result;
     }
 
@@ -77,7 +77,7 @@ class PlantUMLBuilderConnectionTest {
             plantUMLBuilder.addLiterateCodeMapConnection("A", "B", currentType, null);
         }
         plantUMLBuilder.endDocument();
-        String result = plantUMLBuilder.getDiagramDescription();
+        String result = plantUMLBuilder.getLiterateCodeMaoDescription();
         assertThat(true, is(true));
     }
 

@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.*;
 class PlantUMLBuilderTitleDescriptionTest {
 
     @Test
-    public void composeBaseDiagram() {
+    public void composeBaseCodeMap() {
 
         String result = generatePlantUMLDocumentUsingThisTitleAndDescription("", "");
 
@@ -18,7 +18,7 @@ class PlantUMLBuilderTitleDescriptionTest {
     }
 
     @Test
-    public void showTheTitleInTheDiagram() {
+    public void showTheTitleInTheCodeMap() {
 
         String result = generatePlantUMLDocumentUsingThisTitleAndDescription("This is a title", "");
 
@@ -27,7 +27,7 @@ class PlantUMLBuilderTitleDescriptionTest {
     }
 
     @Test
-    public void showTheDescriptionInTheDiagram() {
+    public void showTheDescriptionInTheCodeMap() {
 
         String result = generatePlantUMLDocumentUsingThisTitleAndDescription("", "This is a description");
 
@@ -36,7 +36,7 @@ class PlantUMLBuilderTitleDescriptionTest {
     }
 
     @Test
-    public void dontShowEmptyTitleOrEmptyDescriptionInTheDiagram() {
+    public void dontShowEmptyTitleOrEmptyDescriptionInTheCodeMap() {
 
         String result = generatePlantUMLDocumentUsingThisTitleAndDescription("", "");
 
@@ -49,7 +49,7 @@ class PlantUMLBuilderTitleDescriptionTest {
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument(title, description);
         plantUMLBuilder.endDocument();
-        String result = plantUMLBuilder.getDiagramDescription();
+        String result = plantUMLBuilder.getLiterateCodeMaoDescription();
         return result;
     }
 

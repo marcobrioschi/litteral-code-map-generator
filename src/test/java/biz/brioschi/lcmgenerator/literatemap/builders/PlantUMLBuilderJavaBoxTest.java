@@ -42,7 +42,7 @@ class PlantUMLBuilderJavaBoxTest {
         plantUMLBuilder.startDocument("", "");
         plantUMLBuilder.addLiterateCodeMapBox(boxType, boxName);
         plantUMLBuilder.endDocument();
-        String result = plantUMLBuilder.getDiagramDescription();
+        String result = plantUMLBuilder.getLiterateCodeMaoDescription();
         return result;
     }
 
@@ -54,7 +54,7 @@ class PlantUMLBuilderJavaBoxTest {
             plantUMLBuilder.addLiterateCodeMapBox(currentType, "GenericName");
         }
         plantUMLBuilder.endDocument();
-        String result = plantUMLBuilder.getDiagramDescription();
+        String result = plantUMLBuilder.getLiterateCodeMaoDescription();
         assertThat(true, is(true));
     }
 

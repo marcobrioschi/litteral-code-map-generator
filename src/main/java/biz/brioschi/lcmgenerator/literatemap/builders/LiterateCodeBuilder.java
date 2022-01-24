@@ -13,6 +13,6 @@ public interface LiterateCodeBuilder {
 
     void endDocument();
 
-    String getDiagramDescription();
+    String getLiterateCodeMaoDescription();
 
 }
