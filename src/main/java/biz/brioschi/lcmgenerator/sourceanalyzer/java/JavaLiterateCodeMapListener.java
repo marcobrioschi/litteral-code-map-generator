@@ -118,7 +118,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    // Literate Map Generator directives
+    // Literate Map Generator literatecodemap
 
     @Override
     public void enterStatement(JavaParser.StatementContext ctx) {

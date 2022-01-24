@@ -3,12 +3,20 @@ grammar LiterateCodeMap;
 ///////////////////////////////////////////////////////////////////////////////
 // Parser rules
 
-sentence
+commentsentence
     : (directiveDeclaration)*
     ;
 
 directiveDeclaration
-    : LITERATEMAPINVOKE LPAREN param COMMA param COMMA param RPAREN
+    : literatemapconnection
+    ;
+
+literatemapconnection
+    : LITERATEMAPCONNECTION params
+    ;
+
+params
+    : LPAREN (param (COMMA param)+)? RPAREN
     ;
 
 param
@@ -20,15 +28,15 @@ param
 ///////////////////////////////////////////////////////////////////////////////
 // Tokens
 
-LITERATEMAPINVOKE:  '@LiterateMapInvoke';
+LITERATEMAPCONNECTION:      '@LiterateMapConnection';
 
-NUMBER:             [1-9][0-9]*;
-DQSTRING:           '"' (~["\\\r\n])* '"';
-SQSTRING:           '\'' (~['\\\r\n])* '\'';
+NUMBER:                     [1-9][0-9]*;
+DQSTRING:                   '"' (~["\\\r\n])* '"';
+SQSTRING:                   '\'' (~['\\\r\n])* '\'';
 
-LPAREN:             '(';
-RPAREN:             ')';
-COMMA:              ',';
+LPAREN:                     '(';
+RPAREN:                     ')';
+COMMA:                      ',';
 
-FILLCHARS:          (~[@])              -> channel(HIDDEN);
-WS:                 [ \t\r\n\u000C]+    -> channel(HIDDEN);
+FILLCHARS:                  (~[@])              -> channel(HIDDEN);
+WS:                         [ \t\r\n\u000C]+    -> channel(HIDDEN);

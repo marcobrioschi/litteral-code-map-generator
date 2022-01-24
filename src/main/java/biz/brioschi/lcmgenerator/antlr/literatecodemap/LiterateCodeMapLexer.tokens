@@ -1,4 +1,4 @@
-LITERATEMAPINVOKE=1
+LITERATEMAPCONNECTION=1
 NUMBER=2
 DQSTRING=3
 SQSTRING=4
@@ -7,7 +7,7 @@ RPAREN=6
 COMMA=7
 FILLCHARS=8
 WS=9
-'@LiterateMapInvoke'=1
+'@LiterateMapConnection'=1
 '('=5
 ')'=6
 ','=7

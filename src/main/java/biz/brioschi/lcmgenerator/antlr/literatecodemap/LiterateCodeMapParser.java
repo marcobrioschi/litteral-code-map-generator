@@ -17,26 +17,28 @@ public class LiterateCodeMapParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		LITERATEMAPINVOKE=1, NUMBER=2, DQSTRING=3, SQSTRING=4, LPAREN=5, RPAREN=6, 
+		LITERATEMAPCONNECTION=1, NUMBER=2, DQSTRING=3, SQSTRING=4, LPAREN=5, RPAREN=6, 
 		COMMA=7, FILLCHARS=8, WS=9;
 	public static final int
-		RULE_sentence = 0, RULE_directiveDeclaration = 1, RULE_param = 2;
+		RULE_commentsentence = 0, RULE_directiveDeclaration = 1, RULE_literatemapconnection = 2, 
+		RULE_params = 3, RULE_param = 4;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"sentence", "directiveDeclaration", "param"
+			"commentsentence", "directiveDeclaration", "literatemapconnection", "params", 
+			"param"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'@LiterateMapInvoke'", null, null, null, "'('", "')'", "','"
+			null, "'@LiterateMapConnection'", null, null, null, "'('", "')'", "','"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "LITERATEMAPINVOKE", "NUMBER", "DQSTRING", "SQSTRING", "LPAREN", 
+			null, "LITERATEMAPCONNECTION", "NUMBER", "DQSTRING", "SQSTRING", "LPAREN", 
 			"RPAREN", "COMMA", "FILLCHARS", "WS"
 		};
 	}
@@ -91,45 +93,45 @@ public class LiterateCodeMapParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
-	public static class SentenceContext extends ParserRuleContext {
+	public static class CommentsentenceContext extends ParserRuleContext {
 		public List<DirectiveDeclarationContext> directiveDeclaration() {
 			return getRuleContexts(DirectiveDeclarationContext.class);
 		}
 		public DirectiveDeclarationContext directiveDeclaration(int i) {
 			return getRuleContext(DirectiveDeclarationContext.class,i);
 		}
-		public SentenceContext(ParserRuleContext parent, int invokingState) {
+		public CommentsentenceContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_sentence; }
+		@Override public int getRuleIndex() { return RULE_commentsentence; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).enterSentence(this);
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).enterCommentsentence(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).exitSentence(this);
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).exitCommentsentence(this);
 		}
 	}
 
-	public final SentenceContext sentence() throws RecognitionException {
-		SentenceContext _localctx = new SentenceContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_sentence);
+	public final CommentsentenceContext commentsentence() throws RecognitionException {
+		CommentsentenceContext _localctx = new CommentsentenceContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_commentsentence);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(9);
+			setState(13);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==LITERATEMAPINVOKE) {
+			while (_la==LITERATEMAPCONNECTION) {
 				{
 				{
-				setState(6);
+				setState(10);
 				directiveDeclaration();
 				}
 				}
-				setState(11);
+				setState(15);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -147,19 +149,9 @@ public class LiterateCodeMapParser extends Parser {
 	}
 
 	public static class DirectiveDeclarationContext extends ParserRuleContext {
-		public TerminalNode LITERATEMAPINVOKE() { return getToken(LiterateCodeMapParser.LITERATEMAPINVOKE, 0); }
-		public TerminalNode LPAREN() { return getToken(LiterateCodeMapParser.LPAREN, 0); }
-		public List<ParamContext> param() {
-			return getRuleContexts(ParamContext.class);
+		public LiteratemapconnectionContext literatemapconnection() {
+			return getRuleContext(LiteratemapconnectionContext.class,0);
 		}
-		public ParamContext param(int i) {
-			return getRuleContext(ParamContext.class,i);
-		}
-		public List<TerminalNode> COMMA() { return getTokens(LiterateCodeMapParser.COMMA); }
-		public TerminalNode COMMA(int i) {
-			return getToken(LiterateCodeMapParser.COMMA, i);
-		}
-		public TerminalNode RPAREN() { return getToken(LiterateCodeMapParser.RPAREN, 0); }
 		public DirectiveDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -180,21 +172,126 @@ public class LiterateCodeMapParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(12);
-			match(LITERATEMAPINVOKE);
-			setState(13);
-			match(LPAREN);
-			setState(14);
-			param();
-			setState(15);
-			match(COMMA);
 			setState(16);
-			param();
-			setState(17);
-			match(COMMA);
+			literatemapconnection();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class LiteratemapconnectionContext extends ParserRuleContext {
+		public TerminalNode LITERATEMAPCONNECTION() { return getToken(LiterateCodeMapParser.LITERATEMAPCONNECTION, 0); }
+		public ParamsContext params() {
+			return getRuleContext(ParamsContext.class,0);
+		}
+		public LiteratemapconnectionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_literatemapconnection; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).enterLiteratemapconnection(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).exitLiteratemapconnection(this);
+		}
+	}
+
+	public final LiteratemapconnectionContext literatemapconnection() throws RecognitionException {
+		LiteratemapconnectionContext _localctx = new LiteratemapconnectionContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_literatemapconnection);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
 			setState(18);
-			param();
+			match(LITERATEMAPCONNECTION);
 			setState(19);
+			params();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ParamsContext extends ParserRuleContext {
+		public TerminalNode LPAREN() { return getToken(LiterateCodeMapParser.LPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(LiterateCodeMapParser.RPAREN, 0); }
+		public List<ParamContext> param() {
+			return getRuleContexts(ParamContext.class);
+		}
+		public ParamContext param(int i) {
+			return getRuleContext(ParamContext.class,i);
+		}
+		public List<TerminalNode> COMMA() { return getTokens(LiterateCodeMapParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(LiterateCodeMapParser.COMMA, i);
+		}
+		public ParamsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_params; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).enterParams(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).exitParams(this);
+		}
+	}
+
+	public final ParamsContext params() throws RecognitionException {
+		ParamsContext _localctx = new ParamsContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_params);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(21);
+			match(LPAREN);
+			setState(29);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NUMBER) | (1L << DQSTRING) | (1L << SQSTRING))) != 0)) {
+				{
+				setState(22);
+				param();
+				setState(25); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(23);
+					match(COMMA);
+					setState(24);
+					param();
+					}
+					}
+					setState(27); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==COMMA );
+				}
+			}
+
+			setState(31);
 			match(RPAREN);
 			}
 		}
@@ -229,12 +326,12 @@ public class LiterateCodeMapParser extends Parser {
 
 	public final ParamContext param() throws RecognitionException {
 		ParamContext _localctx = new ParamContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_param);
+		enterRule(_localctx, 8, RULE_param);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(21);
+			setState(33);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NUMBER) | (1L << DQSTRING) | (1L << SQSTRING))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -258,13 +355,16 @@ public class LiterateCodeMapParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\13\32\4\2\t\2\4\3"+
-		"\t\3\4\4\t\4\3\2\7\2\n\n\2\f\2\16\2\r\13\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\4\3\4\3\4\2\2\5\2\4\6\2\3\3\2\4\6\2\27\2\13\3\2\2\2\4\16\3"+
-		"\2\2\2\6\27\3\2\2\2\b\n\5\4\3\2\t\b\3\2\2\2\n\r\3\2\2\2\13\t\3\2\2\2\13"+
-		"\f\3\2\2\2\f\3\3\2\2\2\r\13\3\2\2\2\16\17\7\3\2\2\17\20\7\7\2\2\20\21"+
-		"\5\6\4\2\21\22\7\t\2\2\22\23\5\6\4\2\23\24\7\t\2\2\24\25\5\6\4\2\25\26"+
-		"\7\b\2\2\26\5\3\2\2\2\27\30\t\2\2\2\30\7\3\2\2\2\3\13";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\13&\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\7\2\16\n\2\f\2\16\2\21\13\2\3\3\3\3\3\4"+
+		"\3\4\3\4\3\5\3\5\3\5\3\5\6\5\34\n\5\r\5\16\5\35\5\5 \n\5\3\5\3\5\3\6\3"+
+		"\6\3\6\2\2\7\2\4\6\b\n\2\3\3\2\4\6\2#\2\17\3\2\2\2\4\22\3\2\2\2\6\24\3"+
+		"\2\2\2\b\27\3\2\2\2\n#\3\2\2\2\f\16\5\4\3\2\r\f\3\2\2\2\16\21\3\2\2\2"+
+		"\17\r\3\2\2\2\17\20\3\2\2\2\20\3\3\2\2\2\21\17\3\2\2\2\22\23\5\6\4\2\23"+
+		"\5\3\2\2\2\24\25\7\3\2\2\25\26\5\b\5\2\26\7\3\2\2\2\27\37\7\7\2\2\30\33"+
+		"\5\n\6\2\31\32\7\t\2\2\32\34\5\n\6\2\33\31\3\2\2\2\34\35\3\2\2\2\35\33"+
+		"\3\2\2\2\35\36\3\2\2\2\36 \3\2\2\2\37\30\3\2\2\2\37 \3\2\2\2 !\3\2\2\2"+
+		"!\"\7\b\2\2\"\t\3\2\2\2#$\t\2\2\2$\13\3\2\2\2\5\17\35\37";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -16,13 +16,13 @@ public class LiterateCodeMapBaseListener implements LiterateCodeMapListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSentence(LiterateCodeMapParser.SentenceContext ctx) { }
+	@Override public void enterCommentsentence(LiterateCodeMapParser.CommentsentenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSentence(LiterateCodeMapParser.SentenceContext ctx) { }
+	@Override public void exitCommentsentence(LiterateCodeMapParser.CommentsentenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -35,6 +35,30 @@ public class LiterateCodeMapBaseListener implements LiterateCodeMapListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDirectiveDeclaration(LiterateCodeMapParser.DirectiveDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParams(LiterateCodeMapParser.ParamsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParams(LiterateCodeMapParser.ParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,11 +1,10 @@
-
 # Literate Code Maps Generator
 
 The goal of this project is to support the (semi-)automatic generation of literate code maps.
 
 ## Code directives
 
-### @LiterateMapInvoke(N, targetName, description)
+### @LiterateMapConnection(N, targetName, description)
 
 The directive @LiterateMapInvoke make you able to add a connection between the current box and another box.
 * N => order of the connection in the whole map
@@ -23,14 +22,18 @@ For each statement you can add elements on the map adding:
 
 ## Design decisions
 
-* information described in the diagram are stored in the code (to keep them updated)
+* information described in the literate code map are stored in the code (to keep them updated)
 * the semantic analysis of the code is too complex in this stage of the project so we use the directives in the code to describe some information
 
 ## Self literate map generation
 
-./generator.sh -t 'Literate Code Map Generator' -d 'The diagram describe the main flow of the generator' -s ./src/main/java -o generator.svg -f LiterateCodeMapGenerator,JavaAnalyzer,FileSystemScanner,PlantUMLGenerator,DiagramBuilder,PlantUMLBuilder,BoxesFilter,DiagramMapper
+./generator.sh -t 'Literate Code Map Generator' -d 'This literate code map describe the main flow of the generator' -s ./src/main/java -o generator.svg -f LiterateCodeMapGenerator,JavaAnalyzer,FileSystemScanner,PlantUMLGenerator,DiagramBuilder,PlantUMLBuilder,BoxesFilter,DiagramMapper
 
 ## Credits
 
 * Literate Code Maps idea has taken from https://github.com/abulka/lcodemaps
 * Java grammar has taken from https://github.com/antlr/grammars-v4
+
+# TODO
+Escape o trovare modo di abilitare @ nei commenti
+Inserire spazi tra le variabili nelle direttive

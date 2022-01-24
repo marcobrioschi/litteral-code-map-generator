@@ -12,7 +12,7 @@ import java.util.List;
 
 public class JavaAnalyzer {
 
-    private final CharStream charInputStream;
+    private final CharStream charInputStream;   // TODO make it a parameter of the extractInfo
 
     public JavaAnalyzer(CharStream charInputStream) {
         this.charInputStream = charInputStream;

@@ -1,14 +1,14 @@
 public class StaticMethodCallClass {
 
-    /* @LiterateMapInvoke(1, "GenericClassOne", "firstStaticMethod(...)") */
+    /* @LiterateMapConnection(1, "GenericClassOne", "firstStaticMethod(...)") */
     private MethodReference testVar1 = GenericClassOne.firstStaticMethod(1, "One");
 
     public void classMethod(int par1) {
-        GenericClassTwo.secondStaticMethod(2, "Two");   // @LiterateMapInvoke(2, GenericClassTwo, 'secondStaticMethod(...)')
+        GenericClassTwo.secondStaticMethod(2, "Two");   // @LiterateMapConnection(2, GenericClassTwo, 'secondStaticMethod(...)')
         for (int i = 1; i > 100; --i) {
-            /* @LiterateMapInvoke(3, "VariableClass", "doSomething(...)") */
+            /* @LiterateMapConnection(3, "VariableClass", "doSomething(...)") */
             aVariable.doSomething();
-            List.get(1).fakeInvocation("3-4");  // @LiterateMapInvoke(4, aClass, 'fakeInvocation("3-4")')
+            List.get(1).fakeInvocation("3-4");  // @LiterateMapConnection(4, aClass, 'fakeInvocation("3-4")')
         }
     }
 

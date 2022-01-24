@@ -8,15 +8,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface LiterateCodeMapListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link LiterateCodeMapParser#sentence}.
+	 * Enter a parse tree produced by {@link LiterateCodeMapParser#commentsentence}.
 	 * @param ctx the parse tree
 	 */
-	void enterSentence(LiterateCodeMapParser.SentenceContext ctx);
+	void enterCommentsentence(LiterateCodeMapParser.CommentsentenceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LiterateCodeMapParser#sentence}.
+	 * Exit a parse tree produced by {@link LiterateCodeMapParser#commentsentence}.
 	 * @param ctx the parse tree
 	 */
-	void exitSentence(LiterateCodeMapParser.SentenceContext ctx);
+	void exitCommentsentence(LiterateCodeMapParser.CommentsentenceContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LiterateCodeMapParser#directiveDeclaration}.
 	 * @param ctx the parse tree
@@ -27,6 +27,26 @@ public interface LiterateCodeMapListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDirectiveDeclaration(LiterateCodeMapParser.DirectiveDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LiterateCodeMapParser#literatemapconnection}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LiterateCodeMapParser#literatemapconnection}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LiterateCodeMapParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void enterParams(LiterateCodeMapParser.ParamsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LiterateCodeMapParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void exitParams(LiterateCodeMapParser.ParamsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LiterateCodeMapParser#param}.
 	 * @param ctx the parse tree
