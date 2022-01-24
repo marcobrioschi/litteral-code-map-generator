@@ -4,7 +4,7 @@ import biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
 
 import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
 
-public class PlantUMLBuilder implements DiagramBuilder {
+public class PlantUMLBuilder implements LiterateCodeBuilder {
 
     private final StringBuffer diagramDescription;
 

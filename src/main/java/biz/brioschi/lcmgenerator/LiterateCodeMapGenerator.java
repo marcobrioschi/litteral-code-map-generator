@@ -2,9 +2,9 @@ package biz.brioschi.lcmgenerator;
 
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.literatemap.BoxesFilter;
-import biz.brioschi.lcmgenerator.literatemap.LiterateMapMapper;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMap2BuilderMapper;
 import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
-import biz.brioschi.lcmgenerator.literatemap.builders.DiagramBuilder;
+import biz.brioschi.lcmgenerator.literatemap.builders.LiterateCodeBuilder;
 import biz.brioschi.lcmgenerator.literatemap.builders.PlantUMLBuilder;
 import biz.brioschi.lcmgenerator.providers.FileSystemScanner;
 import biz.brioschi.lcmgenerator.providers.PlantUMLGenerator;
@@ -78,10 +78,10 @@ public class LiterateCodeMapGenerator implements Runnable {
         List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);
 
         // Generate the map description
-        DiagramBuilder diagramBuilder = new PlantUMLBuilder();
-        LiterateMapMapper literateMapMapper = new LiterateMapMapper(diagramBuilder);
-        literateMapMapper.mapBoxes(title, description, filteredBoxes);
-        String source = diagramBuilder.getDiagramDescription();
+        LiterateCodeBuilder literateCodeBuilder = new PlantUMLBuilder();
+        LiterateCodeMap2BuilderMapper literateCodeMap2BuilderMapper = new LiterateCodeMap2BuilderMapper(literateCodeBuilder);
+        literateCodeMap2BuilderMapper.mapBoxes(title, description, filteredBoxes);
+        String source = literateCodeBuilder.getDiagramDescription();
 
         // Generate the map image
         try (OutputStream diagramFileOutputStream = new FileOutputStream(outputDiagramFileName)) {

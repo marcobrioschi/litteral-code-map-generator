@@ -3,7 +3,7 @@ package biz.brioschi.lcmgenerator.literatemap.builders;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
 import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 
-public interface DiagramBuilder {
+public interface LiterateCodeBuilder {
 
     void startDocument(String title, String description);
 
