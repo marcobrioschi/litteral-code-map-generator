@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
+import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.INVOKE;
 
 public class LiterateCodeMapBoxHelper {
 
@@ -25,11 +26,16 @@ public class LiterateCodeMapBoxHelper {
     public static LiterateCodeMapBox generateLiterateCodeMapBox(
             BoxType expectedType,
             String expectedName,
-            String... expectedExtends
+            String... extraInfo
     ) {
         List<BoxConnection> expectedConnections = new ArrayList<>();
-        for (String expectedConnectionName : expectedExtends) {
-            expectedConnections.add(new BoxConnection(EXTENDS, expectedConnectionName));
+        for (String singleExtraInfo : extraInfo) {
+            if (singleExtraInfo.contains(":")) {
+                String[] connectionComponents = singleExtraInfo.split(":");
+                expectedConnections.add(new BoxConnection(INVOKE, connectionComponents[0], connectionComponents[1]));
+            } else {
+                expectedConnections.add(new BoxConnection(EXTENDS, singleExtraInfo));
+            }
         }
         return LiterateCodeMapBox.builder()
                 .type(expectedType)

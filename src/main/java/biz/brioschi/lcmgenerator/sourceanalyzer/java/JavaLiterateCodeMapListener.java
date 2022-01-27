@@ -1,10 +1,16 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
+import biz.brioschi.lcmgenerator.antlr.java.parser.JavaLexer;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
+import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.ClassDeclarationContext;
+import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.IdentifierContext;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import biz.brioschi.lcmgenerator.literatemap.BoxDeclarationScope;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.directives.Directive;
+import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapConnection;
+import biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap.DirectivesRecognizer;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -17,67 +23,79 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
+import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.INVOKE;
 import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
 import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.*;
 
 public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
-
     private BufferedTokenStream bufferedTokenStream;
     private List<LiterateCodeMapBox> literateCodeMapBoxes;
     private Stack<BoxDeclarationScope> typeScopeStack;
-    private int lastReadCommentIndex;
 
     public JavaLiterateCodeMapListener(BufferedTokenStream bufferedTokenStream) {
         this.bufferedTokenStream = bufferedTokenStream;
         this.literateCodeMapBoxes = new ArrayList<>();
         this.typeScopeStack = new Stack<>();
-        this.lastReadCommentIndex = -1;
     }
 
     public List<LiterateCodeMapBox> getLiterateCodeMapBoxes() {
         return literateCodeMapBoxes;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Extensions
-
     @Override
-    public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
-        String className = ctx.identifier().getText();
-        List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
-        typeScopeStack.push(new BoxDeclarationScope(className, connections));
+    public void enterClassDeclaration(ClassDeclarationContext ctx) {
+        pushContextOfCurrentType(ctx.identifier(), ctx);
+        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
     }
 
     @Override
-    public void exitClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
-        BoxDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(JAVA_CLASS, currentScope.getTypeName(), currentScope.getConnections());
+    public void exitClassDeclaration(ClassDeclarationContext ctx) {
+        popContextOfCurrentTypeAndStoreTheBox(JAVA_CLASS);
     }
 
     @Override
     public void enterInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
-        String className = ctx.identifier().getText();
-        List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
-        typeScopeStack.push(new BoxDeclarationScope(className, connections));
+        pushContextOfCurrentType(ctx.identifier(), ctx);
     }
 
     @Override
     public void exitInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
-        BoxDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(JAVA_INTERFACE, currentScope.getTypeName(), currentScope.getConnections());
+        popContextOfCurrentTypeAndStoreTheBox(JAVA_INTERFACE);
     }
 
     @Override
     public void enterEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
-        String className = ctx.identifier().getText();
-        List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
-        typeScopeStack.push(new BoxDeclarationScope(className, connections));
+        pushContextOfCurrentType(ctx.identifier(), ctx);
     }
 
     @Override
     public void exitEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
+        popContextOfCurrentTypeAndStoreTheBox(JAVA_ENUM);
+    }
+
+    @Override
+    public void enterTypeDeclaration(JavaParser.TypeDeclarationContext ctx) {
+        // TODO refactoring
+        String typeName = ctx.classDeclaration().identifier().getText();
+        List<BoxConnection> connections = new ArrayList<>();
+        typeScopeStack.push(new BoxDeclarationScope(typeName, connections));
+        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Extensions
+
+    private void pushContextOfCurrentType(IdentifierContext identifier, ParserRuleContext ctx) {
+        String typeName = identifier.getText();
+        List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
+        typeScopeStack.peek().getConnections().addAll(connections);
+        //typeScopeStack.push(new BoxDeclarationScope(typeName, connections));
+        // TODO move the push context on the type and only the extension on the specific type
+    }
+
+    private void popContextOfCurrentTypeAndStoreTheBox(BoxType boxType) {
         BoxDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(JAVA_ENUM, currentScope.getTypeName(), currentScope.getConnections());
+        generateANewBoxElement(boxType, currentScope.getTypeName(), currentScope.getConnections());
     }
 
     private List<BoxConnection> getCurrentBoxExtensions(ParserRuleContext ctx) {
@@ -118,51 +136,40 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    // Literate Map Generator literatecodemap
+    // Directives
 
-    @Override
-    public void enterStatement(JavaParser.StatementContext ctx) {
-        //parseDirectives(ctx);
-    }
-    // TODO typeDeclaration, classBodyDeclaration, interfaceBodyDeclaration, block, blockStatement and remove statement
-
-    private void parseDirectives(JavaParser.StatementContext ctx) {
-        List<Token> possibleDirectives = new ArrayList<>();
-        possibleDirectives.addAll(findAllCommentsBeforeTheCurrentElementAndNotAlreadyUsed(ctx.start));
-        System.out.println(ctx.stop);
-        possibleDirectives.addAll(findAllCommentsAfterTheCurrentElementAndInTheSameLine(ctx.stop));
-        lastReadCommentIndex = possibleDirectives.stream()
-                .mapToInt(token -> token.getTokenIndex())
-                .max().orElse(lastReadCommentIndex);
-        for (Token singleToken : possibleDirectives) {
-            System.out.println(singleToken.getCharPositionInLine() + " - " + singleToken.getText());
+    /*
+    typeDeclaration
+    : classOrInterfaceModifier*
+      (classDeclaration | enumDeclaration | interfaceDeclaration )
+    | ';'
+    ;
+     */
+    // TODO search for other entry points following rules
+    private void manageDirectivesOnCurrentNode(Token startToken, Token stopToken) {
+        // TODO refactoring and complete with righ comments e filter on already readed comments
+        List<Token> result = bufferedTokenStream.getHiddenTokensToLeft(startToken.getTokenIndex());
+        if (result != null) {
+            String leftComments = result.stream()
+                    .filter(token -> token.getType() == JavaLexer.LINE_COMMENT)
+                    .map(token -> token.getText())
+                    .collect(Collectors.joining(" "));
+            List<Directive> directives = DirectivesRecognizer.extractDirectives(leftComments);
+            if (directives != null) {
+                for (Directive baseDirective: directives) {
+                    if (baseDirective instanceof LiterateMapConnection) {
+                        LiterateMapConnection directive = (LiterateMapConnection)baseDirective;
+                        typeScopeStack.peek().getConnections().add(
+                                new BoxConnection(
+                                        INVOKE,
+                                        directive.getTargetBox(),
+                                        directive.getDescription()
+                                )
+                        );
+                    }
+                }
+            }
         }
-    }
-
-    private List<Token> findAllCommentsBeforeTheCurrentElementAndNotAlreadyUsed(Token currentElementFirstToken) {
-        return bufferedTokenStream.getHiddenTokensToLeft(currentElementFirstToken.getTokenIndex()).stream()
-                .filter(token -> isAComment(token))
-                .filter(token -> !isAlreadyUsed(token))
-                .collect(Collectors.toList());
-    }
-
-    private List<Token> findAllCommentsAfterTheCurrentElementAndInTheSameLine(Token currentElementLastToken) {
-        return bufferedTokenStream.getHiddenTokensToRight(currentElementLastToken.getTokenIndex()).stream()
-                .filter(token -> isAComment(token))
-                .filter(token -> isOnTheSameLine(token, currentElementLastToken.getLine()))
-                .collect(Collectors.toList());
-    }
-
-    private boolean isAlreadyUsed(Token token) {
-        return token.getTokenIndex() <= lastReadCommentIndex;
-    }
-
-    private boolean isOnTheSameLine(Token token, int referenceLine) {
-        return token.getLine() == referenceLine;
-    }
-
-    private boolean isAComment(Token token) {
-        return (token.getType() == JavaParser.COMMENT) || (token.getType() == JavaParser.LINE_COMMENT);
     }
 
 }

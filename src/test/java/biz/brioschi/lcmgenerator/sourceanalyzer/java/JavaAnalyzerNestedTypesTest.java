@@ -15,9 +15,11 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class JavaAnalyzerNestedTypesTest {
 
+    // TODO togliere JavaAnalyzer da tutte le classi
+
     @Test
     public void testNestedTypeNoExtensions() throws IOException {
-        String inputUnit = "src/test/resources/boxconnections/NestedTypeNoExtensions.java";
+        String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/NestedTypeNoExtensions.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(7));
@@ -32,7 +34,7 @@ public class JavaAnalyzerNestedTypesTest {
 
     @Test
     public void testNestedTypeWithExtensions() throws IOException {
-        String inputUnit = "src/test/resources/boxconnections/NestedTypeWithExtensions.java";
+        String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/NestedTypeWithExtensions.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(7));
