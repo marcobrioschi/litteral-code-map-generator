@@ -2,9 +2,6 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaLexer;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
-import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.ClassDeclarationContext;
-import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.IdentifierContext;
-import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.InterfaceDeclarationContext;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.literatemap.BoxDeclarationScope;
@@ -46,36 +43,17 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterClassDeclaration(ClassDeclarationContext ctx) {
-        pushContextOfCurrentType(ctx.identifier());
         addCurrentTypeExtensions(ctx);
-        // TODO manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
-    }
-
-    @Override
-    public void exitClassDeclaration(ClassDeclarationContext ctx) {
-        popContextOfCurrentTypeAndStoreTheBox(JAVA_CLASS);
     }
 
     @Override
     public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
-        pushContextOfCurrentType(ctx.identifier());
         addCurrentTypeExtensions(ctx);
-    }
-
-    @Override
-    public void exitInterfaceDeclaration(InterfaceDeclarationContext ctx) {
-        popContextOfCurrentTypeAndStoreTheBox(JAVA_INTERFACE);
     }
 
     @Override
     public void enterEnumDeclaration(EnumDeclarationContext ctx) {
-        pushContextOfCurrentType(ctx.identifier());
         addCurrentTypeExtensions(ctx);
-    }
-
-    @Override
-    public void exitEnumDeclaration(EnumDeclarationContext ctx) {
-        popContextOfCurrentTypeAndStoreTheBox(JAVA_ENUM);
     }
 
     @Override
@@ -86,8 +64,18 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     @Override
+    public void exitTypeDeclaration(TypeDeclarationContext ctx) {
+        popContextOfCurrentTypeAndStoreTheBox();
+    }
+
+    @Override
     public void enterMemberDeclaration(MemberDeclarationContext ctx) {
         pushRightTypeContext(ctx);
+    }
+
+    @Override
+    public void exitMemberDeclaration(MemberDeclarationContext ctx) {
+        popContextOfCurrentTypeAndStoreTheBox();
     }
 
     @Override
@@ -96,8 +84,18 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     @Override
+    public void exitInterfaceMemberDeclaration(InterfaceMemberDeclarationContext ctx) {
+        popContextOfCurrentTypeAndStoreTheBox();
+    }
+
+    @Override
     public void enterAnnotationTypeElementRest(AnnotationTypeElementRestContext ctx) {
         pushRightTypeContext(ctx);
+    }
+
+    @Override
+    public void exitAnnotationTypeElementRest(AnnotationTypeElementRestContext ctx) {
+        popContextOfCurrentTypeAndStoreTheBox();
     }
 
     @Override
@@ -105,9 +103,15 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         pushRightTypeContext(ctx);
     }
 
+    @Override
+    public void exitLocalTypeDeclaration(LocalTypeDeclarationContext ctx) {
+        popContextOfCurrentTypeAndStoreTheBox();
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Extensions
 
+    // TODO refactor and simplify
     private void pushRightTypeContext(ParserRuleContext ctx) {
         if (ctx.getRuleContext(ClassDeclarationContext.class, 0) != null) {
             String typeName = ctx.getRuleContext(ClassDeclarationContext.class, 0).identifier().getText();
@@ -124,19 +128,14 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         }
     }
 
-    private void pushContextOfCurrentType(IdentifierContext identifier) {
-        String typeName = identifier.getText();
-        //typeScopeStack.push(new BoxDeclarationScope(typeName, null, new ArrayList<>()));
-    }
-
     private void addCurrentTypeExtensions(ParserRuleContext ctx) {
         List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
         typeScopeStack.peek().getConnections().addAll(connections);
     }
 
-    private void popContextOfCurrentTypeAndStoreTheBox(BoxType boxType) {
+    private void popContextOfCurrentTypeAndStoreTheBox() {
         BoxDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(boxType, currentScope.getTypeName(), currentScope.getConnections());
+        generateANewBoxElement(currentScope.getBoxType(), currentScope.getTypeName(), currentScope.getConnections());
     }
 
     private List<BoxConnection> getCurrentBoxExtensions(ParserRuleContext ctx) {
