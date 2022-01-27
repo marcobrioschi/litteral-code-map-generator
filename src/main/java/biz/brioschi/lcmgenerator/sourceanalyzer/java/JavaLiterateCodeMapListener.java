@@ -4,6 +4,7 @@ import biz.brioschi.lcmgenerator.antlr.java.parser.JavaLexer;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.ClassDeclarationContext;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.IdentifierContext;
+import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.InterfaceDeclarationContext;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.literatemap.BoxDeclarationScope;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import static biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.*;
 import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
 import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.INVOKE;
 import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
@@ -55,42 +57,76 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     @Override
-    public void enterInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
+    public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
         pushContextOfCurrentType(ctx.identifier());
         addCurrentTypeExtensions(ctx);
     }
 
     @Override
-    public void exitInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
+    public void exitInterfaceDeclaration(InterfaceDeclarationContext ctx) {
         popContextOfCurrentTypeAndStoreTheBox(JAVA_INTERFACE);
     }
 
     @Override
-    public void enterEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
+    public void enterEnumDeclaration(EnumDeclarationContext ctx) {
         pushContextOfCurrentType(ctx.identifier());
         addCurrentTypeExtensions(ctx);
     }
 
     @Override
-    public void exitEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
+    public void exitEnumDeclaration(EnumDeclarationContext ctx) {
         popContextOfCurrentTypeAndStoreTheBox(JAVA_ENUM);
     }
 
     @Override
-    public void enterTypeDeclaration(JavaParser.TypeDeclarationContext ctx) {
+    public void enterTypeDeclaration(TypeDeclarationContext ctx) {
+        pushRightTypeContext(ctx);
 //        // TODO refactoring
-//        String typeName = ctx.classDeclaration().identifier().getText();
-//        List<BoxConnection> connections = new ArrayList<>();
-//        typeScopeStack.push(new BoxDeclarationScope(typeName, connections));
 //        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
+    }
+
+    @Override
+    public void enterMemberDeclaration(MemberDeclarationContext ctx) {
+        pushRightTypeContext(ctx);
+    }
+
+    @Override
+    public void enterInterfaceMemberDeclaration(InterfaceMemberDeclarationContext ctx) {
+        pushRightTypeContext(ctx);
+    }
+
+    @Override
+    public void enterAnnotationTypeElementRest(AnnotationTypeElementRestContext ctx) {
+        pushRightTypeContext(ctx);
+    }
+
+    @Override
+    public void enterLocalTypeDeclaration(LocalTypeDeclarationContext ctx) {
+        pushRightTypeContext(ctx);
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Extensions
 
+    private void pushRightTypeContext(ParserRuleContext ctx) {
+        if (ctx.getRuleContext(ClassDeclarationContext.class, 0) != null) {
+            String typeName = ctx.getRuleContext(ClassDeclarationContext.class, 0).identifier().getText();
+            List<BoxConnection> connections = new ArrayList<>();
+            typeScopeStack.push(new BoxDeclarationScope(typeName, JAVA_CLASS, connections));
+        } else if (ctx.getRuleContext(InterfaceDeclarationContext.class, 0) != null) {
+            String typeName = ctx.getRuleContext(InterfaceDeclarationContext.class, 0).identifier().getText();
+            List<BoxConnection> connections = new ArrayList<>();
+            typeScopeStack.push(new BoxDeclarationScope(typeName, JAVA_INTERFACE, connections));
+        } else if (ctx.getRuleContext(EnumDeclarationContext.class, 0) != null) {
+            String typeName = ctx.getRuleContext(EnumDeclarationContext.class, 0).identifier().getText();
+            List<BoxConnection> connections = new ArrayList<>();
+            typeScopeStack.push(new BoxDeclarationScope(typeName, JAVA_ENUM, connections));
+        }
+    }
+
     private void pushContextOfCurrentType(IdentifierContext identifier) {
         String typeName = identifier.getText();
-        typeScopeStack.push(new BoxDeclarationScope(typeName, new ArrayList<>()));
+        //typeScopeStack.push(new BoxDeclarationScope(typeName, null, new ArrayList<>()));
     }
 
     private void addCurrentTypeExtensions(ParserRuleContext ctx) {
@@ -106,7 +142,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     private List<BoxConnection> getCurrentBoxExtensions(ParserRuleContext ctx) {
         List<BoxConnection> connections = new ArrayList<>();
         TerminalNode extendsToken = ctx.getToken(JavaParser.EXTENDS, 0);
-        TerminalNode implementsToken = ctx.getToken(JavaParser.IMPLEMENTS, 0);
+        TerminalNode implementsToken = ctx.getToken(IMPLEMENTS, 0);
         int lastReadedChild = 2;
         while ((ctx.getChild(lastReadedChild) == extendsToken) || (ctx.getChild(lastReadedChild) == implementsToken)) {
             ParseTree extendsChild = ctx.getChild(lastReadedChild + 1);
