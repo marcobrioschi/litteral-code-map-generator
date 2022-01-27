@@ -42,21 +42,6 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     @Override
-    public void enterClassDeclaration(ClassDeclarationContext ctx) {
-        addCurrentTypeExtensions(ctx);
-    }
-
-    @Override
-    public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
-        addCurrentTypeExtensions(ctx);
-    }
-
-    @Override
-    public void enterEnumDeclaration(EnumDeclarationContext ctx) {
-        addCurrentTypeExtensions(ctx);
-    }
-
-    @Override
     public void enterTypeDeclaration(TypeDeclarationContext ctx) {
         pushRightTypeContext(ctx);
 //        // TODO refactoring
@@ -108,34 +93,57 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         popContextOfCurrentTypeAndStoreTheBox();
     }
 
+    @Override
+    public void enterClassDeclaration(ClassDeclarationContext ctx) {
+        addCurrentTypeExtensions(ctx);
+    }
+
+    @Override
+    public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
+        addCurrentTypeExtensions(ctx);
+    }
+
+    @Override
+    public void enterEnumDeclaration(EnumDeclarationContext ctx) {
+        addCurrentTypeExtensions(ctx);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Extensions
 
-    // TODO refactor and simplify
     private void pushRightTypeContext(ParserRuleContext ctx) {
-        if (ctx.getRuleContext(ClassDeclarationContext.class, 0) != null) {
-            String typeName = ctx.getRuleContext(ClassDeclarationContext.class, 0).identifier().getText();
-            List<BoxConnection> connections = new ArrayList<>();
-            typeScopeStack.push(new BoxDeclarationScope(typeName, JAVA_CLASS, connections));
-        } else if (ctx.getRuleContext(InterfaceDeclarationContext.class, 0) != null) {
-            String typeName = ctx.getRuleContext(InterfaceDeclarationContext.class, 0).identifier().getText();
-            List<BoxConnection> connections = new ArrayList<>();
-            typeScopeStack.push(new BoxDeclarationScope(typeName, JAVA_INTERFACE, connections));
-        } else if (ctx.getRuleContext(EnumDeclarationContext.class, 0) != null) {
-            String typeName = ctx.getRuleContext(EnumDeclarationContext.class, 0).identifier().getText();
-            List<BoxConnection> connections = new ArrayList<>();
-            typeScopeStack.push(new BoxDeclarationScope(typeName, JAVA_ENUM, connections));
-        }
+        checkAndPushContextForTargetClass(ctx, ClassDeclarationContext.class, JAVA_CLASS);
+        checkAndPushContextForTargetClass(ctx, InterfaceDeclarationContext.class, JAVA_INTERFACE);
+        checkAndPushContextForTargetClass(ctx, EnumDeclarationContext.class, JAVA_ENUM);
     }
 
-    private void addCurrentTypeExtensions(ParserRuleContext ctx) {
-        List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
-        typeScopeStack.peek().getConnections().addAll(connections);
+    private void checkAndPushContextForTargetClass(ParserRuleContext ctx, Class<? extends ParserRuleContext> contextClass, BoxType boxType) {
+        if (ctx.getRuleContext(contextClass, 0) != null) {
+            String typeName = ctx.getRuleContext(contextClass, 0).getRuleContext(IdentifierContext.class, 0).getText();
+            List<BoxConnection> connections = new ArrayList<>();
+            BoxDeclarationScope scope = new BoxDeclarationScope(typeName, boxType, connections);
+            typeScopeStack.push(scope);
+        }
     }
 
     private void popContextOfCurrentTypeAndStoreTheBox() {
         BoxDeclarationScope currentScope = typeScopeStack.pop();
         generateANewBoxElement(currentScope.getBoxType(), currentScope.getTypeName(), currentScope.getConnections());
+    }
+
+    private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
+        literateCodeMapBoxes.add(
+                LiterateCodeMapBox.builder()
+                        .type(boxType)
+                        .name(boxName)
+                        .connections(connections)
+                        .build()
+        );
+    }
+
+    private void addCurrentTypeExtensions(ParserRuleContext ctx) {
+        List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
+        typeScopeStack.peek().getConnections().addAll(connections);
     }
 
     private List<BoxConnection> getCurrentBoxExtensions(ParserRuleContext ctx) {
@@ -163,16 +171,6 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
             );
         }
         return connections;
-    }
-
-    private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
-        literateCodeMapBoxes.add(
-                LiterateCodeMapBox.builder()
-                        .type(boxType)
-                        .name(boxName)
-                        .connections(connections)
-                        .build()
-        );
     }
 
     ///////////////////////////////////////////////////////////////////////////
