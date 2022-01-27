@@ -44,8 +44,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterTypeDeclaration(TypeDeclarationContext ctx) {
         pushRightTypeContext(ctx);
-//        // TODO refactoring
-//        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
+        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
     }
 
     @Override
