@@ -44,8 +44,9 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterClassDeclaration(ClassDeclarationContext ctx) {
-        pushContextOfCurrentType(ctx.identifier(), ctx);
-        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
+        pushContextOfCurrentType(ctx.identifier());
+        addCurrentTypeExtensions(ctx);
+        // TODO manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
     }
 
     @Override
@@ -55,7 +56,8 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterInterfaceDeclaration(JavaParser.InterfaceDeclarationContext ctx) {
-        pushContextOfCurrentType(ctx.identifier(), ctx);
+        pushContextOfCurrentType(ctx.identifier());
+        addCurrentTypeExtensions(ctx);
     }
 
     @Override
@@ -65,7 +67,8 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterEnumDeclaration(JavaParser.EnumDeclarationContext ctx) {
-        pushContextOfCurrentType(ctx.identifier(), ctx);
+        pushContextOfCurrentType(ctx.identifier());
+        addCurrentTypeExtensions(ctx);
     }
 
     @Override
@@ -75,22 +78,24 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterTypeDeclaration(JavaParser.TypeDeclarationContext ctx) {
-        // TODO refactoring
-        String typeName = ctx.classDeclaration().identifier().getText();
-        List<BoxConnection> connections = new ArrayList<>();
-        typeScopeStack.push(new BoxDeclarationScope(typeName, connections));
-        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
+//        // TODO refactoring
+//        String typeName = ctx.classDeclaration().identifier().getText();
+//        List<BoxConnection> connections = new ArrayList<>();
+//        typeScopeStack.push(new BoxDeclarationScope(typeName, connections));
+//        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Extensions
 
-    private void pushContextOfCurrentType(IdentifierContext identifier, ParserRuleContext ctx) {
+    private void pushContextOfCurrentType(IdentifierContext identifier) {
         String typeName = identifier.getText();
+        typeScopeStack.push(new BoxDeclarationScope(typeName, new ArrayList<>()));
+    }
+
+    private void addCurrentTypeExtensions(ParserRuleContext ctx) {
         List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
         typeScopeStack.peek().getConnections().addAll(connections);
-        //typeScopeStack.push(new BoxDeclarationScope(typeName, connections));
-        // TODO move the push context on the type and only the extension on the specific type
     }
 
     private void popContextOfCurrentTypeAndStoreTheBox(BoxType boxType) {
