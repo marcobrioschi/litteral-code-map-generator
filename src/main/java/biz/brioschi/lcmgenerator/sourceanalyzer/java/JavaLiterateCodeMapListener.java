@@ -188,7 +188,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         List<Token> result = bufferedTokenStream.getHiddenTokensToLeft(startToken.getTokenIndex());
         if (result != null) {
             String leftComments = result.stream()
-                    .filter(token -> token.getType() == JavaLexer.LINE_COMMENT)
+                    .filter(token -> (token.getType() == JavaLexer.LINE_COMMENT) || (token.getType() == JavaLexer.COMMENT))
                     .map(token -> token.getText())
                     .collect(Collectors.joining(" "));
             List<Directive> directives = DirectivesRecognizer.extractDirectives(leftComments);
