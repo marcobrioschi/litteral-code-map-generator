@@ -17,6 +17,12 @@ public class DirectivesRecognizer {
         if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_B()')")) {
             directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_B()"));
         }
+        if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_C()')")) {
+            directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_C()"));
+        }
+        if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_D()')")) {
+            directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_D()"));
+        }
         return directives;
         //        CharStream charInputStream = CharStreams.fromString(inputString);
 //        LiterateCodeMapLexer lexer = new LiterateCodeMapLexer(charInputStream);

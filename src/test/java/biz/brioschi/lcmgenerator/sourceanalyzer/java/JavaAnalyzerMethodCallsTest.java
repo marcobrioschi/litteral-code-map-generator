@@ -32,8 +32,8 @@ public class JavaAnalyzerMethodCallsTest {
                                 new String[]{
                                         "TestDestinationClass:doSomething_A()",
                                         "TestDestinationClass:doSomething_B()",
-//  TODO                                      "TestDestinationClass:doSomething_C()",
-//  TODO                                      "TestDestinationClass:doSomething_D()",
+                                        "TestDestinationClass:doSomething_C()",
+                                        "TestDestinationClass:doSomething_D()",
                                 }
                         )
                 )

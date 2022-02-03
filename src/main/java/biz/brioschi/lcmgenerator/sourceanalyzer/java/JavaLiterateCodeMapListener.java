@@ -44,7 +44,6 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterTypeDeclaration(TypeDeclarationContext ctx) {
         pushRightTypeContext(ctx);
-        manageDirectivesOnCurrentNode(ctx.start, ctx.stop);
     }
 
     @Override
@@ -182,10 +181,38 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     | ';'
     ;
      */
+
+    private int lastReadTokenIndex = -1;
+
+    @Override
+    public void visitTerminal(TerminalNode terminalNode) {
+        manageDirectivesOnCurrentNode(terminalNode.getSymbol(), terminalNode.getSymbol());
+    }
+
     // TODO search for other entry points following rules
     private void manageDirectivesOnCurrentNode(Token startToken, Token stopToken) {
+        if (typeScopeStack.empty())
+            return;
         // TODO refactoring and complete with righ comments e filter on already readed comments
-        List<Token> result = bufferedTokenStream.getHiddenTokensToLeft(startToken.getTokenIndex());
+        List<Token> result = new ArrayList<>();
+        List<Token> leftResult = bufferedTokenStream.getHiddenTokensToLeft(startToken.getTokenIndex());
+        if (leftResult != null) {
+            for (Token token : leftResult) {
+                if (token.getTokenIndex() > lastReadTokenIndex) {
+                    result.add(token);
+                    lastReadTokenIndex = token.getTokenIndex();
+                }
+            }
+        }
+        List<Token> rightResult = bufferedTokenStream.getHiddenTokensToRight(stopToken.getTokenIndex());
+        if (rightResult != null) {
+            for (Token token : rightResult) {
+                if (token.getLine() == stopToken.getLine()) {
+                    result.add(token);
+                    lastReadTokenIndex = token.getTokenIndex();
+                }
+            }
+        }
         if (result != null) {
             String leftComments = result.stream()
                     .filter(token -> (token.getType() == JavaLexer.LINE_COMMENT) || (token.getType() == JavaLexer.COMMENT))
