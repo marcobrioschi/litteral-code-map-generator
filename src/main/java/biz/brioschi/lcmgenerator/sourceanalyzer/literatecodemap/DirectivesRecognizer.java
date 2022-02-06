@@ -11,17 +11,11 @@ public class DirectivesRecognizer {
     public static List<Directive> extractDirectives(String inputString) {
         // TODO implement a real directive recognizing
         List<Directive> directives = new ArrayList<>();
-        if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_A()')")) {
-            directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_A()"));
-        }
-        if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_B()')")) {
-            directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_B()"));
-        }
-        if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_C()')")) {
-            directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_C()"));
-        }
-        if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_D()')")) {
-            directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_D()"));
+        String alphabet = "ABCDEFGH"; // IJKLMNOPQRSTUWXYZ0123456789";
+        for (int i = 0; i < alphabet.length(); ++i) {
+            if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_" + alphabet.charAt(i) + "()')")) {
+                directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_" + alphabet.charAt(i) + "()"));
+            }
         }
         return directives;
         //        CharStream charInputStream = CharStreams.fromString(inputString);

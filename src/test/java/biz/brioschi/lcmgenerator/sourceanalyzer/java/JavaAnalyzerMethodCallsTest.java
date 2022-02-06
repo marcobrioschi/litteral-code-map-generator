@@ -2,6 +2,7 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStreams;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,11 +19,12 @@ public class JavaAnalyzerMethodCallsTest {
     // TODO handle only static invocation filtering other expressions
 
     @Test
+    @Disabled
     public void NestedTypes() throws IOException {
         String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/NestedTypeInvokeConnections.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
-        assertThat(units, hasSize(1));  // TODO
+        assertThat(units, hasSize(2));  // TODO
         assertThat(
                 units,
                 hasItems(
@@ -38,7 +40,21 @@ public class JavaAnalyzerMethodCallsTest {
                         )
                 )
         );
-
+        assertThat(
+                units,
+                hasItems(
+                        generateLiterateCodeMapBox(
+                                JAVA_CLASS,
+                                "Level_1_1",
+                                new String[]{
+                                        "TestDestinationClass:doSomething_E()",
+                                        "TestDestinationClass:doSomething_F()",
+                                        "TestDestinationClass:doSomething_G()",
+                                        "TestDestinationClass:doSomething_H()",
+                                }
+                        )
+                )
+        );
     }
 
 }
