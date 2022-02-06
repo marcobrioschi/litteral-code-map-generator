@@ -11,7 +11,7 @@ public class DirectivesRecognizer {
     public static List<Directive> extractDirectives(String inputString) {
         // TODO implement a real directive recognizing
         List<Directive> directives = new ArrayList<>();
-        String alphabet = "ABCDEFGH"; // IJKLMNOPQRSTUWXYZ0123456789";
+        String alphabet = "ABCDEFGHIJKL"; // MNOPQRSTUWXYZ0123456789";
         for (int i = 0; i < alphabet.length(); ++i) {
             if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_" + alphabet.charAt(i) + "()')")) {
                 directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_" + alphabet.charAt(i) + "()"));
