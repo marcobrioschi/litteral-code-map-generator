@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.JAVA_CLASS;
+import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.JAVA_INTERFACE;
 import static biz.brioschi.lcmgenerator.util.LiterateCodeMapBoxHelper.generateLiterateCodeMapBox;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
@@ -23,7 +24,7 @@ public class JavaAnalyzerMethodCallsTest {
         String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/NestedTypeInvokeConnections.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
-        assertThat(units, hasSize(3));  // TODO
+        assertThat(units, hasSize(4));  // TODO
         assertThat(
                 units,
                 hasItems(
@@ -65,6 +66,21 @@ public class JavaAnalyzerMethodCallsTest {
                                         "TestDestinationClass:doSomething_J()",
                                         "TestDestinationClass:doSomething_K()",
                                         "TestDestinationClass:doSomething_L()",
+                                }
+                        )
+                )
+        );
+        assertThat(
+                units,
+                hasItems(
+                        generateLiterateCodeMapBox(
+                                JAVA_INTERFACE,
+                                "Level_1_1_2",
+                                new String[]{
+                                        "TestDestinationClass:doSomething_M()",
+                                        "TestDestinationClass:doSomething_N()",
+                                        "TestDestinationClass:doSomething_O()",
+                                        "TestDestinationClass:doSomething_P()",
                                 }
                         )
                 )

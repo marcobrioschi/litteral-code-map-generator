@@ -9,10 +9,10 @@ public class Level_1 { /* @LiterateMapConnection('TestDestinationClass', 'doSome
         /* @LiterateMapConnection('TestDestinationClass', 'doSomething_J()') */
         public class Level_1_1_1 { /* @LiterateMapConnection('TestDestinationClass', 'doSomething_K()') */ // @LiterateMapConnection('TestDestinationClass', 'doSomething_L()')
         }
-//        // @LiterateMapConnection('TestDestinationClass', 'doSomething_M()')
-//        /* @LiterateMapConnection('TestDestinationClass', 'doSomething_N()') */
-//        public interface Level_1_1_2 { /* @LiterateMapConnection('TestDestinationClass', 'doSomething()_O') */ // @LiterateMapConnection('TestDestinationClass', 'doSomething_P()')
-//        }
+        // @LiterateMapConnection('TestDestinationClass', 'doSomething_M()')
+        /* @LiterateMapConnection('TestDestinationClass', 'doSomething_N()') */
+        public interface Level_1_1_2 { /* @LiterateMapConnection('TestDestinationClass', 'doSomething_O()') */ // @LiterateMapConnection('TestDestinationClass', 'doSomething_P()')
+        }
 //        /* @LiterateMapConnection('TestDestinationClass', 'doSomething_Q()') */
 //        // @LiterateMapConnection('TestDestinationClass', 'doSomething_R()')
 //        public enum Level_1_1_3 { /* @LiterateMapConnection('TestDestinationClass', 'doSomething_S()') */ // @LiterateMapConnection('TestDestinationClass', 'doSomething_T()')
