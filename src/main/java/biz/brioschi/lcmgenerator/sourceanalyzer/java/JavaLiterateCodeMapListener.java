@@ -41,6 +41,9 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         return literateCodeMapBoxes;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Scope management
+
     @Override
     public void enterTypeDeclaration(TypeDeclarationContext ctx) {
         pushRightTypeContext(ctx);
@@ -51,114 +54,44 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         popContextOfCurrentTypeAndStoreTheBox();
     }
 
-
-    // TODO: switch to classBodyDeclaration
-//    @Override
-//    public void enterMemberDeclaration(MemberDeclarationContext ctx) {
-//        pushRightTypeContext(ctx);
-//    }
-//
-//    @Override
-//    public void exitMemberDeclaration(MemberDeclarationContext ctx) {
-//        popContextOfCurrentTypeAndStoreTheBox();
-//    }
-
     @Override
     public void enterClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
         if (ctx.memberDeclaration() != null) {
-            if (ctx.memberDeclaration().classDeclaration() != null) {
-                buildContextAndPushIt(ctx.memberDeclaration().classDeclaration().identifier().getText(), JAVA_CLASS);
-            }
-        }
-        if (ctx.memberDeclaration() != null) {
-            if (ctx.memberDeclaration().interfaceDeclaration() != null) {
-                buildContextAndPushIt(ctx.memberDeclaration().interfaceDeclaration().identifier().getText(), JAVA_INTERFACE);
-            }
-        }
-        if (ctx.memberDeclaration() != null) {
-            if (ctx.memberDeclaration().enumDeclaration() != null) {
-                buildContextAndPushIt(ctx.memberDeclaration().enumDeclaration().identifier().getText(), JAVA_ENUM);
-            }
+            pushRightTypeContext(ctx.getRuleContext(MemberDeclarationContext.class, 0));
         }
     }
 
     @Override
     public void exitClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
         if (ctx.memberDeclaration() != null) {
-            if (ctx.memberDeclaration().classDeclaration() != null) {
-                popContextOfCurrentTypeAndStoreTheBox();
-            }
-        }
-        if (ctx.memberDeclaration() != null) {
-            if (ctx.memberDeclaration().interfaceDeclaration() != null) {
-                popContextOfCurrentTypeAndStoreTheBox();
-            }
-        }
-        if (ctx.memberDeclaration() != null) {
-            if (ctx.memberDeclaration().enumDeclaration() != null) {
+            if (
+                    (ctx.memberDeclaration().classDeclaration() != null) ||
+                    (ctx.memberDeclaration().interfaceDeclaration() != null) ||
+                    (ctx.memberDeclaration().enumDeclaration() != null)
+            ) {
                 popContextOfCurrentTypeAndStoreTheBox();
             }
         }
     }
 
-    // TODO switch to interfaceBodyDeclaration
-//    @Override
-//    public void enterInterfaceMemberDeclaration(InterfaceMemberDeclarationContext ctx) {
-//        pushRightTypeContext(ctx);
-//    }
-//
-//    @Override
-//    public void exitInterfaceMemberDeclaration(InterfaceMemberDeclarationContext ctx) {
-//        popContextOfCurrentTypeAndStoreTheBox();
-//    }
-
     @Override
     public void enterInterfaceBodyDeclaration(InterfaceBodyDeclarationContext ctx) {
         if (ctx.interfaceMemberDeclaration() != null) {
-            if (ctx.interfaceMemberDeclaration().classDeclaration() != null) {
-                buildContextAndPushIt(ctx.interfaceMemberDeclaration().classDeclaration().identifier().getText(), JAVA_CLASS);
-            }
-        }
-        if (ctx.interfaceMemberDeclaration() != null) {
-            if (ctx.interfaceMemberDeclaration().interfaceDeclaration() != null) {
-                buildContextAndPushIt(ctx.interfaceMemberDeclaration().interfaceDeclaration().identifier().getText(), JAVA_INTERFACE);
-            }
-        }
-        if (ctx.interfaceMemberDeclaration() != null) {
-            if (ctx.interfaceMemberDeclaration().enumDeclaration() != null) {
-                buildContextAndPushIt(ctx.interfaceMemberDeclaration().enumDeclaration().identifier().getText(), JAVA_ENUM);
-            }
+            pushRightTypeContext(ctx.getRuleContext(InterfaceMemberDeclarationContext.class, 0));
         }
     }
 
     @Override
     public void exitInterfaceBodyDeclaration(InterfaceBodyDeclarationContext ctx) {
         if (ctx.interfaceMemberDeclaration() != null) {
-            if (ctx.interfaceMemberDeclaration().classDeclaration() != null) {
+            if (
+                    (ctx.interfaceMemberDeclaration().classDeclaration() != null) ||
+                    (ctx.interfaceMemberDeclaration().interfaceDeclaration() != null) ||
+                    (ctx.interfaceMemberDeclaration().enumDeclaration() != null)
+            ) {
                 popContextOfCurrentTypeAndStoreTheBox();
             }
         }
-        if (ctx.interfaceMemberDeclaration() != null) {
-            if (ctx.interfaceMemberDeclaration().interfaceDeclaration() != null) {
-                popContextOfCurrentTypeAndStoreTheBox();
-            }
-        }
-        if (ctx.interfaceMemberDeclaration() != null) {
-            if (ctx.interfaceMemberDeclaration().enumDeclaration() != null) {
-                popContextOfCurrentTypeAndStoreTheBox();
-            }
-        }
-    }
-
-    // TODO switch to annotationTypeElementDeclaration
-    @Override
-    public void enterAnnotationTypeElementRest(AnnotationTypeElementRestContext ctx) {
-        pushRightTypeContext(ctx);
-    }
-
-    @Override
-    public void exitAnnotationTypeElementRest(AnnotationTypeElementRestContext ctx) {
-        popContextOfCurrentTypeAndStoreTheBox();
     }
 
     @Override
@@ -171,36 +104,18 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         popContextOfCurrentTypeAndStoreTheBox();
     }
 
-    @Override
-    public void enterClassDeclaration(ClassDeclarationContext ctx) {
-        addCurrentTypeExtensions(ctx);
-    }
-
-    @Override
-    public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
-        addCurrentTypeExtensions(ctx);
-    }
-
-    @Override
-    public void enterEnumDeclaration(EnumDeclarationContext ctx) {
-        addCurrentTypeExtensions(ctx);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Extensions
-
     private void pushRightTypeContext(ParserRuleContext ctx) {
-        if (ctx.getRuleContext((Class<? extends ParserRuleContext>) ClassDeclarationContext.class, 0) != null) {
-            String typeName2 = ctx.getRuleContext((Class<? extends ParserRuleContext>) ClassDeclarationContext.class, 0).getRuleContext(IdentifierContext.class, 0).getText();
-            buildContextAndPushIt(typeName2, JAVA_CLASS);
-        }
-        if (ctx.getRuleContext((Class<? extends ParserRuleContext>) InterfaceDeclarationContext.class, 0) != null) {
-            String typeName1 = ctx.getRuleContext((Class<? extends ParserRuleContext>) InterfaceDeclarationContext.class, 0).getRuleContext(IdentifierContext.class, 0).getText();
-            buildContextAndPushIt(typeName1, JAVA_INTERFACE);
-        }
-        if (ctx.getRuleContext((Class<? extends ParserRuleContext>) EnumDeclarationContext.class, 0) != null) {
-            String typeName = ctx.getRuleContext((Class<? extends ParserRuleContext>) EnumDeclarationContext.class, 0).getRuleContext(IdentifierContext.class, 0).getText();
-            buildContextAndPushIt(typeName, JAVA_ENUM);
+        checkContextAndGenerateScope(ctx, ClassDeclarationContext.class, JAVA_CLASS);
+        checkContextAndGenerateScope(ctx, InterfaceDeclarationContext.class, JAVA_INTERFACE);
+        checkContextAndGenerateScope(ctx, EnumDeclarationContext.class, JAVA_ENUM);
+    }
+
+    private void checkContextAndGenerateScope(ParserRuleContext ctx, Class<? extends ParserRuleContext> classDeclarationContextClass, BoxType boxType) {
+        ParserRuleContext currentCheckedClassContext = ctx.getRuleContext(classDeclarationContextClass, 0);
+        if (currentCheckedClassContext != null) {
+            IdentifierContext identifier = currentCheckedClassContext.getRuleContext(IdentifierContext.class, 0);
+            String typeName = identifier.getText();
+            buildContextAndPushIt(typeName, boxType);
         }
     }
 
@@ -222,6 +137,24 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
                         .connections(connections)
                         .build()
         );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Extensions
+
+    @Override
+    public void enterClassDeclaration(ClassDeclarationContext ctx) {
+        addCurrentTypeExtensions(ctx);
+    }
+
+    @Override
+    public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
+        addCurrentTypeExtensions(ctx);
+    }
+
+    @Override
+    public void enterEnumDeclaration(EnumDeclarationContext ctx) {
+        addCurrentTypeExtensions(ctx);
     }
 
     private void addCurrentTypeExtensions(ParserRuleContext ctx) {
