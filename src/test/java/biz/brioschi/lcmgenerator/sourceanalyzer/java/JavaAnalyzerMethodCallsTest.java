@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.JAVA_CLASS;
-import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.JAVA_INTERFACE;
+import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.*;
 import static biz.brioschi.lcmgenerator.util.LiterateCodeMapBoxHelper.generateLiterateCodeMapBox;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
@@ -16,15 +15,12 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class JavaAnalyzerMethodCallsTest {
 
-    // TODO nested classes
-    // TODO handle only static invocation filtering other expressions
-
     @Test
     public void NestedTypes() throws IOException {
         String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/NestedTypeInvokeConnections.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
-        assertThat(units, hasSize(4));  // TODO
+        assertThat(units, hasSize(7));
         assertThat(
                 units,
                 hasItems(
@@ -81,6 +77,51 @@ public class JavaAnalyzerMethodCallsTest {
                                         "TestDestinationClass:doSomething_N()",
                                         "TestDestinationClass:doSomething_O()",
                                         "TestDestinationClass:doSomething_P()",
+                                }
+                        )
+                )
+        );
+        assertThat(
+                units,
+                hasItems(
+                        generateLiterateCodeMapBox(
+                                JAVA_ENUM,
+                                "Level_1_1_3",
+                                new String[]{
+                                        "TestDestinationClass:doSomething_Q()",
+                                        "TestDestinationClass:doSomething_R()",
+                                        "TestDestinationClass:doSomething_S()",
+                                        "TestDestinationClass:doSomething_T()",
+                                }
+                        )
+                )
+        );
+        assertThat(
+                units,
+                hasItems(
+                        generateLiterateCodeMapBox(
+                                JAVA_INTERFACE,
+                                "Level_1_2",
+                                new String[]{
+                                        "TestDestinationClass:doSomething_U()",
+                                        "TestDestinationClass:doSomething_W()",
+                                        "TestDestinationClass:doSomething_X()",
+                                        "TestDestinationClass:doSomething_Y()",
+                                }
+                        )
+                )
+        );
+        assertThat(
+                units,
+                hasItems(
+                        generateLiterateCodeMapBox(
+                                JAVA_ENUM,
+                                "Level_1_3",
+                                new String[]{
+                                        "TestDestinationClass:doSomething_Z()",
+                                        "TestDestinationClass:doSomething_1()",
+                                        "TestDestinationClass:doSomething_2()",
+                                        "TestDestinationClass:doSomething_3()",
                                 }
                         )
                 )
