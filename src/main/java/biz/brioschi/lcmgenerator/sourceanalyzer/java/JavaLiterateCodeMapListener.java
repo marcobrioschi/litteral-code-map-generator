@@ -16,9 +16,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 import static biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.*;
 import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
@@ -192,64 +192,76 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     ///////////////////////////////////////////////////////////////////////////
     // Directives
 
-    /*
-    typeDeclaration
-    : classOrInterfaceModifier*
-      (classDeclaration | enumDeclaration | interfaceDeclaration )
-    | ';'
-    ;
-     */
-
     private int lastReadTokenIndex = -1;
 
     @Override
     public void visitTerminal(TerminalNode terminalNode) {
-        manageDirectivesOnCurrentNode(terminalNode.getSymbol(), terminalNode.getSymbol());
+        manageDirectivesOnCurrentNode(terminalNode.getSymbol());
     }
 
-    // TODO search for other entry points following rules
-    private void manageDirectivesOnCurrentNode(Token startToken, Token stopToken) {
-        if (typeScopeStack.empty())
-            return;
-        // TODO refactoring and complete with righ comments e filter on already readed comments
+    private void manageDirectivesOnCurrentNode(Token currentToken) {
+        List<Token> comments = new ArrayList<>();
+        comments.addAll(readLeftComments(currentToken));
+        comments.addAll(readRightComments(currentToken));
+        comments.stream()
+                .map(Token::getText)
+                .map(DirectivesRecognizer::extractDirectives)
+                .flatMap(Collection::stream)
+                .forEach(this::applyDirective);
+    }
+
+    private List<Token> readLeftComments(Token currentToken) {
+        List<Token> leftResult = bufferedTokenStream.getHiddenTokensToLeft(currentToken.getTokenIndex());
         List<Token> result = new ArrayList<>();
-        List<Token> leftResult = bufferedTokenStream.getHiddenTokensToLeft(startToken.getTokenIndex());
         if (leftResult != null) {
             for (Token token : leftResult) {
-                if (token.getTokenIndex() > lastReadTokenIndex) {
+                if (isAComment(token) && isNotAlreadyRead(token)) {
                     result.add(token);
                     lastReadTokenIndex = token.getTokenIndex();
                 }
             }
         }
-        List<Token> rightResult = bufferedTokenStream.getHiddenTokensToRight(stopToken.getTokenIndex());
+        return result;
+    }
+
+    private boolean isNotAlreadyRead(Token token) {
+        return token.getTokenIndex() > lastReadTokenIndex;
+    }
+
+    private List<Token> readRightComments(Token currentToken) {
+        List<Token> rightResult = bufferedTokenStream.getHiddenTokensToRight(currentToken.getTokenIndex());
+        List<Token> result = new ArrayList<>();
         if (rightResult != null) {
             for (Token token : rightResult) {
-                if (token.getLine() == stopToken.getLine()) {
+                if (isAComment(token) && tokensAreOnTheSameLine(currentToken, token)) {
                     result.add(token);
                     lastReadTokenIndex = token.getTokenIndex();
                 }
             }
         }
-        if ((result != null) && result.size() > 0) {
-            String leftComments = result.stream()
-                    .filter(token -> (token.getType() == JavaLexer.LINE_COMMENT) || (token.getType() == JavaLexer.COMMENT))
-                    .map(token -> token.getText())
-                    .collect(Collectors.joining(" "));
-            List<Directive> directives = DirectivesRecognizer.extractDirectives(leftComments);
-            if (directives != null) {
-                for (Directive baseDirective: directives) {
-                    if (baseDirective instanceof LiterateMapConnection) {
-                        LiterateMapConnection directive = (LiterateMapConnection)baseDirective;
-                        typeScopeStack.peek().getConnections().add(
-                                new BoxConnection(
-                                        INVOKE,
-                                        directive.getTargetBox(),
-                                        directive.getDescription()
-                                )
-                        );
-                    }
-                }
+        return result;
+    }
+
+    private boolean tokensAreOnTheSameLine(Token firstToken, Token secondToken) {
+        return secondToken.getLine() == firstToken.getLine();
+    }
+
+    private boolean isAComment(Token token) {
+        return (token.getType() == JavaLexer.LINE_COMMENT) || (token.getType() == JavaLexer.COMMENT);
+    }
+
+    private void applyDirective(Directive baseDirective) {
+        // TODO refactoring and enrich logic
+        if (baseDirective instanceof LiterateMapConnection) {
+            if (!typeScopeStack.empty()) {
+                LiterateMapConnection directive = (LiterateMapConnection) baseDirective;
+                typeScopeStack.peek().getConnections().add(
+                        new BoxConnection(
+                                INVOKE,
+                                directive.getTargetBox(),
+                                directive.getDescription()
+                        )
+                );
             }
         }
     }
