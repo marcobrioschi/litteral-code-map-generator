@@ -1,7 +1,7 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap;
 
 import biz.brioschi.lcmgenerator.literatemap.directives.Directive;
-import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapConnection;
+import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapInvoke;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ public class DirectivesRecognizer {
         List<Directive> directives = new ArrayList<>();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUWXYZ0123";
         for (int i = 0; i < alphabet.length(); ++i) {
-            if (inputString.contains("@LiterateMapConnection('TestDestinationClass', 'doSomething_" + alphabet.charAt(i) + "()')")) {
-                directives.add(new LiterateMapConnection("TestDestinationClass",  "doSomething_" + alphabet.charAt(i) + "()"));
+            if (inputString.contains("@LiterateMapInvoke('TestDestinationClass', 'doSomething_" + alphabet.charAt(i) + "()')")) {
+                directives.add(new LiterateMapInvoke("TestDestinationClass",  "doSomething_" + alphabet.charAt(i) + "()"));
             }
         }
         return directives;

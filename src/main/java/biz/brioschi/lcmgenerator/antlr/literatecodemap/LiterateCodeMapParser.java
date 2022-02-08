@@ -32,7 +32,7 @@ public class LiterateCodeMapParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'@LiterateMapConnection'", null, null, null, "'('", "')'", "','"
+			null, "'@LiterateMapInvoke'", null, null, null, "'('", "')'", "','"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();

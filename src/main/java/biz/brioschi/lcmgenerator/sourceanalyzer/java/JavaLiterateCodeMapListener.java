@@ -7,7 +7,7 @@ import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.literatemap.BoxDeclarationScope;
 import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import biz.brioschi.lcmgenerator.literatemap.directives.Directive;
-import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapConnection;
+import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapInvoke;
 import biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap.DirectivesRecognizer;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -252,9 +252,9 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     private void applyDirective(Directive baseDirective) {
         // TODO refactoring and enrich logic
-        if (baseDirective instanceof LiterateMapConnection) {
+        if (baseDirective instanceof LiterateMapInvoke) {
             if (!typeScopeStack.empty()) {
-                LiterateMapConnection directive = (LiterateMapConnection) baseDirective;
+                LiterateMapInvoke directive = (LiterateMapInvoke) baseDirective;
                 typeScopeStack.peek().getConnections().add(
                         new BoxConnection(
                                 INVOKE,
