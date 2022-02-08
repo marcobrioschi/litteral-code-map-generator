@@ -28,8 +28,8 @@ public class DirectivesListener extends LiterateCodeMapBaseListener {
     @Override
     public void enterLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx) {
         List<Object> params = parseParams(ctx.params());
-        directives.add(new LiterateMapInvoke(   // TODO manage numbers
-                //params.get(0),
+        directives.add(new LiterateMapInvoke(
+                (Integer)params.get(0),
                 (String)params.get(1),
                 (String)params.get(2)
         ));

@@ -253,7 +253,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     private void applyDirective(Directive baseDirective) {
         // TODO refactoring and enrich logic
         if (baseDirective instanceof LiterateMapInvoke) {
-            if (!typeScopeStack.empty()) {
+            if (!typeScopeStack.empty()) {  // TODO emit warning!!!!
                 LiterateMapInvoke directive = (LiterateMapInvoke) baseDirective;
                 typeScopeStack.peek().getConnections().add(
                         new BoxConnection(
