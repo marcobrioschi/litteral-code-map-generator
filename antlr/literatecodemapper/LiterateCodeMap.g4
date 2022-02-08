@@ -30,7 +30,7 @@ param
 
 LITERATEMAPINVOKE:          '@LiterateMapInvoke';
 
-NUMBER:                     [1-9][0-9]*;
+NUMBER:                     [0-9]*;
 DQSTRING:                   '"' (~["\\\r\n])* '"';
 SQSTRING:                   '\'' (~['\\\r\n])* '\'';
 
