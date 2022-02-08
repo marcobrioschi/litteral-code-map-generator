@@ -8,11 +8,11 @@ commentsentence
     ;
 
 directiveDeclaration
-    : literatemapconnection
+    : literatemapinvoke
     ;
 
-literatemapconnection
-    : LITERATEMAPCONNECTION params
+literatemapinvoke
+    : LITERATEMAPINVOKE params
     ;
 
 params
@@ -28,7 +28,7 @@ param
 ///////////////////////////////////////////////////////////////////////////////
 // Tokens
 
-LITERATEMAPCONNECTION:      '@LiterateMapConnection';
+LITERATEMAPINVOKE:          '@LiterateMapInvoke';
 
 NUMBER:                     [1-9][0-9]*;
 DQSTRING:                   '"' (~["\\\r\n])* '"';

@@ -40,13 +40,13 @@ public class LiterateCodeMapBaseListener implements LiterateCodeMapListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx) { }
+	@Override public void enterLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx) { }
+	@Override public void exitLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

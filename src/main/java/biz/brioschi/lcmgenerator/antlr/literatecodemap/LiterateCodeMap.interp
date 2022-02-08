@@ -1,6 +1,6 @@
 token literal names:
 null
-'@LiterateMapConnection'
+'@LiterateMapInvoke'
 null
 null
 null
@@ -12,7 +12,7 @@ null
 
 token symbolic names:
 null
-LITERATEMAPCONNECTION
+LITERATEMAPINVOKE
 NUMBER
 DQSTRING
 SQSTRING
@@ -25,7 +25,7 @@ WS
 rule names:
 commentsentence
 directiveDeclaration
-literatemapconnection
+literatemapinvoke
 params
 param
 

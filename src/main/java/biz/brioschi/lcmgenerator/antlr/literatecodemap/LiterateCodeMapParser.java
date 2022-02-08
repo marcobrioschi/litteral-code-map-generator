@@ -17,14 +17,14 @@ public class LiterateCodeMapParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		LITERATEMAPCONNECTION=1, NUMBER=2, DQSTRING=3, SQSTRING=4, LPAREN=5, RPAREN=6, 
+		LITERATEMAPINVOKE=1, NUMBER=2, DQSTRING=3, SQSTRING=4, LPAREN=5, RPAREN=6, 
 		COMMA=7, FILLCHARS=8, WS=9;
 	public static final int
-		RULE_commentsentence = 0, RULE_directiveDeclaration = 1, RULE_literatemapconnection = 2, 
+		RULE_commentsentence = 0, RULE_directiveDeclaration = 1, RULE_literatemapinvoke = 2, 
 		RULE_params = 3, RULE_param = 4;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"commentsentence", "directiveDeclaration", "literatemapconnection", "params", 
+			"commentsentence", "directiveDeclaration", "literatemapinvoke", "params", 
 			"param"
 		};
 	}
@@ -38,7 +38,7 @@ public class LiterateCodeMapParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "LITERATEMAPCONNECTION", "NUMBER", "DQSTRING", "SQSTRING", "LPAREN", 
+			null, "LITERATEMAPINVOKE", "NUMBER", "DQSTRING", "SQSTRING", "LPAREN", 
 			"RPAREN", "COMMA", "FILLCHARS", "WS"
 		};
 	}
@@ -124,7 +124,7 @@ public class LiterateCodeMapParser extends Parser {
 			setState(13);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==LITERATEMAPCONNECTION) {
+			while (_la==LITERATEMAPINVOKE) {
 				{
 				{
 				setState(10);
@@ -149,8 +149,8 @@ public class LiterateCodeMapParser extends Parser {
 	}
 
 	public static class DirectiveDeclarationContext extends ParserRuleContext {
-		public LiteratemapconnectionContext literatemapconnection() {
-			return getRuleContext(LiteratemapconnectionContext.class,0);
+		public LiteratemapinvokeContext literatemapinvoke() {
+			return getRuleContext(LiteratemapinvokeContext.class,0);
 		}
 		public DirectiveDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -173,7 +173,7 @@ public class LiterateCodeMapParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(16);
-			literatemapconnection();
+			literatemapinvoke();
 			}
 		}
 		catch (RecognitionException re) {
@@ -187,33 +187,33 @@ public class LiterateCodeMapParser extends Parser {
 		return _localctx;
 	}
 
-	public static class LiteratemapconnectionContext extends ParserRuleContext {
-		public TerminalNode LITERATEMAPCONNECTION() { return getToken(LiterateCodeMapParser.LITERATEMAPCONNECTION, 0); }
+	public static class LiteratemapinvokeContext extends ParserRuleContext {
+		public TerminalNode LITERATEMAPINVOKE() { return getToken(LiterateCodeMapParser.LITERATEMAPINVOKE, 0); }
 		public ParamsContext params() {
 			return getRuleContext(ParamsContext.class,0);
 		}
-		public LiteratemapconnectionContext(ParserRuleContext parent, int invokingState) {
+		public LiteratemapinvokeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_literatemapconnection; }
+		@Override public int getRuleIndex() { return RULE_literatemapinvoke; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).enterLiteratemapconnection(this);
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).enterLiteratemapinvoke(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).exitLiteratemapconnection(this);
+			if ( listener instanceof LiterateCodeMapListener ) ((LiterateCodeMapListener)listener).exitLiteratemapinvoke(this);
 		}
 	}
 
-	public final LiteratemapconnectionContext literatemapconnection() throws RecognitionException {
-		LiteratemapconnectionContext _localctx = new LiteratemapconnectionContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_literatemapconnection);
+	public final LiteratemapinvokeContext literatemapinvoke() throws RecognitionException {
+		LiteratemapinvokeContext _localctx = new LiteratemapinvokeContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_literatemapinvoke);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(18);
-			match(LITERATEMAPCONNECTION);
+			match(LITERATEMAPINVOKE);
 			setState(19);
 			params();
 			}

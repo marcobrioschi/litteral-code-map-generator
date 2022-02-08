@@ -28,15 +28,15 @@ public interface LiterateCodeMapListener extends ParseTreeListener {
 	 */
 	void exitDirectiveDeclaration(LiterateCodeMapParser.DirectiveDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LiterateCodeMapParser#literatemapconnection}.
+	 * Enter a parse tree produced by {@link LiterateCodeMapParser#literatemapinvoke}.
 	 * @param ctx the parse tree
 	 */
-	void enterLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx);
+	void enterLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LiterateCodeMapParser#literatemapconnection}.
+	 * Exit a parse tree produced by {@link LiterateCodeMapParser#literatemapinvoke}.
 	 * @param ctx the parse tree
 	 */
-	void exitLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx);
+	void exitLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LiterateCodeMapParser#params}.
 	 * @param ctx the parse tree

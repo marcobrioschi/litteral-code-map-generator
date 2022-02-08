@@ -25,7 +25,7 @@ public class DirectivesListener extends LiterateCodeMapBaseListener {
     // Parse directives
 
     @Override
-    public void enterLiteratemapconnection(LiterateCodeMapParser.LiteratemapconnectionContext ctx) {
+    public void enterLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx) {
         List<Object> params = parseParams(ctx.params());
         // TODO build the directive
     }
