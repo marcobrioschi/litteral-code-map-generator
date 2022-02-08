@@ -3,30 +3,17 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap;
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapLexer;
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser;
 import biz.brioschi.lcmgenerator.literatemap.directives.Directive;
-import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapInvoke;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DirectivesRecognizer {
 
     public static List<Directive> extractDirectives(String inputString) {
-        // TODO implement a real directive recognizing
-        List<Directive> directives = new ArrayList<>();
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUWXYZ0123";
-        for (int i = 0; i < alphabet.length(); ++i) {
-            if (inputString.contains("@LiterateMapInvoke(0, 'TestDestinationClass', 'doSomething_" + alphabet.charAt(i) + "()')")) {
-                directives.add(new LiterateMapInvoke("TestDestinationClass",  "doSomething_" + alphabet.charAt(i) + "()"));
-            }
-        }
-        if (directives.size() > 0) {
-            return directives;
-        }
         CharStream charInputStream = CharStreams.fromString(inputString);
         LiterateCodeMapLexer lexer = new LiterateCodeMapLexer(charInputStream);
         CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
