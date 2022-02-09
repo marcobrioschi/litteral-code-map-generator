@@ -1,7 +1,7 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
-import biz.brioschi.lcmgenerator.diagram.BoxConnection;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,7 +14,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class JavaAnalyzerEnumExtensionTest {
-    
+
+    // TODO rifattorizzare l'helper
+
     @ParameterizedTest(name = "{index} - \"{0}\" the extensions are \"{1}\"")
     @MethodSource
     public void parseEnumExtensions(String inputUnit, BoxConnection[] connections) {

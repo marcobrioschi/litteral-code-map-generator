@@ -1,4 +1,4 @@
-package biz.brioschi.lcmgenerator.diagram;
+package biz.brioschi.lcmgenerator.literatemap;
 
 import lombok.Builder;
 import lombok.NonNull;

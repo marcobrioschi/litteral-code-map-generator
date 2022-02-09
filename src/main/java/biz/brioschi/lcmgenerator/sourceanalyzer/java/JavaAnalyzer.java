@@ -2,7 +2,7 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.antlr.java.lexer.JavaLexer;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
-import biz.brioschi.lcmgenerator.diagram.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class JavaAnalyzer {
 
-    private final CharStream charInputStream;
+    private final CharStream charInputStream;   // TODO make it a parameter of the extractInfo
 
     public JavaAnalyzer(CharStream charInputStream) {
         this.charInputStream = charInputStream;
@@ -23,7 +23,7 @@ public class JavaAnalyzer {
         CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
         JavaParser parser = new JavaParser(commonTokenStream);
         ParseTree tree = parser.compilationUnit();
-        JavaLiterateCodeMapListener listener = new JavaLiterateCodeMapListener();
+        JavaLiterateCodeMapListener listener = new JavaLiterateCodeMapListener(commonTokenStream);
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
         return listener.getLiterateCodeMapBoxes();
