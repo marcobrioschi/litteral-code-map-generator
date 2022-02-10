@@ -12,17 +12,29 @@ public class BoxConnection {
     @NonNull
     String targetBoxName;
 
+    Integer progressiveNumber;
+
     String description;
 
+    // TODO private constructor and add factory methods
     public BoxConnection(ConnectionType type, String targetBoxName) {
         this.type = type;
         this.targetBoxName = targetBoxName;
+        this.progressiveNumber = null;
         this.description = "";
     }
 
-    public BoxConnection(ConnectionType type, String targetBoxName, String description) {
+    public BoxConnection(ConnectionType type, String targetBoxName, String description) {   // TODO remove
         this.type = type;
         this.targetBoxName = targetBoxName;
+        this.progressiveNumber = null;
+        this.description = description;
+    }
+
+    public BoxConnection(ConnectionType type, String targetBoxName, Integer progressiveNumber, String description) {
+        this.type = type;
+        this.targetBoxName = targetBoxName;
+        this.progressiveNumber = progressiveNumber;
         this.description = description;
     }
 

@@ -29,10 +29,10 @@ public class JavaDirectiveLiterateMapInvokeTest {
                                 JAVA_CLASS,
                                 "TestClass",
                                 new String[]{
-                                        "ClassA:MethodA()",
-                                        "ClassB:MethodB()",
-                                        "ClassC:MethodC()",
-                                        "ClassD:MethodD()",
+                                        "1:ClassA:MethodA()",
+                                        "2:ClassB:MethodB()",
+                                        "3:ClassC:MethodC()",
+                                        "4:ClassD:MethodD()",
                                 }
                         )
                 )

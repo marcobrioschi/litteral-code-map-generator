@@ -259,6 +259,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
                         new BoxConnection(
                                 INVOKE,
                                 directive.getTargetBox(),
+                                directive.getProgressiveNumber(),
                                 directive.getDescription()
                         )
                 );

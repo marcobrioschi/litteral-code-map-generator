@@ -51,7 +51,7 @@ public class LiterateCodeMapGenerator implements Runnable {
 
         // Scan all the files
         FileSystemScanner fileSystemScanner = new FileSystemScanner(sourceDirectories);
-        List<File> sourceUnits = fileSystemScanner.scanBaseDirectories();
+        List<File> sourceUnits = fileSystemScanner.scanBaseDirectories();   // @LiterateMapInvoke(1, "FileSystemScanner", "scanBaseDirectories()")
         List<LiterateCodeMapBox> boxes = new ArrayList<>();
         for (File sourceUnit : sourceUnits) {
             try (FileInputStream sourceUnitInputStream = new FileInputStream(sourceUnit)) {
@@ -75,18 +75,18 @@ public class LiterateCodeMapGenerator implements Runnable {
 
         // Filter list of boxes
         BoxesFilter boxesFilter = new BoxesFilter(validBoxes);
-        List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);
+        List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);     // @LiterateMapInvoke(2, "BoxesFilter", "filter(...)")
 
         // Generate the map description
         LiterateCodeBuilder literateCodeBuilder = new PlantUMLBuilder();
         LiterateCodeMap2BuilderMapper literateCodeMap2BuilderMapper = new LiterateCodeMap2BuilderMapper(literateCodeBuilder);
         literateCodeMap2BuilderMapper.mapBoxes(title, description, filteredBoxes);
-        String source = literateCodeBuilder.getLiterateCodeMaoDescription();
+        String source = literateCodeBuilder.getLiterateCodeMaoDescription();    // @LiterateMapInvoke(2, "PlantUMLBuilder", "mapBoxes(...)")
 
         // Generate the map image
         try (OutputStream literateCodeMapFileOutputStream = new FileOutputStream(outputLiterateCodeMapFileName)) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
-            plantUMLGenerator.generateSVGImage(source, literateCodeMapFileOutputStream);
+            plantUMLGenerator.generateSVGImage(source, literateCodeMapFileOutputStream);    // @LiterateMapInvoke(3, "plantUMLGenerator", "generateSVGImage(...)")
         } catch (IOException e) {
             System.err.println("Exception writing the literate code map: " + e.getMessage());
         }

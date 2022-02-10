@@ -32,7 +32,12 @@ public class LiterateCodeMapBoxHelper {
         for (String singleExtraInfo : extraInfo) {
             if (singleExtraInfo.contains(":")) {
                 String[] connectionComponents = singleExtraInfo.split(":");
-                expectedConnections.add(new BoxConnection(INVOKE, connectionComponents[0], connectionComponents[1]));
+                expectedConnections.add(new BoxConnection(
+                        INVOKE,
+                        connectionComponents[1],
+                        Integer.parseInt(connectionComponents[0]),
+                        connectionComponents[2]
+                ));
             } else {
                 expectedConnections.add(new BoxConnection(EXTENDS, singleExtraInfo));
             }
