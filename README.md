@@ -25,9 +25,13 @@ For each statement you can add elements on the map adding:
 * a comment before the statement
 * a comment after the statement and in the same line
 
-## Self literate map generation
+## Self literate code map generation
 
-./generator.sh -t 'Literate Code Map Generator' -d 'This literate code map describe the main flow of the generator' -s ./src/main/java -o generator.svg -f LiterateCodeMapGenerator,JavaAnalyzer,FileSystemScanner,PlantUMLGenerator,DiagramBuilder,PlantUMLBuilder,BoxesFilter,DiagramMapper
+![Generated literate code map](generator.svg)
+
+```
+./generator.sh -p -t 'Literate Code Map Generator' -d 'This literate code map describe the main flow of the generator' -s ./src/main/java -o generator.svg -f LiterateCodeMapGenerator,JavaAnalyzer,FileSystemScanner,PlantUMLGenerator,DiagramBuilder,LiterateCodeBuilder,PlantUMLBuilder,BoxesFilter,DiagramMapper
+```
 
 ## Credits
 

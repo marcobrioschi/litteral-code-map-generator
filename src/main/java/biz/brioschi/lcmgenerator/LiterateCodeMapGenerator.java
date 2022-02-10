@@ -46,18 +46,21 @@ public class LiterateCodeMapGenerator implements Runnable {
     @Option(names = {"-o", "--output-file"}, description = "output literate code map file name", defaultValue = "./literate-code-map.svg")
     private String outputLiterateCodeMapFileName;
 
+    @Option(names = {"-p", "--keep-plantuml-file"}, description = "keep the PlantUML intermediate file", defaultValue = "false")
+    private boolean trackPlantUMLSourceFile;
+
     @Override
     public void run() {
 
         // Scan all the files
         FileSystemScanner fileSystemScanner = new FileSystemScanner(sourceDirectories);
-        List<File> sourceUnits = fileSystemScanner.scanBaseDirectories();   // @LiterateMapInvoke(1, "FileSystemScanner", "scanBaseDirectories()")
+        List<File> sourceUnits = fileSystemScanner.scanBaseDirectories();       // @LiterateMapInvoke(1, "FileSystemScanner", "scanBaseDirectories()")
         List<LiterateCodeMapBox> boxes = new ArrayList<>();
         for (File sourceUnit : sourceUnits) {
             try (FileInputStream sourceUnitInputStream = new FileInputStream(sourceUnit)) {
                 CharStream charInputStream = CharStreams.fromStream(sourceUnitInputStream);
                 JavaAnalyzer javaAnalyzer = new JavaAnalyzer(charInputStream);
-                boxes.addAll(javaAnalyzer.extractInfo());
+                boxes.addAll(javaAnalyzer.extractInfo());                       // @LiterateMapInvoke(2, "JavaAnalyzer", "extractInfo(...)")
             } catch (IOException e) {
                 System.err.println("Exception reading a source unit: " + e.getMessage());
             }
@@ -75,18 +78,28 @@ public class LiterateCodeMapGenerator implements Runnable {
 
         // Filter list of boxes
         BoxesFilter boxesFilter = new BoxesFilter(validBoxes);
-        List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);     // @LiterateMapInvoke(2, "BoxesFilter", "filter(...)")
+        List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);                 // @LiterateMapInvoke(3, "BoxesFilter", "filter(boxes)")
 
         // Generate the map description
         LiterateCodeBuilder literateCodeBuilder = new PlantUMLBuilder();
         LiterateCodeMap2BuilderMapper literateCodeMap2BuilderMapper = new LiterateCodeMap2BuilderMapper(literateCodeBuilder);
-        literateCodeMap2BuilderMapper.mapBoxes(title, description, filteredBoxes);
-        String source = literateCodeBuilder.getLiterateCodeMaoDescription();    // @LiterateMapInvoke(2, "PlantUMLBuilder", "mapBoxes(...)")
+        literateCodeMap2BuilderMapper.mapBoxes(title, description, filteredBoxes);          // @LiterateMapInvoke(4, "LiterateCodeBuilder", "mapBoxes(filteredBoxes)")
+        String source = literateCodeBuilder.getLiterateCodeMaoDescription();
+
+        // Track PlantUML file
+        if (trackPlantUMLSourceFile) {
+            String plantUMLFileName = outputLiterateCodeMapFileName.replace(".svg", ".plantuml");
+            try(PrintWriter plantUMLFile = new PrintWriter(plantUMLFileName)) {
+                plantUMLFile.println(source);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         // Generate the map image
         try (OutputStream literateCodeMapFileOutputStream = new FileOutputStream(outputLiterateCodeMapFileName)) {
             PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
-            plantUMLGenerator.generateSVGImage(source, literateCodeMapFileOutputStream);    // @LiterateMapInvoke(3, "plantUMLGenerator", "generateSVGImage(...)")
+            plantUMLGenerator.generateSVGImage(source, literateCodeMapFileOutputStream);    // @LiterateMapInvoke(5, "PlantUMLGenerator", "generateSVGImage(...)")
         } catch (IOException e) {
             System.err.println("Exception writing the literate code map: " + e.getMessage());
         }

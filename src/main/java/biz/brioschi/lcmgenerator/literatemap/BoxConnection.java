@@ -24,13 +24,6 @@ public class BoxConnection {
         this.description = "";
     }
 
-    public BoxConnection(ConnectionType type, String targetBoxName, String description) {   // TODO remove
-        this.type = type;
-        this.targetBoxName = targetBoxName;
-        this.progressiveNumber = null;
-        this.description = description;
-    }
-
     public BoxConnection(ConnectionType type, String targetBoxName, Integer progressiveNumber, String description) {
         this.type = type;
         this.targetBoxName = targetBoxName;
