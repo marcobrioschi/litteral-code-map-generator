@@ -1,9 +1,10 @@
-package biz.brioschi.lcmgenerator.literatemap.builders;
+package biz.brioschi.lcmgenerator.builders;
 
+import biz.brioschi.lcmgenerator.builders.PlantUMLBuilder;
 import org.junit.jupiter.api.Test;
 
 import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
-import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
+import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;

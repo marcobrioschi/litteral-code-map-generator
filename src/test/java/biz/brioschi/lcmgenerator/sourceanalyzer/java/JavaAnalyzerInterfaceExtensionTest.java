@@ -1,7 +1,7 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.Box;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,10 +21,10 @@ public class JavaAnalyzerInterfaceExtensionTest {
     @MethodSource
     public void parseInterfaceExtensions(String inputUnit, BoxConnection[] connections) {
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromString(inputUnit));
-        List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
+        List<Box> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(1));
-        LiterateCodeMapBox firstUnit = units.get(0);
-        assertThat(firstUnit.getType(), is(LiterateCodeMapBox.BoxType.JAVA_INTERFACE));
+        Box firstUnit = units.get(0);
+        assertThat(firstUnit.getType(), is(Box.BoxType.JAVA_INTERFACE));
         assertThat(firstUnit.getName(), is("InterfaceX"));
         assertThat(firstUnit.getConnections(), contains(connections));
     }
@@ -34,22 +34,22 @@ public class JavaAnalyzerInterfaceExtensionTest {
                 Arguments.of(
                         "interface InterfaceX extends InterfaceA { }",
                         new BoxConnection[] {
-                                new BoxConnection(BoxConnection.ConnectionType.EXTENDS, "InterfaceA")
+                                BoxConnection.generateExtends("InterfaceA")
                         }
                 ),
                 Arguments.of(
                         "interface InterfaceX extends InterfaceA, InterfaceB { }",
                         new BoxConnection[] {
-                                new BoxConnection(BoxConnection.ConnectionType.EXTENDS, "InterfaceA"),
-                                new BoxConnection(BoxConnection.ConnectionType.EXTENDS, "InterfaceB")
+                                BoxConnection.generateExtends("InterfaceA"),
+                                BoxConnection.generateExtends("InterfaceB")
                         }
                 ),
                 Arguments.of(
                         "interface InterfaceX extends InterfaceA, InterfaceB, InterfaceC { }",
                         new BoxConnection[] {
-                                new BoxConnection(BoxConnection.ConnectionType.EXTENDS, "InterfaceA"),
-                                new BoxConnection(BoxConnection.ConnectionType.EXTENDS, "InterfaceB"),
-                                new BoxConnection(BoxConnection.ConnectionType.EXTENDS, "InterfaceC")
+                                BoxConnection.generateExtends("InterfaceA"),
+                                BoxConnection.generateExtends("InterfaceB"),
+                                BoxConnection.generateExtends("InterfaceC")
                         }
                 )
         );

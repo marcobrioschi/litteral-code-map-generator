@@ -1,13 +1,13 @@
-package biz.brioschi.lcmgenerator.literatemap.builders;
+package biz.brioschi.lcmgenerator.builders;
 
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.Box;
 
 public interface LiterateCodeBuilder {
 
     void startDocument(String title, String description);
 
-    void addLiterateCodeMapBox(LiterateCodeMapBox.BoxType boxType, String boxName);
+    void addLiterateCodeMapBox(Box.BoxType boxType, String boxName);
 
     void addLiterateCodeMapConnection(String sourceBox, String destinationBox, ConnectionType connectionType, Integer progressiveNumber, String description);
 

@@ -1,8 +1,8 @@
-package biz.brioschi.lcmgenerator.literatemap.builders;
+package biz.brioschi.lcmgenerator.builders;
 
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
 
-import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
+import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
 
 public class PlantUMLBuilder implements LiterateCodeBuilder {
 

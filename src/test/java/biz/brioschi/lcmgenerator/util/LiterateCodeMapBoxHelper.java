@@ -1,29 +1,26 @@
 package biz.brioschi.lcmgenerator.util;
 
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
+import biz.brioschi.lcmgenerator.literatemap.Box;
+import biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
-import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.INVOKE;
-
 public class LiterateCodeMapBoxHelper {
 
-    public static LiterateCodeMapBox generateLiterateCodeMapBox(
+    public static Box generateLiterateCodeMapBox(
             BoxType expectedType,
             String expectedName
     ) {
-        return LiterateCodeMapBox.builder()
+        return Box.builder()
                 .type(expectedType)
                 .name(expectedName)
                 .connections(new ArrayList<>())
                 .build();
     }
 
-    public static LiterateCodeMapBox generateLiterateCodeMapBox(
+    public static Box generateLiterateCodeMapBox(
             BoxType expectedType,
             String expectedName,
             String... extraInfo
@@ -32,17 +29,16 @@ public class LiterateCodeMapBoxHelper {
         for (String singleExtraInfo : extraInfo) {
             if (singleExtraInfo.contains(":")) {
                 String[] connectionComponents = singleExtraInfo.split(":");
-                expectedConnections.add(new BoxConnection(
-                        INVOKE,
+                expectedConnections.add(BoxConnection.generateInvoke(
                         connectionComponents[1],
                         Integer.parseInt(connectionComponents[0]),
                         connectionComponents[2]
                 ));
             } else {
-                expectedConnections.add(new BoxConnection(EXTENDS, singleExtraInfo));
+                expectedConnections.add(BoxConnection.generateExtends(singleExtraInfo));
             }
         }
-        return LiterateCodeMapBox.builder()
+        return Box.builder()
                 .type(expectedType)
                 .name(expectedName)
                 .connections(expectedConnections)

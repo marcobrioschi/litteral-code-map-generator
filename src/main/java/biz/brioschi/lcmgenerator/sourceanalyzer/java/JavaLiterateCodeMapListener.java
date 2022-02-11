@@ -4,10 +4,9 @@ import biz.brioschi.lcmgenerator.antlr.java.parser.JavaLexer;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
-import biz.brioschi.lcmgenerator.literatemap.BoxDeclarationScope;
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
-import biz.brioschi.lcmgenerator.literatemap.directives.Directive;
-import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapInvoke;
+import biz.brioschi.lcmgenerator.literatemap.Box;
+import biz.brioschi.lcmgenerator.directives.Directive;
+import biz.brioschi.lcmgenerator.directives.LiterateMapInvoke;
 import biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap.DirectivesRecognizer;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -21,24 +20,22 @@ import java.util.List;
 import java.util.Stack;
 
 import static biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.*;
-import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.EXTENDS;
-import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType.INVOKE;
-import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType;
-import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.*;
+import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
+import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.*;
 
 public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     private BufferedTokenStream bufferedTokenStream;
-    private List<LiterateCodeMapBox> literateCodeMapBoxes;
+    private List<Box> boxes;
     private Stack<BoxDeclarationScope> typeScopeStack;
 
     public JavaLiterateCodeMapListener(BufferedTokenStream bufferedTokenStream) {
         this.bufferedTokenStream = bufferedTokenStream;
-        this.literateCodeMapBoxes = new ArrayList<>();
+        this.boxes = new ArrayList<>();
         this.typeScopeStack = new Stack<>();
     }
 
-    public List<LiterateCodeMapBox> getLiterateCodeMapBoxes() {
-        return literateCodeMapBoxes;
+    public List<Box> getLiterateCodeMapBoxes() {
+        return boxes;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -130,8 +127,8 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
-        literateCodeMapBoxes.add(
-                LiterateCodeMapBox.builder()
+        boxes.add(
+                Box.builder()
                         .type(boxType)
                         .name(boxName)
                         .connections(connections)
@@ -180,8 +177,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
         for (int i = 0; i < interfaceList.getChildCount(); i += 2) {
             String currentExtensionName = interfaceList.getChild(i).getText();
             connections.add(
-                    new BoxConnection(
-                            EXTENDS,
+                    BoxConnection.generateExtends(
                             currentExtensionName
                     )
             );
@@ -256,8 +252,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
             if (!typeScopeStack.empty()) {  // TODO emit warning!!!!
                 LiterateMapInvoke directive = (LiterateMapInvoke) baseDirective;
                 typeScopeStack.peek().getConnections().add(
-                        new BoxConnection(
-                                INVOKE,
+                        BoxConnection.generateInvoke(
                                 directive.getTargetBox(),
                                 directive.getProgressiveNumber(),
                                 directive.getDescription()

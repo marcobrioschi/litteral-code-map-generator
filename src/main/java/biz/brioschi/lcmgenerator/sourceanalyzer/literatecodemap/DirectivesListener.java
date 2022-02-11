@@ -4,8 +4,8 @@ import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapBaseListen
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser;
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser.ParamContext;
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser.ParamsContext;
-import biz.brioschi.lcmgenerator.literatemap.directives.Directive;
-import biz.brioschi.lcmgenerator.literatemap.directives.LiterateMapInvoke;
+import biz.brioschi.lcmgenerator.directives.Directive;
+import biz.brioschi.lcmgenerator.directives.LiterateMapInvoke;
 
 import java.util.ArrayList;
 import java.util.List;

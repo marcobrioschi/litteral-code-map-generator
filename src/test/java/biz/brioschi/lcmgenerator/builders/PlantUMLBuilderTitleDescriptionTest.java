@@ -1,5 +1,6 @@
-package biz.brioschi.lcmgenerator.literatemap.builders;
+package biz.brioschi.lcmgenerator.builders;
 
+import biz.brioschi.lcmgenerator.builders.PlantUMLBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

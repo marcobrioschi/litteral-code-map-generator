@@ -3,9 +3,9 @@ package biz.brioschi.lcmgenerator;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.literatemap.BoxesFilter;
 import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMap2BuilderMapper;
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
-import biz.brioschi.lcmgenerator.literatemap.builders.LiterateCodeBuilder;
-import biz.brioschi.lcmgenerator.literatemap.builders.PlantUMLBuilder;
+import biz.brioschi.lcmgenerator.literatemap.Box;
+import biz.brioschi.lcmgenerator.builders.LiterateCodeBuilder;
+import biz.brioschi.lcmgenerator.builders.PlantUMLBuilder;
 import biz.brioschi.lcmgenerator.providers.FileSystemScanner;
 import biz.brioschi.lcmgenerator.providers.PlantUMLGenerator;
 import biz.brioschi.lcmgenerator.sourceanalyzer.java.JavaAnalyzer;
@@ -55,7 +55,7 @@ public class LiterateCodeMapGenerator implements Runnable {
         // Scan all the files
         FileSystemScanner fileSystemScanner = new FileSystemScanner(sourceDirectories);
         List<File> sourceUnits = fileSystemScanner.scanBaseDirectories();       // @LiterateMapInvoke(1, "FileSystemScanner", "scanBaseDirectories()")
-        List<LiterateCodeMapBox> boxes = new ArrayList<>();
+        List<Box> boxes = new ArrayList<>();
         for (File sourceUnit : sourceUnits) {
             try (FileInputStream sourceUnitInputStream = new FileInputStream(sourceUnit)) {
                 CharStream charInputStream = CharStreams.fromStream(sourceUnitInputStream);
@@ -68,7 +68,7 @@ public class LiterateCodeMapGenerator implements Runnable {
 
         // List all the boxes
         if (listAllBoxes) {
-            for (LiterateCodeMapBox box : boxes) {
+            for (Box box : boxes) {
                 System.out.println("box:" + box.getName());
                 for (BoxConnection connection: box.getConnections()) {
                     System.out.println("source:" + box.getName() + ",target:" + connection.getTargetBoxName());
@@ -78,7 +78,7 @@ public class LiterateCodeMapGenerator implements Runnable {
 
         // Filter list of boxes
         BoxesFilter boxesFilter = new BoxesFilter(validBoxes);
-        List<LiterateCodeMapBox> filteredBoxes = boxesFilter.filter(boxes);                 // @LiterateMapInvoke(3, "BoxesFilter", "filter(boxes)")
+        List<Box> filteredBoxes = boxesFilter.filter(boxes);                 // @LiterateMapInvoke(3, "BoxesFilter", "filter(boxes)")
 
         // Generate the map description
         LiterateCodeBuilder literateCodeBuilder = new PlantUMLBuilder();

@@ -1,6 +1,6 @@
 package biz.brioschi.lcmgenerator.literatemap;
 
-import biz.brioschi.lcmgenerator.literatemap.builders.LiterateCodeBuilder;
+import biz.brioschi.lcmgenerator.builders.LiterateCodeBuilder;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ public class LiterateCodeMap2BuilderMapper {
         this.literateCodeBuilder = literateCodeBuilder;
     }
 
-    public void mapBoxes(String title, String description, List<LiterateCodeMapBox> boxes) {
+    public void mapBoxes(String title, String description, List<Box> boxes) {
         this.literateCodeBuilder.startDocument(title, description);
-        for (LiterateCodeMapBox box : boxes) {
+        for (Box box : boxes) {
             this.literateCodeBuilder.addLiterateCodeMapBox(box.getType(), box.getName());
             for (BoxConnection connection : box.getConnections()) {
                 this.literateCodeBuilder.addLiterateCodeMapConnection(
