@@ -1,13 +1,11 @@
 package biz.brioschi.lcmgenerator.builders;
 
-import biz.brioschi.lcmgenerator.builders.PlantUMLBuilder;
 import org.junit.jupiter.api.Test;
 
-import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
 import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
+import static biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 class PlantUMLBuilderConnectionTest {
 
@@ -82,6 +80,37 @@ class PlantUMLBuilderConnectionTest {
         );
 
         assertThat(result, containsString("\nClassNameSource --> ClassNameTarget : 123. connectionDescription\n"));
+
+    }
+
+    @Test
+    public void testElementGenerationOrder() {
+        PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
+        plantUMLBuilder.startDocument("", "");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_INTERFACE, "Interface1");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "Class3");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "Class2");
+        plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "Class1");
+        plantUMLBuilder.addLiterateCodeMapConnection("Class2", "Interface1", ConnectionType.EXTENDS, null, null);
+        plantUMLBuilder.addLiterateCodeMapConnection("Class1", "Interface1", ConnectionType.EXTENDS, null, null);
+        plantUMLBuilder.addLiterateCodeMapConnection(
+                "Class2",
+                "Class3",
+                ConnectionType.INVOKE,
+                2,
+                "Description2"
+        );
+        plantUMLBuilder.addLiterateCodeMapConnection(
+                "Class1",
+                "Class3",
+                ConnectionType.INVOKE,
+                1,
+                "Description1"
+        );
+        plantUMLBuilder.endDocument();
+        String result = plantUMLBuilder.getLiterateCodeMaoDescription();
+
+        assertThat(result, startsWith("@startuml\nClass1 --> Class3 : 1. Description1\nClass2 --> Class3 : 2. Description2"));
 
     }
 

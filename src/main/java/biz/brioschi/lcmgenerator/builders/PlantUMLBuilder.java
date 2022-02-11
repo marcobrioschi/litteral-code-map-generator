@@ -2,14 +2,24 @@ package biz.brioschi.lcmgenerator.builders;
 
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection.ConnectionType;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
 
 public class PlantUMLBuilder implements LiterateCodeBuilder {
 
     private final StringBuffer plantUMLLiterateCodeMapDefinition;
+    private final List<String> diagramEntries;
+    private final Map<Integer, String> invokeConnections;
 
     public PlantUMLBuilder() {
         this.plantUMLLiterateCodeMapDefinition = new StringBuffer();
+        this.diagramEntries = new ArrayList<>();
+        this.invokeConnections = new Hashtable<>();
     }
 
     @Override
@@ -25,39 +35,48 @@ public class PlantUMLBuilder implements LiterateCodeBuilder {
 
     @Override
     public void addLiterateCodeMapBox(BoxType boxType, String boxName) {
+        StringBuffer boxDescription = new StringBuffer();
         switch(boxType) {
             case JAVA_CLASS:
-                this.plantUMLLiterateCodeMapDefinition.append("class ").append(boxName).append("\n");
+                boxDescription.append("class ").append(boxName).append("\n");
                 break;
             case JAVA_INTERFACE:
-                this.plantUMLLiterateCodeMapDefinition.append("interface ").append(boxName).append("\n");
+                boxDescription.append("interface ").append(boxName).append("\n");
                 break;
             case JAVA_ENUM:
-                this.plantUMLLiterateCodeMapDefinition.append("enum ").append(boxName).append("\n");
+                boxDescription.append("enum ").append(boxName).append("\n");
                 break;
             default:
                 throw new RuntimeException("Missing case for enum value: " + boxType);
         }
+        this.diagramEntries.add(boxDescription.toString());
     }
 
     @Override
     public void addLiterateCodeMapConnection(String sourceBox, String destinationBox, ConnectionType connectionType, Integer progressiveNumber, String description) {
+        StringBuffer connectionDescription = new StringBuffer();
         switch(connectionType) {
             case EXTENDS:
-                this.plantUMLLiterateCodeMapDefinition.append(destinationBox).append(" <|-- ").append(sourceBox).append("\n");
+                connectionDescription.append(destinationBox).append(" <|-- ").append(sourceBox).append("\n");
+                this.diagramEntries.add(connectionDescription.toString());
                 break;
             case INVOKE:
-                this.plantUMLLiterateCodeMapDefinition.append(sourceBox).append(" --> ").append(destinationBox);
+                connectionDescription.append(sourceBox).append(" --> ").append(destinationBox);
                 if ( (progressiveNumber != null) || (description !=null && !description.equals("")) ) {
-                    this.plantUMLLiterateCodeMapDefinition.append(" :");
+                    connectionDescription.append(" :");
                     if (progressiveNumber != null) {
-                        this.plantUMLLiterateCodeMapDefinition.append(" ").append(progressiveNumber.toString()).append(".");
+                        connectionDescription.append(" ").append(progressiveNumber.toString()).append(".");
                     }
                     if (description !=null && !description.equals("")) {
-                        this.plantUMLLiterateCodeMapDefinition.append(" ").append(description);
+                        connectionDescription.append(" ").append(description);
                     }
                 }
-                this.plantUMLLiterateCodeMapDefinition.append("\n");
+                connectionDescription.append("\n");
+                if (progressiveNumber != null) {
+                    this.invokeConnections.put(progressiveNumber, connectionDescription.toString());
+                } else {
+                    this.diagramEntries.add(connectionDescription.toString());
+                }
                 break;
             default:
                 throw new RuntimeException("Missing case for enum value: " + connectionType);
@@ -66,6 +85,12 @@ public class PlantUMLBuilder implements LiterateCodeBuilder {
 
     @Override
     public void endDocument() {
+        for (Integer i : this.invokeConnections.keySet().stream().sorted().collect(Collectors.toList())) {
+            this.plantUMLLiterateCodeMapDefinition.append(this.invokeConnections.get(i));
+        }
+        for (String s : this.diagramEntries) {
+            this.plantUMLLiterateCodeMapDefinition.append(s);
+        }
         this.plantUMLLiterateCodeMapDefinition.append("@enduml");
     }
 
