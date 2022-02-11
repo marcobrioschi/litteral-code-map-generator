@@ -41,15 +41,21 @@ public class PlantUMLBuilder implements LiterateCodeBuilder {
     }
 
     @Override
-    public void addLiterateCodeMapConnection(String sourceBox, String destinationBox, ConnectionType connectionType, String description) {
+    public void addLiterateCodeMapConnection(String sourceBox, String destinationBox, ConnectionType connectionType, Integer progressiveNumber, String description) {
         switch(connectionType) {
             case EXTENDS:
                 this.plantUMLLiterateCodeMapDefinition.append(destinationBox).append(" <|-- ").append(sourceBox).append("\n");
                 break;
             case INVOKE:
                 this.plantUMLLiterateCodeMapDefinition.append(sourceBox).append(" --> ").append(destinationBox);
-                if (description !=null && !description.equals("")) {
-                    this.plantUMLLiterateCodeMapDefinition.append(" : ").append(description);
+                if ( (progressiveNumber != null) || (description !=null && !description.equals("")) ) {
+                    this.plantUMLLiterateCodeMapDefinition.append(" :");
+                    if (progressiveNumber != null) {
+                        this.plantUMLLiterateCodeMapDefinition.append(" ").append(progressiveNumber.toString()).append(".");
+                    }
+                    if (description !=null && !description.equals("")) {
+                        this.plantUMLLiterateCodeMapDefinition.append(" ").append(description);
+                    }
                 }
                 this.plantUMLLiterateCodeMapDefinition.append("\n");
                 break;

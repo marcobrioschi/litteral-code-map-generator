@@ -9,7 +9,7 @@ public interface LiterateCodeBuilder {
 
     void addLiterateCodeMapBox(LiterateCodeMapBox.BoxType boxType, String boxName);
 
-    void addLiterateCodeMapConnection(String sourceBox, String destinationBox, ConnectionType connectionType, String description);
+    void addLiterateCodeMapConnection(String sourceBox, String destinationBox, ConnectionType connectionType, Integer progressiveNumber, String description);
 
     void endDocument();
 

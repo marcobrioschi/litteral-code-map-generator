@@ -21,6 +21,7 @@ public class LiterateCodeMap2BuilderMapper {
                         box.getName(),
                         connection.getTargetBoxName(),
                         connection.getType(),
+                        connection.getProgressiveNumber(),
                         connection.getDescription());
             }
         }

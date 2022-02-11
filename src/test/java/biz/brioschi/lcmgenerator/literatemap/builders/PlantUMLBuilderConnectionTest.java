@@ -17,6 +17,7 @@ class PlantUMLBuilderConnectionTest {
                 "ClassNameSource",
                 "ClassNameTarget",
                 ConnectionType.EXTENDS,
+                null,
                 null
         );
 
@@ -24,12 +25,13 @@ class PlantUMLBuilderConnectionTest {
     }
 
     @Test
-    public void generateCallWithNoDescription() {
+    public void generateCallWithNoNumberAndNoDescription() {
 
         String result = generatePlantUMLDocumentUsingConnectionBoxInfo(
                 "ClassNameSource",
                 "ClassNameTarget",
                 ConnectionType.INVOKE,
+                null,
                 null
         );
 
@@ -38,12 +40,28 @@ class PlantUMLBuilderConnectionTest {
     }
 
     @Test
-    public void generateCallWithDescription() {
+    public void generateCallWithNumberAndNoDescription() {
 
         String result = generatePlantUMLDocumentUsingConnectionBoxInfo(
                 "ClassNameSource",
                 "ClassNameTarget",
                 ConnectionType.INVOKE,
+                347,
+                null
+        );
+
+        assertThat(result, containsString("\nClassNameSource --> ClassNameTarget : 347.\n"));
+
+    }
+
+    @Test
+    public void generateCallWithNoNumberAndDescription() {
+
+        String result = generatePlantUMLDocumentUsingConnectionBoxInfo(
+                "ClassNameSource",
+                "ClassNameTarget",
+                ConnectionType.INVOKE,
+                null,
                 "connectionDescription"
         );
 
@@ -51,17 +69,33 @@ class PlantUMLBuilderConnectionTest {
 
     }
 
+    @Test
+    public void generateCallWithNumberAndDescription() {
+
+        String result = generatePlantUMLDocumentUsingConnectionBoxInfo(
+                "ClassNameSource",
+                "ClassNameTarget",
+                ConnectionType.INVOKE,
+                123,
+                "connectionDescription"
+        );
+
+        assertThat(result, containsString("\nClassNameSource --> ClassNameTarget : 123. connectionDescription\n"));
+
+    }
+
     private String generatePlantUMLDocumentUsingConnectionBoxInfo(
             String sourceBoxName,
             String targetBoxName,
             ConnectionType connectionType,
+            Integer progressiveNumber,
             String description
     ) {
         PlantUMLBuilder plantUMLBuilder = new PlantUMLBuilder();
         plantUMLBuilder.startDocument("", "");
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameSource");
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "ClassNameTarget");
-        plantUMLBuilder.addLiterateCodeMapConnection(sourceBoxName, targetBoxName, connectionType, description);
+        plantUMLBuilder.addLiterateCodeMapConnection(sourceBoxName, targetBoxName, connectionType, progressiveNumber, description);
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getLiterateCodeMaoDescription();
         return result;
@@ -74,7 +108,7 @@ class PlantUMLBuilderConnectionTest {
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "A");
         plantUMLBuilder.addLiterateCodeMapBox(BoxType.JAVA_CLASS, "B");
         for (ConnectionType currentType : ConnectionType.values()) {
-            plantUMLBuilder.addLiterateCodeMapConnection("A", "B", currentType, null);
+            plantUMLBuilder.addLiterateCodeMapConnection("A", "B", currentType, 1001,null);
         }
         plantUMLBuilder.endDocument();
         String result = plantUMLBuilder.getLiterateCodeMaoDescription();
