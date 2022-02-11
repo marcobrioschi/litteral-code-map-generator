@@ -8,7 +8,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class LiterateCodeMapBox {
+public class Box {
 
     @NonNull
     BoxType type;

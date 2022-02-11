@@ -14,12 +14,12 @@ public class BoxesFilter {
         this.filters = filters;
     }
 
-    public List<LiterateCodeMapBox> filter(List<LiterateCodeMapBox> boxList) {
+    public List<Box> filter(List<Box> boxList) {
         if (filtersAreValid()) {
             Pattern filterPattern = composeNameMatchRegularExpression();
             return boxList.stream()
                     .filter(box -> filterPattern.matcher(box.getName()).matches())
-                    .map(box -> new LiterateCodeMapBox(
+                    .map(box -> new Box(
                             box.getType(),
                             box.getName(),
                             box.getConnections().stream()

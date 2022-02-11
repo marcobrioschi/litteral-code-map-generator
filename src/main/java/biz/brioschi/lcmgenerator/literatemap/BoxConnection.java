@@ -6,23 +6,27 @@ import lombok.Value;
 @Value
 public class BoxConnection {
 
-    @NonNull
     ConnectionType type;
 
     @NonNull
     String targetBoxName;
 
+    Integer progressiveNumber;
+
     String description;
 
-    public BoxConnection(ConnectionType type, String targetBoxName) {
-        this.type = type;
-        this.targetBoxName = targetBoxName;
-        this.description = "";
+    public static BoxConnection generateExtends(String targetBoxName) {
+        return new BoxConnection(ConnectionType.EXTENDS, targetBoxName, null, null);
     }
 
-    public BoxConnection(ConnectionType type, String targetBoxName, String description) {
-        this.type = type;
+    public static BoxConnection generateInvoke(String targetBoxName, Integer progressiveNumber, String description) {
+        return new BoxConnection(ConnectionType.INVOKE, targetBoxName, progressiveNumber, description);
+    }
+
+    private BoxConnection(ConnectionType connectionType, String targetBoxName, Integer progressiveNumber, String description) {
+        this.type = connectionType;
         this.targetBoxName = targetBoxName;
+        this.progressiveNumber = progressiveNumber;
         this.description = description;
     }
 

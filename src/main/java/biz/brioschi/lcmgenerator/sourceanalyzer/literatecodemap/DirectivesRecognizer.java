@@ -2,7 +2,7 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap;
 
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapLexer;
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser;
-import biz.brioschi.lcmgenerator.literatemap.directives.Directive;
+import biz.brioschi.lcmgenerator.directives.Directive;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;

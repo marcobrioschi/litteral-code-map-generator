@@ -1,13 +1,13 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
-import biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox;
+import biz.brioschi.lcmgenerator.literatemap.Box;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.literatemap.LiterateCodeMapBox.BoxType.*;
+import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.*;
 import static biz.brioschi.lcmgenerator.util.LiterateCodeMapBoxHelper.generateLiterateCodeMapBox;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
@@ -19,7 +19,7 @@ public class JavaAnalyzerMethodCallsTest {
     public void NestedTypes() throws IOException {
         String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/NestedTypeInvokeConnections.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
-        List<LiterateCodeMapBox> units = javaAnalyzer.extractInfo();
+        List<Box> units = javaAnalyzer.extractInfo();
         assertThat(units, hasSize(7));
         assertThat(
                 units,
@@ -28,10 +28,10 @@ public class JavaAnalyzerMethodCallsTest {
                                 JAVA_CLASS,
                                 "Level_1",
                                 new String[]{
-                                        "TestDestinationClass:doSomething_A()",
-                                        "TestDestinationClass:doSomething_B()",
-                                        "TestDestinationClass:doSomething_C()",
-                                        "TestDestinationClass:doSomething_D()",
+                                        "0:TestDestinationClass:doSomething_A()",
+                                        "0:TestDestinationClass:doSomething_B()",
+                                        "0:TestDestinationClass:doSomething_C()",
+                                        "0:TestDestinationClass:doSomething_D()",
                                 }
                         )
                 )
@@ -43,10 +43,10 @@ public class JavaAnalyzerMethodCallsTest {
                                 JAVA_CLASS,
                                 "Level_1_1",
                                 new String[]{
-                                        "TestDestinationClass:doSomething_E()",
-                                        "TestDestinationClass:doSomething_F()",
-                                        "TestDestinationClass:doSomething_G()",
-                                        "TestDestinationClass:doSomething_H()",
+                                        "0:TestDestinationClass:doSomething_E()",
+                                        "0:TestDestinationClass:doSomething_F()",
+                                        "0:TestDestinationClass:doSomething_G()",
+                                        "0:TestDestinationClass:doSomething_H()",
                                 }
                         )
                 )
@@ -58,10 +58,10 @@ public class JavaAnalyzerMethodCallsTest {
                                 JAVA_CLASS,
                                 "Level_1_1_1",
                                 new String[]{
-                                        "TestDestinationClass:doSomething_I()",
-                                        "TestDestinationClass:doSomething_J()",
-                                        "TestDestinationClass:doSomething_K()",
-                                        "TestDestinationClass:doSomething_L()",
+                                        "0:TestDestinationClass:doSomething_I()",
+                                        "0:TestDestinationClass:doSomething_J()",
+                                        "0:TestDestinationClass:doSomething_K()",
+                                        "0:TestDestinationClass:doSomething_L()",
                                 }
                         )
                 )
@@ -73,10 +73,10 @@ public class JavaAnalyzerMethodCallsTest {
                                 JAVA_INTERFACE,
                                 "Level_1_1_2",
                                 new String[]{
-                                        "TestDestinationClass:doSomething_M()",
-                                        "TestDestinationClass:doSomething_N()",
-                                        "TestDestinationClass:doSomething_O()",
-                                        "TestDestinationClass:doSomething_P()",
+                                        "0:TestDestinationClass:doSomething_M()",
+                                        "0:TestDestinationClass:doSomething_N()",
+                                        "0:TestDestinationClass:doSomething_O()",
+                                        "0:TestDestinationClass:doSomething_P()",
                                 }
                         )
                 )
@@ -88,10 +88,10 @@ public class JavaAnalyzerMethodCallsTest {
                                 JAVA_ENUM,
                                 "Level_1_1_3",
                                 new String[]{
-                                        "TestDestinationClass:doSomething_Q()",
-                                        "TestDestinationClass:doSomething_R()",
-                                        "TestDestinationClass:doSomething_S()",
-                                        "TestDestinationClass:doSomething_T()",
+                                        "0:TestDestinationClass:doSomething_Q()",
+                                        "0:TestDestinationClass:doSomething_R()",
+                                        "0:TestDestinationClass:doSomething_S()",
+                                        "0:TestDestinationClass:doSomething_T()",
                                 }
                         )
                 )
@@ -103,10 +103,10 @@ public class JavaAnalyzerMethodCallsTest {
                                 JAVA_INTERFACE,
                                 "Level_1_2",
                                 new String[]{
-                                        "TestDestinationClass:doSomething_U()",
-                                        "TestDestinationClass:doSomething_W()",
-                                        "TestDestinationClass:doSomething_X()",
-                                        "TestDestinationClass:doSomething_Y()",
+                                        "0:TestDestinationClass:doSomething_U()",
+                                        "0:TestDestinationClass:doSomething_W()",
+                                        "0:TestDestinationClass:doSomething_X()",
+                                        "0:TestDestinationClass:doSomething_Y()",
                                 }
                         )
                 )
@@ -118,10 +118,10 @@ public class JavaAnalyzerMethodCallsTest {
                                 JAVA_ENUM,
                                 "Level_1_3",
                                 new String[]{
-                                        "TestDestinationClass:doSomething_Z()",
-                                        "TestDestinationClass:doSomething_1()",
-                                        "TestDestinationClass:doSomething_2()",
-                                        "TestDestinationClass:doSomething_3()",
+                                        "0:TestDestinationClass:doSomething_Z()",
+                                        "0:TestDestinationClass:doSomething_1()",
+                                        "0:TestDestinationClass:doSomething_2()",
+                                        "0:TestDestinationClass:doSomething_3()",
                                 }
                         )
                 )

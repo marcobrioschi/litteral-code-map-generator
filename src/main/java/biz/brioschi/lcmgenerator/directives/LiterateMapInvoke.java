@@ -1,4 +1,4 @@
-package biz.brioschi.lcmgenerator.literatemap.directives;
+package biz.brioschi.lcmgenerator.directives;
 
 import lombok.Value;
 
