@@ -15,16 +15,16 @@ public class BoxConnection {
 
     String description;
 
-    // TODO private constructor and add factory methods
-    private BoxConnection(String targetBoxName) {
-        this.type = ConnectionType.EXTENDS;
-        this.targetBoxName = targetBoxName;
-        this.progressiveNumber = null;
-        this.description = null;
+    public static BoxConnection generateExtends(String targetBoxName) {
+        return new BoxConnection(ConnectionType.EXTENDS, targetBoxName, null, null);
     }
 
-    private BoxConnection(String targetBoxName, Integer progressiveNumber, String description) {
-        this.type = ConnectionType.INVOKE;
+    public static BoxConnection generateInvoke(String targetBoxName, Integer progressiveNumber, String description) {
+        return new BoxConnection(ConnectionType.INVOKE, targetBoxName, progressiveNumber, description);
+    }
+
+    private BoxConnection(ConnectionType connectionType, String targetBoxName, Integer progressiveNumber, String description) {
+        this.type = connectionType;
         this.targetBoxName = targetBoxName;
         this.progressiveNumber = progressiveNumber;
         this.description = description;
@@ -33,14 +33,6 @@ public class BoxConnection {
     public enum ConnectionType {
         EXTENDS,
         INVOKE
-    }
-
-    public static BoxConnection generateExtends(String targetBoxName) {
-        return new BoxConnection(targetBoxName);
-    }
-
-    public static BoxConnection generateInvoke(String targetBoxName, Integer progressiveNumber, String description) {
-        return new BoxConnection(targetBoxName, progressiveNumber, description);
     }
 
 }

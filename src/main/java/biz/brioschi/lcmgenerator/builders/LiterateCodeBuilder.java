@@ -13,6 +13,6 @@ public interface LiterateCodeBuilder {
 
     void endDocument();
 
-    String getLiterateCodeMaoDescription();
+    String getLiterateCodeMaoDescription();         // TODO use a more generic outputStream?
 
 }
