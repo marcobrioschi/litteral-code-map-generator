@@ -9,7 +9,7 @@ import java.util.Stack;
 
 class ListenerStatus {
 
-    // TODO make them private?
+    // TODO make them private and segretate interfaces?
     public BufferedTokenStream bufferedTokenStream;
     public Stack<BoxDeclarationScope> typeScopeStack;
     public List<Box> boxes;
