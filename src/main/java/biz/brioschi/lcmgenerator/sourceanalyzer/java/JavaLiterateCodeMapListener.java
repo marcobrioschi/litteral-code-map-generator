@@ -3,39 +3,36 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaLexer;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
-import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
-import biz.brioschi.lcmgenerator.literatemap.Box;
 import biz.brioschi.lcmgenerator.directives.Directive;
 import biz.brioschi.lcmgenerator.directives.LiterateMapInvoke;
+import biz.brioschi.lcmgenerator.literatemap.Box;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap.DirectivesRecognizer;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Stack;
 
 import static biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.*;
-import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
-import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.*;
 
 public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
-    private BufferedTokenStream bufferedTokenStream;
-    private List<Box> boxes;
-    private Stack<BoxDeclarationScope> typeScopeStack;
+
+    private ListenerStatus currentStatus;
+    private ScopeManager scopeManager;
 
     public JavaLiterateCodeMapListener(BufferedTokenStream bufferedTokenStream) {
-        this.bufferedTokenStream = bufferedTokenStream;
-        this.boxes = new ArrayList<>();
-        this.typeScopeStack = new Stack<>();
+        this.currentStatus = new ListenerStatus(bufferedTokenStream);
+        this.scopeManager = new ScopeManager(currentStatus);
     }
 
     public List<Box> getLiterateCodeMapBoxes() {
-        return boxes;
+        return this.currentStatus.boxes;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -43,97 +40,42 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     @Override
     public void enterTypeDeclaration(TypeDeclarationContext ctx) {
-        pushRightTypeContext(ctx);
+        scopeManager.enterTypeDeclaration(ctx);
     }
 
     @Override
     public void exitTypeDeclaration(TypeDeclarationContext ctx) {
-        popContextOfCurrentTypeAndStoreTheBox();
+        scopeManager.exitTypeDeclaration(ctx);
     }
 
     @Override
     public void enterClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
-        if (ctx.memberDeclaration() != null) {
-            pushRightTypeContext(ctx.getRuleContext(MemberDeclarationContext.class, 0));
-        }
+        scopeManager.enterClassBodyDeclaration(ctx);
     }
 
     @Override
     public void exitClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
-        if (ctx.memberDeclaration() != null) {
-            if (
-                    (ctx.memberDeclaration().classDeclaration() != null) ||
-                    (ctx.memberDeclaration().interfaceDeclaration() != null) ||
-                    (ctx.memberDeclaration().enumDeclaration() != null)
-            ) {
-                popContextOfCurrentTypeAndStoreTheBox();
-            }
-        }
+        scopeManager.exitClassBodyDeclaration(ctx);
     }
 
     @Override
     public void enterInterfaceBodyDeclaration(InterfaceBodyDeclarationContext ctx) {
-        if (ctx.interfaceMemberDeclaration() != null) {
-            pushRightTypeContext(ctx.getRuleContext(InterfaceMemberDeclarationContext.class, 0));
-        }
+        scopeManager.enterInterfaceBodyDeclaration(ctx);
     }
 
     @Override
     public void exitInterfaceBodyDeclaration(InterfaceBodyDeclarationContext ctx) {
-        if (ctx.interfaceMemberDeclaration() != null) {
-            if (
-                    (ctx.interfaceMemberDeclaration().classDeclaration() != null) ||
-                    (ctx.interfaceMemberDeclaration().interfaceDeclaration() != null) ||
-                    (ctx.interfaceMemberDeclaration().enumDeclaration() != null)
-            ) {
-                popContextOfCurrentTypeAndStoreTheBox();
-            }
-        }
+        scopeManager.exitInterfaceBodyDeclaration(ctx);
     }
 
     @Override
     public void enterLocalTypeDeclaration(LocalTypeDeclarationContext ctx) {
-        pushRightTypeContext(ctx);
+        scopeManager.enterLocalTypeDeclaration(ctx);
     }
 
     @Override
     public void exitLocalTypeDeclaration(LocalTypeDeclarationContext ctx) {
-        popContextOfCurrentTypeAndStoreTheBox();
-    }
-
-    private void pushRightTypeContext(ParserRuleContext ctx) {
-        checkContextAndGenerateScope(ctx, ClassDeclarationContext.class, JAVA_CLASS);
-        checkContextAndGenerateScope(ctx, InterfaceDeclarationContext.class, JAVA_INTERFACE);
-        checkContextAndGenerateScope(ctx, EnumDeclarationContext.class, JAVA_ENUM);
-    }
-
-    private void checkContextAndGenerateScope(ParserRuleContext ctx, Class<? extends ParserRuleContext> classDeclarationContextClass, BoxType boxType) {
-        ParserRuleContext currentCheckedClassContext = ctx.getRuleContext(classDeclarationContextClass, 0);
-        if (currentCheckedClassContext != null) {
-            IdentifierContext identifier = currentCheckedClassContext.getRuleContext(IdentifierContext.class, 0);
-            String typeName = identifier.getText();
-            buildContextAndPushIt(typeName, boxType);
-        }
-    }
-
-    private void buildContextAndPushIt(String typeName, BoxType boxType) {
-        BoxDeclarationScope scope = new BoxDeclarationScope(typeName, boxType, new ArrayList<>());
-        typeScopeStack.push(scope);
-    }
-
-    private void popContextOfCurrentTypeAndStoreTheBox() {
-        BoxDeclarationScope currentScope = typeScopeStack.pop();
-        generateANewBoxElement(currentScope.getBoxType(), currentScope.getTypeName(), currentScope.getConnections());
-    }
-
-    private void generateANewBoxElement(BoxType boxType, String boxName, List<BoxConnection> connections) {
-        boxes.add(
-                Box.builder()
-                        .type(boxType)
-                        .name(boxName)
-                        .connections(connections)
-                        .build()
-        );
+        scopeManager.exitLocalTypeDeclaration(ctx);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -156,7 +98,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
 
     private void addCurrentTypeExtensions(ParserRuleContext ctx) {
         List<BoxConnection> connections = getCurrentBoxExtensions(ctx);
-        typeScopeStack.peek().getConnections().addAll(connections);
+        this.currentStatus.typeScopeStack.peek().getConnections().addAll(connections);
     }
 
     private List<BoxConnection> getCurrentBoxExtensions(ParserRuleContext ctx) {
@@ -186,6 +128,28 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     ///////////////////////////////////////////////////////////////////////////
+    // Code blocks
+
+    @Override
+    public void enterBlock(BlockContext ctx) {
+        String sourceText = this.currentStatus.bufferedTokenStream.getText(Interval.of(ctx.start.getTokenIndex() + 1, ctx.stop.getTokenIndex() - 1));
+        //String sourceText = bufferedTokenStream.getText(ctx.start + 1, ctx.stop);
+        System.out.println(sourceText);
+    }
+
+    @Override
+    public void enterBlockStatement(BlockStatementContext ctx) {
+        String sourceText = this.currentStatus.bufferedTokenStream.getText(ctx.start, ctx.stop);
+        System.out.println(sourceText);
+    }
+
+    @Override
+    public void enterStatement(StatementContext ctx) {
+        String sourceText = this.currentStatus.bufferedTokenStream.getText(ctx.start, ctx.stop);
+        System.out.println(sourceText);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     // Directives
 
     private int lastReadTokenIndex = -1;
@@ -207,7 +171,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     private List<Token> readLeftComments(Token currentToken) {
-        List<Token> leftResult = bufferedTokenStream.getHiddenTokensToLeft(currentToken.getTokenIndex());
+        List<Token> leftResult = this.currentStatus.bufferedTokenStream.getHiddenTokensToLeft(currentToken.getTokenIndex());
         List<Token> result = new ArrayList<>();
         if (leftResult != null) {
             for (Token token : leftResult) {
@@ -225,7 +189,7 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     }
 
     private List<Token> readRightComments(Token currentToken) {
-        List<Token> rightResult = bufferedTokenStream.getHiddenTokensToRight(currentToken.getTokenIndex());
+        List<Token> rightResult = this.currentStatus.bufferedTokenStream.getHiddenTokensToRight(currentToken.getTokenIndex());
         List<Token> result = new ArrayList<>();
         if (rightResult != null) {
             for (Token token : rightResult) {
@@ -249,9 +213,9 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     private void applyDirective(Directive baseDirective) {
         // TODO refactoring and enrich logic
         if (baseDirective instanceof LiterateMapInvoke) {
-            if (!typeScopeStack.empty()) {  // TODO emit warning!!!!
+            if (!this.currentStatus.typeScopeStack.empty()) {  // TODO emit warning!!!!
                 LiterateMapInvoke directive = (LiterateMapInvoke) baseDirective;
-                typeScopeStack.peek().getConnections().add(
+                this.currentStatus.typeScopeStack.peek().getConnections().add(
                         BoxConnection.generateInvoke(
                                 directive.getTargetBox(),
                                 directive.getProgressiveNumber(),
