@@ -41,6 +41,7 @@ class BoxesFilterTest {
             .name("box_numero_1")
             .type(JAVA_CLASS)
             .connections(new ArrayList<>())
+            .blocks(new ArrayList<>())
             .build();
     private static final Box BOX2 = Box.builder()
             .name("box_numero_2")
@@ -50,6 +51,8 @@ class BoxesFilterTest {
                             BoxConnection.generateExtends("box_numero_3"),
                             BoxConnection.generateExtends("box_numero_4")
                     )
-            ).build();
+            )
+            .blocks(new ArrayList<>())
+            .build();
 
 }

@@ -16,16 +16,6 @@ public class TestClass {
         return integer + 1;
     }
 
-    public interface TestInterface {
-        /*
-        * @LiterateMapBlock()
-        */
-        public void interfaceMethod1(String a1, String b1);
-
-        // @LiterateMapBlock()
-        public List<String> interfaceMethod2(Integer a2, boolean b2);
-    }
-
     private enum TestEnum {
         a, z;
 

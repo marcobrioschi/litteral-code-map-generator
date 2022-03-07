@@ -1,5 +1,6 @@
 package biz.brioschi.lcmgenerator.util;
 
+import biz.brioschi.lcmgenerator.literatemap.BoxBlock;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.literatemap.Box;
 import biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
@@ -17,6 +18,7 @@ public class LiterateCodeMapBoxHelper {
                 .type(expectedType)
                 .name(expectedName)
                 .connections(new ArrayList<>())
+                .blocks(new ArrayList<>())
                 .build();
     }
 
@@ -26,8 +28,14 @@ public class LiterateCodeMapBoxHelper {
             String... extraInfo
     ) {
         List<BoxConnection> expectedConnections = new ArrayList<>();
+        List<BoxBlock> expectedBlocks = new ArrayList<>();
         for (String singleExtraInfo : extraInfo) {
-            if (singleExtraInfo.contains(":")) {
+            if (singleExtraInfo.contains("|")) {
+                String[] connectionComponents = singleExtraInfo.split("|");
+                expectedBlocks.add(
+                        new BoxBlock(connectionComponents[1], connectionComponents[2])
+                );
+            } else if (singleExtraInfo.contains(":")) {
                 String[] connectionComponents = singleExtraInfo.split(":");
                 expectedConnections.add(BoxConnection.generateInvoke(
                         connectionComponents[1],
@@ -42,6 +50,7 @@ public class LiterateCodeMapBoxHelper {
                 .type(expectedType)
                 .name(expectedName)
                 .connections(expectedConnections)
+                .blocks(expectedBlocks)
                 .build();
     }
 

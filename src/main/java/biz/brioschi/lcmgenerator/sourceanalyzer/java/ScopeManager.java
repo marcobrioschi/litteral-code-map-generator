@@ -1,5 +1,6 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
+import biz.brioschi.lcmgenerator.literatemap.Box;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.Optional;
 import static biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.*;
 import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
 import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.*;
-import static biz.brioschi.lcmgenerator.literatemap.Box.builder;
 
 class ScopeManager {
 
@@ -98,10 +98,11 @@ class ScopeManager {
     private void popContextOfCurrentTypeAndStoreTheBox() {
         BoxDeclarationScope currentScope = this.currentStatus.typeScopeStack.pop(); // TODO interface segregation
         this.currentStatus.boxes.add(
-                builder()
+                Box.builder()
                         .type(currentScope.getBoxType())
                         .name(currentScope.getTypeName())
                         .connections(currentScope.getConnections())
+                        .blocks(new ArrayList<>())  // TODO: use real block list
                         .build()
         );
     }

@@ -19,6 +19,9 @@ public class Box {
     @NonNull
     List<BoxConnection> connections;
 
+    @NonNull
+    List<BoxBlock> blocks;
+
     public enum BoxType  {
         JAVA_CLASS,
         JAVA_INTERFACE,

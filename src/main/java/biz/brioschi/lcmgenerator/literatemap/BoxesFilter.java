@@ -24,7 +24,8 @@ public class BoxesFilter {
                             box.getName(),
                             box.getConnections().stream()
                                     .filter(boxConnection -> filterPattern.matcher(boxConnection.getTargetBoxName()).matches())
-                                    .collect(Collectors.toList())
+                                    .collect(Collectors.toList()),
+                            box.getBlocks()
                     ))
                     .collect(Collectors.toList());
         } else {
