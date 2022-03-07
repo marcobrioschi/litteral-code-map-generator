@@ -30,10 +30,10 @@ public class LiterateCodeMapBoxHelper {
         List<BoxConnection> expectedConnections = new ArrayList<>();
         List<BoxBlock> expectedBlocks = new ArrayList<>();
         for (String singleExtraInfo : extraInfo) {
-            if (singleExtraInfo.contains("|")) {
-                String[] connectionComponents = singleExtraInfo.split("|");
+            if (singleExtraInfo.contains("#")) {
+                String[] connectionComponents = singleExtraInfo.split("#");
                 expectedBlocks.add(
-                        new BoxBlock(connectionComponents[1], connectionComponents[2])
+                        new BoxBlock(connectionComponents[0], connectionComponents[1])
                 );
             } else if (singleExtraInfo.contains(":")) {
                 String[] connectionComponents = singleExtraInfo.split(":");

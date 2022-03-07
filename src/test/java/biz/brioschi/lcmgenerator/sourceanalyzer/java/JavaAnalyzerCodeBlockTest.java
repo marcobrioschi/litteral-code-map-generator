@@ -22,21 +22,21 @@ public class JavaAnalyzerCodeBlockTest {
         String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/MethodCodeBlock.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
         List<Box> units = javaAnalyzer.extractInfo();
-        assertThat(units, hasSize(3));
+        assertThat(units, hasSize(2));
         assertThat(units, hasItem(
                 generateLiterateCodeMapBox(
                         JAVA_CLASS,
                         "TestClass",
-                        "void aCostructor(Integer integer)|this.string = integer.toString();",
-                        "int aMethod(Integer integer)|return integer + 1;"
+                        "void aCostructor(Integer integer)#this.string = integer.toString();",
+                        "int aMethod(Integer integer)#return integer + 1;"
                 )
         ));
         assertThat(units, hasItem(
                 generateLiterateCodeMapBox(
                         JAVA_ENUM,
                         "TestEnum",
-                        "String getEnumStringValue()|return null;",
-                        "void doSomething()|return;")
+                        "String getEnumStringValue()#return null;",
+                        "void doSomething()#return;")
         ));
         assertThat(true, is(false));    // TODO: add code blocks
     }
