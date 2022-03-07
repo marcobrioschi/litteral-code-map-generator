@@ -16,6 +16,10 @@ The directive @LiterateMapInvoke make you able to add a connection between the c
 * targetName => name of the box that'll be connected
 * description => description of the connection
 
+### @LiterateMapBlock()
+
+The directive @LiterateMapBlock adds a new code block to the current box and use the method name as a title of the block.
+
 ## Languages
 
 ### Java
