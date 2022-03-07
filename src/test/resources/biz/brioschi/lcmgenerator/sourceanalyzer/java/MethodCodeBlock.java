@@ -4,19 +4,43 @@ public class TestClass {
 
     private String string;
 
-    public void TestClass(Integer integer) {
+    /*
+    * @LiterateMapBlock()
+    */
+    public void aCostructor(Integer integer) {
         this.string = integer.toString();
     }
 
+    // @LiterateMapBlock()
     public int aMethod(Integer integer) {
-        int a = 1;
-        int b = 2;
-        int c = 0;
-        for (i = 0; i < 10; i++) {
-            c += AnotherClass.doSomething();
-            d += 7;
+        return integer + 1;
+    }
+
+    public interface TestInterface {
+        /*
+        * @LiterateMapBlock()
+        */
+        public void interfaceMethod1(String a1, String b1);
+
+        // @LiterateMapBlock()
+        public List<String> interfaceMethod2(Integer a2, boolean b2);
+    }
+
+    private enum TestEnum {
+        a, z;
+
+        /*
+        * @LiterateMapBlock()
+        * */
+        public String getEnumStringValue() {
+            return null;
         }
-        return a + b + c;
+
+        // @LiterateMapBlock()
+        public void doSomething() {
+            return;
+        }
+
     }
 
 }

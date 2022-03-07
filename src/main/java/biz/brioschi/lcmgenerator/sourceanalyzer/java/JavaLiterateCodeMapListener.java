@@ -3,7 +3,6 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParserBaseListener;
 import biz.brioschi.lcmgenerator.literatemap.Box;
 import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.List;
@@ -87,28 +86,6 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterEnumDeclaration(EnumDeclarationContext ctx) {
         extensionManager.enterEnumDeclaration(ctx);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Code blocks
-
-    @Override
-    public void enterBlock(BlockContext ctx) {
-        String sourceText = this.currentStatus.bufferedTokenStream.getText(Interval.of(ctx.start.getTokenIndex() + 1, ctx.stop.getTokenIndex() - 1));
-        //String sourceText = bufferedTokenStream.getText(ctx.start + 1, ctx.stop);
-        System.out.println(sourceText);
-    }
-
-    @Override
-    public void enterBlockStatement(BlockStatementContext ctx) {
-        String sourceText = this.currentStatus.bufferedTokenStream.getText(ctx.start, ctx.stop);
-        System.out.println(sourceText);
-    }
-
-    @Override
-    public void enterStatement(StatementContext ctx) {
-        String sourceText = this.currentStatus.bufferedTokenStream.getText(ctx.start, ctx.stop);
-        System.out.println(sourceText);
     }
 
     ///////////////////////////////////////////////////////////////////////////
