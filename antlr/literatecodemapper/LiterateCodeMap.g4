@@ -9,10 +9,15 @@ commentsentence
 
 directiveDeclaration
     : literatemapinvoke
+    | literatemapblock
     ;
 
 literatemapinvoke
     : LITERATEMAPINVOKE params
+    ;
+
+literatemapblock
+    : LITERATEMAPBLOCK params
     ;
 
 params
@@ -29,6 +34,7 @@ param
 // Tokens
 
 LITERATEMAPINVOKE:          '@LiterateMapInvoke';
+LITERATEMAPBLOCK:           '@LiterateMapBlock';
 
 NUMBER:                     [0-9]*;
 DQSTRING:                   '"' (~["\\\r\n])* '"';

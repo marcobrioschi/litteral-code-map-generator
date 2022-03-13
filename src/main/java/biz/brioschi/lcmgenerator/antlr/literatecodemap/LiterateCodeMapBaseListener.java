@@ -52,6 +52,18 @@ public class LiterateCodeMapBaseListener implements LiterateCodeMapListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLiteratemapblock(LiterateCodeMapParser.LiteratemapblockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLiteratemapblock(LiterateCodeMapParser.LiteratemapblockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterParams(LiterateCodeMapParser.ParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}

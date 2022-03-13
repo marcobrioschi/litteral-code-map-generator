@@ -16,7 +16,7 @@ public class JavaDirectiveLiterateMapInvokeTest {
 
     @ParameterizedTest(name = "{index} - \"{0}\"")
     @MethodSource
-    public void LiterateMapInvoke2(String sourceText, LiterateMapInvoke targetDirective) {
+    public void LiterateMapInvoke(String sourceText, LiterateMapInvoke targetDirective) {
         List<Directive> directives = DirectivesRecognizer.extractDirectives(sourceText);
         assertThat(directives, hasSize(1));
         assertThat(directives.get(0), instanceOf(LiterateMapInvoke.class));
@@ -24,7 +24,7 @@ public class JavaDirectiveLiterateMapInvokeTest {
         assertThat(firstDirective, is(targetDirective));
     }
 
-    private static Stream<Arguments> LiterateMapInvoke2() {
+    private static Stream<Arguments> LiterateMapInvoke() {
         return Stream.of(
                 Arguments.of(
                         "/* This is the first invocation: @LiterateMapInvoke(1, \"ClassA\", \"MethodA()\") */",
@@ -35,7 +35,7 @@ public class JavaDirectiveLiterateMapInvokeTest {
                         new LiterateMapInvoke(2, "ClassB", "MethodB()")
                 ),
                 Arguments.of(
-                        " // This method delegate @LiterateMapInvoke(3, 'ClassC', 'MethodC()')",
+                        "// This method delegate @LiterateMapInvoke(3, 'ClassC', 'MethodC()')",
                         new LiterateMapInvoke(3, "ClassC", "MethodC()")
                 ),
                 Arguments.of(

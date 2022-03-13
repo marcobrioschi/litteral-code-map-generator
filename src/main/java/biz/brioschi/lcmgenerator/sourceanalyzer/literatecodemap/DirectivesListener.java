@@ -5,6 +5,7 @@ import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser;
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser.ParamContext;
 import biz.brioschi.lcmgenerator.antlr.literatecodemap.LiterateCodeMapParser.ParamsContext;
 import biz.brioschi.lcmgenerator.directives.Directive;
+import biz.brioschi.lcmgenerator.directives.LiterateMapBlock;
 import biz.brioschi.lcmgenerator.directives.LiterateMapInvoke;
 
 import java.util.ArrayList;
@@ -27,12 +28,18 @@ public class DirectivesListener extends LiterateCodeMapBaseListener {
 
     @Override
     public void enterLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx) {
-        List<Object> params = parseParams(ctx.params());
+        List<Object> params = parseParams(ctx.params());    // TODO check parameters
         directives.add(new LiterateMapInvoke(
                 (Integer)params.get(0),
                 (String)params.get(1),
                 (String)params.get(2)
         ));
+    }
+
+    @Override
+    public void enterLiteratemapblock(LiterateCodeMapParser.LiteratemapblockContext ctx) {
+        List<Object> params = parseParams(ctx.params());        // TODO check parameters
+        directives.add(new LiterateMapBlock());
     }
 
     private List<Object> parseParams(ParamsContext paramsContext) {

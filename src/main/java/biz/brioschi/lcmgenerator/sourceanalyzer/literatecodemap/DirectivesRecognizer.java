@@ -13,6 +13,8 @@ import java.util.List;
 
 public class DirectivesRecognizer {
 
+    // TODO: fix the grammar (e.g. using ILANDS) because the string "@LiterateMapBlockXXX" is recognized as a valid directive
+
     public static List<Directive> extractDirectives(String inputString) {
         CharStream charInputStream = CharStreams.fromString(inputString);
         LiterateCodeMapLexer lexer = new LiterateCodeMapLexer(charInputStream);

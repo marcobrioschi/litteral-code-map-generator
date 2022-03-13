@@ -38,6 +38,16 @@ public interface LiterateCodeMapListener extends ParseTreeListener {
 	 */
 	void exitLiteratemapinvoke(LiterateCodeMapParser.LiteratemapinvokeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LiterateCodeMapParser#literatemapblock}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteratemapblock(LiterateCodeMapParser.LiteratemapblockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LiterateCodeMapParser#literatemapblock}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteratemapblock(LiterateCodeMapParser.LiteratemapblockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LiterateCodeMapParser#params}.
 	 * @param ctx the parse tree
 	 */
