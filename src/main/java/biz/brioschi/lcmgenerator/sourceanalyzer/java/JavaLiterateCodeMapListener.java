@@ -14,12 +14,14 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     private ListenerStatus currentStatus;
     private ScopeManager scopeManager;
     private ExtensionManager extensionManager;
+    private BlockManager blockManager;
     private DirectiveManager directiveManager;
 
     public JavaLiterateCodeMapListener(BufferedTokenStream bufferedTokenStream) {
         this.currentStatus = new ListenerStatus(bufferedTokenStream);
         this.scopeManager = new ScopeManager(currentStatus);
         this.extensionManager = new ExtensionManager(currentStatus);
+        this.blockManager = new BlockManager(currentStatus);
         this.directiveManager = new DirectiveManager(currentStatus);
     }
 
@@ -86,6 +88,29 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterEnumDeclaration(EnumDeclarationContext ctx) {
         extensionManager.enterEnumDeclaration(ctx);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Blocks
+
+    @Override
+    public void enterMethodDeclaration(MethodDeclarationContext ctx) {
+        blockManager.enterMethodDeclaration(ctx);
+    }
+
+    @Override
+    public void exitMethodDeclaration(MethodDeclarationContext ctx) {
+        blockManager.exitMethodDeclaration(ctx);
+    }
+
+    @Override
+    public void enterBlock(BlockContext ctx) {
+        blockManager.enterBlock(ctx);
+    }
+
+    @Override
+    public void exitBlock(BlockContext ctx) {
+        blockManager.exitBlock(ctx);
     }
 
     ///////////////////////////////////////////////////////////////////////////

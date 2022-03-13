@@ -1,4 +1,5 @@
 import a.b.c;
+import com.sun.jdi.InterfaceType;
 
 public class TestClass {
 
@@ -16,6 +17,24 @@ public class TestClass {
         return integer + 1;
     }
 
+    public void hiddenMethod() {
+        // TODO add it to the test
+//        InterfaceType v = new InterfaceType() {
+//
+//            @Override
+//            public void method1() {
+//                return;
+//            }
+//
+//            @Override
+//            // @LiterateMapBlock()
+//            public int method2() {
+//                return 10;
+//            }
+//
+//        };
+    }
+
     private enum TestEnum {
         a, z;
 
@@ -27,7 +46,7 @@ public class TestClass {
         }
 
         // @LiterateMapBlock()
-        public void doSomething() {
+        public void doSomething(Boolean value, String ... strings) {
             return;
         }
 

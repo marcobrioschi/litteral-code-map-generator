@@ -12,11 +12,15 @@ class ListenerStatus {
     // TODO make them private and segretate interfaces?
     public BufferedTokenStream bufferedTokenStream;
     public Stack<BoxDeclarationScope> typeScopeStack;
+    public Stack<String> currentBlockName;
+    public Stack<String> currentBlockContent;
     public List<Box> boxes;
 
     public ListenerStatus(BufferedTokenStream bufferedTokenStream) {
         this.bufferedTokenStream = bufferedTokenStream;
         this.typeScopeStack = new Stack<>();
+        this.currentBlockName = new Stack<>();
+        this.currentBlockContent = new Stack<>();
         this.boxes = new ArrayList<>();
     }
 

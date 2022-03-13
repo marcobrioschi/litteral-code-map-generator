@@ -91,7 +91,7 @@ class ScopeManager {
     }
 
     private void buildContextAndPushIt(String typeName, BoxType boxType) {
-        BoxDeclarationScope scope = new BoxDeclarationScope(typeName, boxType, new ArrayList<>());
+        BoxDeclarationScope scope = new BoxDeclarationScope(typeName, boxType, new ArrayList<>(), new ArrayList<>());
         this.currentStatus.typeScopeStack.push(scope);  // TODO interface segregation
     }
 
