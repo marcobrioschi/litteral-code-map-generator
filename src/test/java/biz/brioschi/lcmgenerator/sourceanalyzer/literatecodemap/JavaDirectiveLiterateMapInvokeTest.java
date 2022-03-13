@@ -2,21 +2,13 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap;
 
 import biz.brioschi.lcmgenerator.directives.Directive;
 import biz.brioschi.lcmgenerator.directives.LiterateMapInvoke;
-import biz.brioschi.lcmgenerator.literatemap.Box;
-import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
-import biz.brioschi.lcmgenerator.sourceanalyzer.java.JavaAnalyzer;
-import org.antlr.v4.runtime.CharStreams;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.*;
-import static biz.brioschi.lcmgenerator.util.LiterateCodeMapBoxHelper.generateLiterateCodeMapBox;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 

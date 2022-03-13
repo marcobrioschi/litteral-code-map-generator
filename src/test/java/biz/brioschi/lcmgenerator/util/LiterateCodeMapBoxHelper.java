@@ -1,9 +1,9 @@
 package biz.brioschi.lcmgenerator.util;
 
-import biz.brioschi.lcmgenerator.literatemap.BoxBlock;
-import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.literatemap.Box;
 import biz.brioschi.lcmgenerator.literatemap.Box.BoxType;
+import biz.brioschi.lcmgenerator.literatemap.BoxBlock;
+import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 
 import java.util.ArrayList;
 import java.util.List;

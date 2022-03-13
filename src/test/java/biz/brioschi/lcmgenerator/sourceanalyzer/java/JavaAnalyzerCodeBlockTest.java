@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.*;
+import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.JAVA_CLASS;
+import static biz.brioschi.lcmgenerator.literatemap.Box.BoxType.JAVA_ENUM;
 import static biz.brioschi.lcmgenerator.util.LiterateCodeMapBoxHelper.generateLiterateCodeMapBox;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
