@@ -14,7 +14,9 @@ public class TestClass {
 
     // @LiterateMapBlock()
     public int aMethod(Integer integer) {
+
         return integer + 1;
+
     }
 
     public void hiddenMethod() {

@@ -35,7 +35,7 @@ public class JavaAnalyzerCodeBlockTest {
                         JAVA_ENUM,
                         "TestEnum",
                         "String getEnumStringValue()#return null;",
-                        "void doSomething()#return;")
+                        "doSomething(Boolean value, String ... strings)#return;")
         ));
     }
 
