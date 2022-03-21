@@ -1,5 +1,11 @@
 package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
+import biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
+
+import java.util.List;
+
 import static biz.brioschi.lcmgenerator.antlr.java.parser.JavaParser.*;
 
 public class BlockManager {
@@ -16,25 +22,30 @@ public class BlockManager {
     ///////////////////////////////////////////////////////////////////////////
     // Listener hooks
 
-    public void enterMethodDeclaration(MethodDeclarationContext ctx) {
-        String methodReturnType = ctx.typeTypeOrVoid().getText();
-        String methodName = ctx.identifier().getText();
-        String parameters = getParametersText(ctx);
-        String currentBlockName = methodReturnType + " " + methodName + parameters;
-        currentStatus.currentBlockName.push(currentBlockName);
+    // TODO generic method, enumBody, interfaceBody
+
+    public void enterClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
+        if (ctx.memberDeclaration() != null) {
+            if (ctx.memberDeclaration().methodDeclaration() != null) {
+                MethodDeclarationContext methodDeclaration = ctx.memberDeclaration().methodDeclaration();
+                String methodReturnType = methodDeclaration.typeTypeOrVoid().getText();
+                String methodName = methodDeclaration.identifier().getText();
+                String parameters = getParametersText(methodDeclaration);
+                String currentBlockName = methodReturnType + " " + methodName + parameters;
+                currentStatus.currentBlockName.push(currentBlockName);
+                String blockContent = getBlockContentText(methodDeclaration.methodBody().block());
+                currentStatus.currentBlockContent.push(blockContent);
+            }
+        }
     }
 
-    public void exitMethodDeclaration(MethodDeclarationContext ctx) {
-        currentStatus.currentBlockName.pop();
-    }
-
-    public void enterBlock(BlockContext ctx) {
-        String blockContent = getBlockContentText(ctx);
-        currentStatus.currentBlockContent.push(blockContent);
-    }
-
-    public void exitBlock(BlockContext ctx) {
-        currentStatus.currentBlockContent.pop();
+    public void exitClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
+        if (ctx.memberDeclaration() != null) {
+            if (ctx.memberDeclaration().methodDeclaration() != null) {
+                currentStatus.currentBlockName.pop();
+                currentStatus.currentBlockContent.pop();
+            }
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -46,8 +57,19 @@ public class BlockManager {
     }
 
     private String getBlockContentText(BlockContext ctx) {
-        String result = currentStatus.bufferedTokenStream.getText(ctx.start, ctx.stop);
-        return result;
+        Token startJustAfterParenthesis = currentStatus.bufferedTokenStream.get(ctx.start.getTokenIndex() + 1);
+        Token endJustBeforeParenthesis = currentStatus.bufferedTokenStream.get(ctx.stop.getTokenIndex() - 1);
+        String rawText = currentStatus.bufferedTokenStream.getText(startJustAfterParenthesis, endJustBeforeParenthesis);
+        String cleanedText = fixIndentation(rawText);
+        System.out.println(cleanedText);
+        return cleanedText;
+    }
+
+    private String fixIndentation(String source) {
+        // TODO: remove empty lines at beginning and at the end
+        // TODO: reduce the indentation in the same way in all the lines
+        String[] strings = source.split("\n");
+        return source;
     }
 
 }

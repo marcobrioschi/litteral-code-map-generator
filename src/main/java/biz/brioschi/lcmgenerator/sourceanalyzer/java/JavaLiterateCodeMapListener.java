@@ -45,11 +45,13 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
         scopeManager.enterClassBodyDeclaration(ctx);
+        blockManager.enterClassBodyDeclaration(ctx);
     }
 
     @Override
     public void exitClassBodyDeclaration(ClassBodyDeclarationContext ctx) {
         scopeManager.exitClassBodyDeclaration(ctx);
+        blockManager.exitClassBodyDeclaration(ctx);
     }
 
     @Override
@@ -88,29 +90,6 @@ public class JavaLiterateCodeMapListener extends JavaParserBaseListener {
     @Override
     public void enterEnumDeclaration(EnumDeclarationContext ctx) {
         extensionManager.enterEnumDeclaration(ctx);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Blocks
-
-    @Override
-    public void enterMethodDeclaration(MethodDeclarationContext ctx) {
-        blockManager.enterMethodDeclaration(ctx);
-    }
-
-    @Override
-    public void exitMethodDeclaration(MethodDeclarationContext ctx) {
-        blockManager.exitMethodDeclaration(ctx);
-    }
-
-    @Override
-    public void enterBlock(BlockContext ctx) {
-        blockManager.enterBlock(ctx);
-    }
-
-    @Override
-    public void exitBlock(BlockContext ctx) {
-        blockManager.exitBlock(ctx);
     }
 
     ///////////////////////////////////////////////////////////////////////////

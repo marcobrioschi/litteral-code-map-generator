@@ -102,7 +102,7 @@ class ScopeManager {
                         .type(currentScope.getBoxType())
                         .name(currentScope.getTypeName())
                         .connections(currentScope.getConnections())
-                        .blocks(new ArrayList<>())  // TODO: use real block list
+                        .blocks(currentScope.getBlocks())
                         .build()
         );
     }

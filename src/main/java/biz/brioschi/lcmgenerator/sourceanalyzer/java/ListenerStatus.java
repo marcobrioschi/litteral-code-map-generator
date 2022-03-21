@@ -12,7 +12,7 @@ class ListenerStatus {
     // TODO make them private and segretate interfaces?
     public BufferedTokenStream bufferedTokenStream;
     public Stack<BoxDeclarationScope> typeScopeStack;
-    public Stack<String> currentBlockName;
+    public Stack<String> currentBlockName;  // TODO: unify all the values with a stack of BoxBlox?
     public Stack<String> currentBlockContent;
     public List<Box> boxes;
 

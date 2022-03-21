@@ -2,7 +2,9 @@ package biz.brioschi.lcmgenerator.sourceanalyzer.java;
 
 import biz.brioschi.lcmgenerator.antlr.java.parser.JavaLexer;
 import biz.brioschi.lcmgenerator.directives.Directive;
+import biz.brioschi.lcmgenerator.directives.LiterateMapBlock;
 import biz.brioschi.lcmgenerator.directives.LiterateMapInvoke;
+import biz.brioschi.lcmgenerator.literatemap.BoxBlock;
 import biz.brioschi.lcmgenerator.literatemap.BoxConnection;
 import biz.brioschi.lcmgenerator.sourceanalyzer.literatecodemap.DirectivesRecognizer;
 import org.antlr.v4.runtime.Token;
@@ -99,6 +101,14 @@ public class DirectiveManager { // TODO interface segregation
                         )
                 );
             }
+        }
+        if (baseDirective instanceof LiterateMapBlock) {
+            this.currentStatus.typeScopeStack.peek().getBlocks().add(
+                    BoxBlock.generate(
+                            this.currentStatus.currentBlockName.peek(),
+                            this.currentStatus.currentBlockContent.peek()
+                    )
+            );
         }
     }
 

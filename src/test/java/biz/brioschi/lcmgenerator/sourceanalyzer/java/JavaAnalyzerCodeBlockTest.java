@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.*;
 public class JavaAnalyzerCodeBlockTest {
 
     @Test
-    @Disabled
     public void codeBlock() throws IOException {
         String inputUnit = "src/test/resources/biz/brioschi/lcmgenerator/sourceanalyzer/java/MethodCodeBlock.java";
         JavaAnalyzer javaAnalyzer = new JavaAnalyzer(CharStreams.fromFileName(inputUnit));
@@ -38,7 +37,6 @@ public class JavaAnalyzerCodeBlockTest {
                         "String getEnumStringValue()#return null;",
                         "void doSomething()#return;")
         ));
-        assertThat(true, is(false));    // TODO: add code blocks
     }
 
 }

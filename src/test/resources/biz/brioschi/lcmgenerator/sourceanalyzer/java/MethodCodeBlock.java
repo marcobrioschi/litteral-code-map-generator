@@ -18,7 +18,7 @@ public class TestClass {
     }
 
     public void hiddenMethod() {
-        // TODO add it to the test
+// TODO add it to the test
 //        InterfaceType v = new InterfaceType() {
 //
 //            @Override
@@ -27,7 +27,7 @@ public class TestClass {
 //            }
 //
 //            @Override
-//            // @LiterateMapBlock()
+//            // @XXXLiterateMapBlock()
 //            public int method2() {
 //                return 10;
 //            }
